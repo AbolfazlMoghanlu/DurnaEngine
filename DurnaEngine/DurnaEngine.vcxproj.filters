@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{107145F9-FC28-8746-6530-60A251072237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Glad">
+      <UniqueIdentifier>{F7E1214C-636D-8F10-6C7E-1205D888EB10}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\DurnaPCH.h" />
+    <ClInclude Include="Source\Runtime\Launch\LaunchEngineLoop.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\DurnaEngine.cpp" />
+    <ClCompile Include="Source\DurnaPCH.cpp" />
+    <ClCompile Include="Source\ThirdParty\Glad\glad.c">
+      <Filter>ThirdParty\Glad</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Runtime\Launch\LaunchEngineLoop.cpp" />
+  </ItemGroup>
+</Project>
