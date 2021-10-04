@@ -1,6 +1,6 @@
 workspace "DurnaEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Game"
 
 	configurations
 	{
@@ -16,11 +16,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 	
 	
 ----------------------------------------------
----------- DurnaEngine -----------------------
+---------- Engine -----------------------
 ----------------------------------------------
 	
-project "DurnaEngine"
-	location "DurnaEngine"
+project "Engine"
+	location "Engine"
 	kind "Staticlib"
 	language "c++"
 	cppdialect "c++17"
@@ -30,7 +30,7 @@ project "DurnaEngine"
 	objdir ("Intermediate/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "DurnaPCH.h"
-	pchsource "DurnaEngine/Source/DurnaPCH.cpp"
+	pchsource "Engine/Source/DurnaPCH.cpp"
 
 	files
 	{
@@ -52,7 +52,8 @@ project "DurnaEngine"
 	
 	links
 	{
-		"glfw3.lib",
+--		"glfw3.lib",
+		"glfw3_mt.lib",
 		"opengl32.lib"
 	}
 	
@@ -61,9 +62,10 @@ project "DurnaEngine"
 	
 	filter "configurations:Debug"
 		defines
-			{
-				"DRN_DEBUG"
-			}
+		{
+			"DRN_DEBUG"
+		}
+			
 		runtime "Debug"
 		symbols "on"			
 		
@@ -72,6 +74,7 @@ project "DurnaEngine"
 		{
 			"DRN_RELEASE"
 		}
+		
 		runtime "Release"
 		optimize "on"
 				
@@ -80,16 +83,17 @@ project "DurnaEngine"
 		{
 			"DRN_DIST"
 		}
+		
 		runtime "Release"
 		optimize "on"
 
 
 ----------------------------------------------
----------- Sandbox ---------------------------
+---------- Game ---------------------------
 ----------------------------------------------
 	
-project "Sandbox"
-	location "Sandbox"
+project "Game"
+	location "Game"
 	kind "ConsoleApp"
 	language "c++"
 	cppdialect "c++17"
@@ -106,10 +110,10 @@ project "Sandbox"
 	
 	includedirs
 	{
-		"DurnaEngine/Source"
+		"Engine/Source"
 	}
 	
-	links "DurnaEngine"
+	links "Engine"
 	
 	filter "configurations:Debug"
 		defines

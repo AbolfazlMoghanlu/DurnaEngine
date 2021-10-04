@@ -1,31 +1,26 @@
 namespace Durna
 {
+	class Application;
+
 	class Engineloop
 	{
 	public:
 		Engineloop()
-			: MaxTimeDilation(0.01667f)
+			: MaxTimeDilation(1 / 60.0f)
 			, LastTickTime(-1.0f)
 		{
 		}
 
-		bool Init()
-		{
-			// todo: make application class and initiate it
+		bool Init();
+		void Shutdown();
 
-			return true;
-		}
-
-		void StartLoop();
+		void MainLoop();
 
 		void Tick(float DeltaTime);
 
-		void Shutdown()
-		{
-
-		}
-
 		private:
+
+		Application* App;
 
 		float MaxTimeDilation;
 		double LastTickTime;

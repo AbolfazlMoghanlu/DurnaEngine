@@ -1,15 +1,28 @@
 #include "DurnaPCH.h"
 #include "Runtime/Launch/LaunchEngineLoop.h"
 
-#include <ctime>
+#include "Runtime/Core/Application.h"
 
 namespace Durna
 {
 	Engineloop engineLoop;
 
-	void Engineloop::StartLoop()
+	bool Engineloop::Init()
 	{
-		while (true) // todo: based on application running flag
+		App = new Application();
+		App->Init();
+
+		return true;
+	}
+
+	void Engineloop::Shutdown()
+	{
+		delete App;
+	}
+
+	void Engineloop::MainLoop()
+	{
+		while (App->IsRunning()) 
 		{
 			// Calculating time dilation
 			std::chrono::duration<double, std::milli> TimeDuration = std::chrono::high_resolution_clock::now().time_since_epoch();
@@ -48,7 +61,7 @@ int main()
 	}
 
 	// engine main loop
-	Durna::engineLoop.StartLoop();
+	Durna::engineLoop.MainLoop();
 
 	Durna::engineLoop.Shutdown();
 }
