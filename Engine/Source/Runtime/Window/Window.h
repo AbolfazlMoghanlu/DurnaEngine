@@ -11,14 +11,27 @@ namespace Durna
 			: Title		(InTitle)
 			, Width		(InWidth)
 			, Height	(InHeight)
+			, window	(nullptr)
 		{
+		}
+
+		~Window()
+		{
+			//delete window;
 		}
 
 		void Init();
 
+		void Tick(float DeltaTime);
+
+		// TODO: move to input class
+		void ProcessInput();
+
+		bool IsClosing() const;
+
 	private:
 
-		GLFWwindow* window = nullptr;
+		GLFWwindow* window;
 
 		std::string Title;
 

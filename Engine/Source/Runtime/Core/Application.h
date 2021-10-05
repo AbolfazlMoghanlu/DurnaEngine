@@ -13,6 +13,8 @@ namespace Durna
 
 		void Init();
 
+		void Tick(float DeltaTime);
+
 		void Shutdown();
 
 		bool IsRunning() const;

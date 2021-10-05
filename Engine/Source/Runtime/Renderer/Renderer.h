@@ -13,10 +13,10 @@ namespace Durna
 
 		static void Init();
 
+		static void Tick(float DeltaTime);
+
 		static void Shutdown();
 
-
-	private:
 		static Window* MainWindow;
 	};
 }

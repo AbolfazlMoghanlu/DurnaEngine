@@ -22,7 +22,7 @@ namespace Durna
 
 	void Engineloop::MainLoop()
 	{
-		while (App->IsRunning()) 
+		while (App->IsRunning())
 		{
 			// Calculating time dilation
 			std::chrono::duration<double, std::milli> TimeDuration = std::chrono::high_resolution_clock::now().time_since_epoch();
@@ -46,7 +46,7 @@ namespace Durna
 		// prints framerate
 		std::cout << 1 / DeltaTime << std::endl;
 
-
+		App->Tick(DeltaTime);
 	}
 }
 

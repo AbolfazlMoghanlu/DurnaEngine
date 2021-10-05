@@ -27,9 +27,21 @@ namespace Durna
 		}
 	}
 
+	void Renderer::Tick(float DeltaTime)
+	{
+		MainWindow->Tick(DeltaTime);
+
+		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwPollEvents();
+	}
+
 	void Renderer::Shutdown()
 	{
 		delete MainWindow;
+
+		glfwTerminate();
 	}
 
 }

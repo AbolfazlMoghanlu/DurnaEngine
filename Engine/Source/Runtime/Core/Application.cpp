@@ -11,6 +11,11 @@ namespace Durna
 		Renderer::Init();
 	}
 
+	void Application::Tick(float DeltaTime)
+	{
+		Renderer::Tick(DeltaTime);
+	}
+
 	void Application::Shutdown()
 	{
 		Renderer::Shutdown();
@@ -18,7 +23,7 @@ namespace Durna
 
 	bool Application::IsRunning() const
 	{
-		return Running;
+		return Running && !Renderer::MainWindow->IsClosing();
 	}
 
 }
