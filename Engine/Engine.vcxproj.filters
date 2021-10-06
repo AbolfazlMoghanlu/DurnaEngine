@@ -37,6 +37,7 @@
     <ClInclude Include="Source\Runtime\Window\Window.h">
       <Filter>Runtime\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Runtime\Renderer\Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DurnaEngine.cpp" />
@@ -56,5 +57,6 @@
     <ClCompile Include="Source\ThirdParty\Glad\glad.c">
       <Filter>ThirdParty\Glad</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Runtime\Renderer\Buffer.cpp" />
   </ItemGroup>
 </Project>

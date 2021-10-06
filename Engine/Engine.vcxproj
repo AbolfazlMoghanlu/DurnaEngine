@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Runtime\Renderer\Buffer.h" />
     <ClInclude Include="Source\DurnaPCH.h" />
     <ClInclude Include="Source\Runtime\Core\Application.h" />
     <ClInclude Include="Source\Runtime\Launch\LaunchEngineLoop.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Source\Runtime\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Runtime\Renderer\Buffer.cpp" />
     <ClCompile Include="Source\DurnaEngine.cpp" />
     <ClCompile Include="Source\DurnaPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

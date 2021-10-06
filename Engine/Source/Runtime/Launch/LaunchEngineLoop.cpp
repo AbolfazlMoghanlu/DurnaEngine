@@ -44,7 +44,7 @@ namespace Durna
 	void Engineloop::Tick(float DeltaTime)
 	{
 		// prints framerate
-		std::cout << 1 / DeltaTime << std::endl;
+		//std::cout << 1 / DeltaTime << std::endl;
 
 		App->Tick(DeltaTime);
 	}
