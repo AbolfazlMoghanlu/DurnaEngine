@@ -1,33 +1,15 @@
 #include "DurnaPCH.h"
 #include "Renderer.h"
 
+#include "Runtime/Window/Window.h"
+#include "Runtime/Renderer/Shader.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Runtime/Window/Window.h"
 
 //todo remove dependancy
 #include "Runtime/Renderer/Buffer.h"
-
-//TODO: make proper shader class
-const char *vertexShaderSource = "#version 460 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec4 VColor;\n"
-"out vec4 V_Color;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"	V_Color = VColor;\n"
-"}\n";
-
-const char* fragmentshadersource = "#version 460 core\n"
-"out vec4 FragColor;\n"
-"in vec4 V_Color;\n"
-"void main()\n"
-"{\n"
-"	FragColor = V_Color;\n"
-"}\n";
-
 
 namespace Durna
 {
@@ -79,53 +61,9 @@ namespace Durna
 
 		VertexBuffer vb = VertexBuffer(vp, vc);
 
-		
-		unsigned int vertexshader;
-		vertexshader = glCreateShader(GL_VERTEX_SHADER);
+		Shader shader("Content/Shader/t.glsl");
+		shader.Use();
 
-		glShaderSource(vertexshader, 1, &vertexShaderSource, nullptr);
-		glCompileShader(vertexshader);
-
-		int  success;
-		char infoLog[512];
-		glGetShaderiv(vertexshader, GL_COMPILE_STATUS, &success);
-
-		if (!success)
-		{
-			glGetShaderInfoLog(vertexshader, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		}
-
-
-		unsigned int fragmentshader;
-		fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
-
-		glShaderSource(fragmentshader, 1, &fragmentshadersource, nullptr);
-		glCompileShader(fragmentshader);
-
-		glGetShaderiv(fragmentshader, GL_COMPILE_STATUS, &success);
-
-		if (!success)
-		{
-			glGetShaderInfoLog(fragmentshader, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::FRAG::COMPILATION_FAILED\n" << infoLog << std::endl;
-		}
-
-
-		unsigned int shaderprogram;
-		shaderprogram = glCreateProgram();
-
-		glAttachShader(shaderprogram, vertexshader);
-		glAttachShader(shaderprogram, fragmentshader);
-		glLinkProgram(shaderprogram);
-
-		glGetProgramiv(shaderprogram, GL_LINK_STATUS, &success);
-		if (!success) {
-			glGetProgramInfoLog(shaderprogram, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
-		}
-
-		glUseProgram(shaderprogram);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);

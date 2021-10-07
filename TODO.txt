@@ -1,0 +1,3 @@
+Make a file path helper class
+Find a way to make seprate content folder in game and engine folder and merge them at end(currently when 
+running program from ide game project doesn't know about engine content folder)

@@ -38,6 +38,7 @@
       <Filter>Runtime\Window</Filter>
     </ClInclude>
     <ClInclude Include="Source\Runtime\Renderer\Buffer.h" />
+    <ClInclude Include="Source\Runtime\Renderer\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DurnaEngine.cpp" />
@@ -58,5 +59,6 @@
       <Filter>ThirdParty\Glad</Filter>
     </ClCompile>
     <ClCompile Include="Source\Runtime\Renderer\Buffer.cpp" />
+    <ClCompile Include="Source\Runtime\Renderer\Shader.cpp" />
   </ItemGroup>
 </Project>
