@@ -6,6 +6,7 @@ namespace Durna
 	{
 	public:
 		Shader(const char* FilePath);
+		Shader(const std::string& FilePath);
 		Shader(const char* VertexShaderSource, const char* FragmentShaderSource);
 
 		~Shader();

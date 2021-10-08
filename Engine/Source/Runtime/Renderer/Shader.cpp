@@ -23,6 +23,10 @@ namespace Durna
 		}
 	}
 
+	Shader::Shader(const std::string& FilePath) : Shader(FilePath.c_str())
+	{
+	}
+
 	Shader::~Shader()
 	{
 		glDeleteShader(ID);
@@ -139,24 +143,15 @@ namespace Durna
 
 	bool Shader::ReadShaderSourceFromFile(const char* FilePath, std::string& VertexShaderSource, std::string& FragmentShaderSource)
 	{
-		std::ifstream in(FilePath, std::ios::in | std::ios::binary);
-		if (!in)
+		std::string Source;
+		if (!FileHelper::ReadStringFromTextFile(FilePath, Source))
 		{
-			//TODO log calss
-			std::cout << "Could not open file '" << FilePath << "'\n";
-
-			in.close();
+#if DRN_DEBUG || DRN_RELEASE
+			// TODO: log class
+			std::cout << "Error while loading shader file '" << FilePath << "'.\n";
+#endif
 			return false;
 		}
-
-		std::string Source;
-		in.seekg(0, std::ios::end);
-		Source.resize(in.tellg());
-		in.seekg(0, std::ios::beg);
-		in.read(&Source[0], Source.size());
-		in.close();
-
-		// Readed whole file
 
 		bool FoundVertexShader = false;
 		bool FoundFragmentShader = false;

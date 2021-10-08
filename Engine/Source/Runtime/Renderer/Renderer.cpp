@@ -58,10 +58,10 @@ namespace Durna
 			0, 1, 3,
 			1, 2, 3
 		};
-
+		
 		VertexBuffer vb = VertexBuffer(vp, vc);
 
-		Shader shader("Content/Shader/t.glsl");
+		Shader shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		shader.Use();
 
 

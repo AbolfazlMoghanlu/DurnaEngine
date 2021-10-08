@@ -39,6 +39,8 @@
     </ClInclude>
     <ClInclude Include="Source\Runtime\Renderer\Buffer.h" />
     <ClInclude Include="Source\Runtime\Renderer\Shader.h" />
+    <ClInclude Include="Source\Runtime\Misc\FileHelper.h" />
+    <ClInclude Include="Source\Runtime\Misc\Path.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DurnaEngine.cpp" />
@@ -60,5 +62,7 @@
     </ClCompile>
     <ClCompile Include="Source\Runtime\Renderer\Buffer.cpp" />
     <ClCompile Include="Source\Runtime\Renderer\Shader.cpp" />
+    <ClCompile Include="Source\Runtime\Misc\FileHelper.cpp" />
+    <ClCompile Include="Source\Runtime\Misc\Path.cpp" />
   </ItemGroup>
 </Project>
