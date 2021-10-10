@@ -143,6 +143,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Durna.h" />
+    <ClInclude Include="Source\Runtime\Misc\Log.h" />
     <ClInclude Include="Source\Runtime\Misc\Path.h" />
     <ClInclude Include="Source\Runtime\Misc\FileHelper.h" />
     <ClInclude Include="Source\Runtime\Renderer\Shader.h" />
@@ -154,11 +156,12 @@
     <ClInclude Include="Source\Runtime\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Runtime\Misc\Log.cpp" />
     <ClCompile Include="Source\Runtime\Misc\Path.cpp" />
     <ClCompile Include="Source\Runtime\Misc\FileHelper.cpp" />
     <ClCompile Include="Source\Runtime\Renderer\Shader.cpp" />
     <ClCompile Include="Source\Runtime\Renderer\Buffer.cpp" />
-    <ClCompile Include="Source\DurnaEngine.cpp" />
+    <ClCompile Include="Source\Durna.cpp" />
     <ClCompile Include="Source\DurnaPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

@@ -1,6 +1,8 @@
 #include "DurnaPCH.h"
 #include "FileHelper.h"
 
+LOG_DEFINE_CATEGORY(LogFileHelper, "FileHelper")
+
 namespace Durna
 {
 	bool FileHelper::ReadStringFromTextFile(const char* FilePath, std::string& Str)
@@ -8,11 +10,8 @@ namespace Durna
 		std::ifstream in(FilePath, std::ios::in | std::ios::binary);
 		if (!in)
 		{
-#if DRN_DEBUG || DRN_RELEASE
-			//TODO log calss
-			std::cout << "Could not open file '" << FilePath << "'\n";
-#endif
-			
+			LOG(LogFileHelper, Warning, "Could not open file \"%s\"", FilePath);
+
 			in.close();
 			return false;
 		}

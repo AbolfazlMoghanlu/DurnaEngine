@@ -41,9 +41,10 @@
     <ClInclude Include="Source\Runtime\Renderer\Shader.h" />
     <ClInclude Include="Source\Runtime\Misc\FileHelper.h" />
     <ClInclude Include="Source\Runtime\Misc\Path.h" />
+    <ClInclude Include="Source\Runtime\Misc\Log.h" />
+    <ClInclude Include="Source\Durna.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\DurnaEngine.cpp" />
     <ClCompile Include="Source\DurnaPCH.cpp" />
     <ClCompile Include="Source\Runtime\Core\Application.cpp">
       <Filter>Runtime\Core</Filter>
@@ -64,5 +65,7 @@
     <ClCompile Include="Source\Runtime\Renderer\Shader.cpp" />
     <ClCompile Include="Source\Runtime\Misc\FileHelper.cpp" />
     <ClCompile Include="Source\Runtime\Misc\Path.cpp" />
+    <ClCompile Include="Source\Runtime\Misc\Log.cpp" />
+    <ClCompile Include="Source\Durna.cpp" />
   </ItemGroup>
 </Project>

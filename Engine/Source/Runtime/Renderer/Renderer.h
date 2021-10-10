@@ -7,9 +7,7 @@ namespace Durna
 	class Renderer
 	{
 	public:
-		Renderer()
-		{
-		}
+		Renderer();
 
 		static void Init();
 

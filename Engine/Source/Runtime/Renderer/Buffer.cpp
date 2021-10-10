@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+LOG_DEFINE_CATEGORY(LogBuffer, "Buffer");
+
 namespace Durna
 {
 	VertexBuffer::VertexBuffer(const std::vector<float>& VertexPosition, const std::vector<float>& VertexColor)
@@ -23,8 +25,7 @@ namespace Durna
 		if (VertexPosition.size() % 3 != 0 || VertexColor.size() % 4 != 0 
 			|| VertexPosition.size() / 3 != VertexColor.size() / 4)
 		{
-			// TODO: make a log class
-			std::cout << "Couldn't generate vertexbuffer because of bad vertexposition and vertexcolor array size";
+			LOG(LogBuffer, Error, "Couldn't generate vertexbuffer because of bad vertexposition and vertexcolor size");
 			return false;
 		}
 

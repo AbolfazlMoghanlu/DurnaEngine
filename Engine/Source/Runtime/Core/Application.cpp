@@ -4,10 +4,23 @@
 #include "Runtime/Renderer/Renderer.h"
 #include "Runtime/Window/Window.h"
 
+LOG_DEFINE_CATEGORY(LogApp, "Application");
+
 namespace Durna
 {
+	Application::Application()
+	{
+		Init();
+	}
+
+	Application::~Application()
+	{
+		Shutdown();
+	}
+
 	void Application::Init()
 	{
+		LOG(LogApp, Info, "initializing.");
 		Renderer::Init();
 	}
 
@@ -18,6 +31,7 @@ namespace Durna
 
 	void Application::Shutdown()
 	{
+		LOG(LogApp, Info, "shutingdown.");
 		Renderer::Shutdown();
 	}
 

@@ -7,16 +7,24 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-
 //todo remove dependancy
 #include "Runtime/Renderer/Buffer.h"
+
+LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
 {
 	Window* Renderer::MainWindow = nullptr;
 
+	Renderer::Renderer()
+	{
+
+	}
+
 	void Renderer::Init()
 	{
+		LOG(LogRenderer, Info, "Initializing.");
+
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -27,7 +35,7 @@ namespace Durna
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
-			std::cout << "Failed to initialize GLAD" << std::endl;
+			LOG(LogRenderer, Error, "Failed to initialize GLAD");
 			return;
 		}
 
@@ -79,6 +87,8 @@ namespace Durna
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -93,6 +103,7 @@ namespace Durna
 
 	void Renderer::Shutdown()
 	{
+		LOG(LogRenderer, Info, "Shutingdown");
 		delete MainWindow;
 
 		glfwTerminate();

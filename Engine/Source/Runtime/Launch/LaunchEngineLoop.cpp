@@ -3,20 +3,36 @@
 
 #include "Runtime/Core/Application.h"
 
+LOG_DEFINE_CATEGORY(LogEngine, "Engine");
+
 namespace Durna
 {
 	Engineloop engineLoop;
 
+	Engineloop::Engineloop() :
+		MaxTimeDilation(1 / 60.0f)
+		, LastTickTime(-1.0f)
+	{
+
+	}
+
+	Engineloop::~Engineloop()
+	{
+
+	}
+
 	bool Engineloop::Init()
 	{
+		LOG(LogEngine, Info, "Initalizing.");
 		App = new Application();
-		App->Init();
 
 		return true;
 	}
 
 	void Engineloop::Shutdown()
 	{
+		LOG(LogEngine, Info, "Shutingdown.");
+
 		delete App;
 	}
 
@@ -52,14 +68,12 @@ namespace Durna
 
 int main()
 {
-	std::cout << "Engine started.";
-
 	if (!Durna::engineLoop.Init())
 	{
-		// todo: error log
+		LOG(LogEngine, Error, "Failed to initialize engine.");
 		return -1;
 	}
-
+	
 	// engine main loop
 	Durna::engineLoop.MainLoop();
 

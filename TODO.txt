@@ -1,1 +1,1 @@
-Make a file path helper class
+make a ENSURE macro for asserting

@@ -1,3 +1,6 @@
+
+LOG_DECLARE_CATEGORY(LogApp);
+
 namespace Durna
 {
 	class Application;
@@ -5,11 +8,9 @@ namespace Durna
 	class Engineloop
 	{
 	public:
-		Engineloop()
-			: MaxTimeDilation(1 / 60.0f)
-			, LastTickTime(-1.0f)
-		{
-		}
+		Engineloop();
+
+		~Engineloop();
 
 		bool Init();
 		void Shutdown();

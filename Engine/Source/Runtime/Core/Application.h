@@ -7,9 +7,9 @@ namespace Durna
 	class Application
 	{
 	public:
-		Application()
-		{
-		}
+		Application();
+
+		~Application();
 
 		void Init();
 

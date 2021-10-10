@@ -4,6 +4,8 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
+LOG_DEFINE_CATEGORY(LogShader, "Shader");
+
 namespace Durna
 {
 
@@ -14,12 +16,16 @@ namespace Durna
 
 	Shader::Shader(const char* FilePath)
 	{
+		LOG(LogShader, Info, "Compiling shader from file \"%s\"", FilePath);
 		std::string VertexShaderSource;
 		std::string FragmentShaderSource;
 
 		if (ReadShaderSourceFromFile(FilePath, VertexShaderSource, FragmentShaderSource))
 		{
-			CompileShader(VertexShaderSource.c_str(), FragmentShaderSource.c_str());
+			if (CompileShader(VertexShaderSource.c_str(), FragmentShaderSource.c_str()))
+			{
+				LOG(LogShader, Info, "Shader compiled successfuly \"%s\".", FilePath);
+			}
 		}
 	}
 
@@ -74,14 +80,11 @@ namespace Durna
 
 		if (!Success)
 		{
-
-#if DRN_DEBUG || DRN_RELEASE
+#ifndef DRN_DIST
 			char InfoLog[512];
 			glGetShaderInfoLog(ID, 512, NULL, InfoLog);
 
-			//TODO: log class
-			std::cout << "Vertex shader complation failed:\n" << InfoLog << std::endl;
-
+			LOG(LogShader, Error, "Vertex shader complation failed:\n%s", InfoLog);
 #endif
 			return false;
 		}
@@ -102,13 +105,11 @@ namespace Durna
 		if (!Success)
 		{
 
-#if DRN_DEBUG || DRN_RELEASE
+#ifndef DRN_DIST
 			char InfoLog[512];
 			glGetShaderInfoLog(ID, 512, NULL, InfoLog);
 
-			//TODO: log class
-			std::cout << "Fragment shader complation failed:\n" << InfoLog << std::endl;
-
+			LOG(LogShader, Error, "Fragment shader complation failed:\n%s", InfoLog);
 #endif
 			return false;
 		}
@@ -128,13 +129,11 @@ namespace Durna
 
 		if (!Success)
 		{
-#if DRN_DEBUG || DRN_RELEASE
+#ifndef DRN_DIST
 			char InfoLog[512];
 			glGetProgramInfoLog(ID, 512, NULL, InfoLog);
 
-			//TODO: log class
-			std::cout << "Shader program linkage failed:\n" << InfoLog << std::endl;
-
+			LOG(LogShader, Error, "Shader program linkage failed:\n%s", InfoLog)
 #endif
 			return false;
 		}
@@ -146,10 +145,8 @@ namespace Durna
 		std::string Source;
 		if (!FileHelper::ReadStringFromTextFile(FilePath, Source))
 		{
-#if DRN_DEBUG || DRN_RELEASE
-			// TODO: log class
-			std::cout << "Error while loading shader file '" << FilePath << "'.\n";
-#endif
+			LOG(LogShader, Error, "Shader compilation failed to bad file \"%s\".", FilePath);
+
 			return false;
 		}
 
@@ -165,8 +162,7 @@ namespace Durna
 
 			if (eol == std::string::npos)
 			{
-				//TODO: log class
-				std::cout << "Syntax error in'" << FilePath << "'\n";
+				LOG(LogShader, Error, "Syntax error in shader file \"%s\"", FilePath);
 				return false;
 			}
 
@@ -181,8 +177,7 @@ namespace Durna
 			{
 				if (FoundVertexShader)
 				{
-					//TODO: log class
-					std::cout << "There is already a vertex shader defined in '" << FilePath << "'!\n";
+					LOG(LogShader, Error, "There is already a vertex shader defined in shader file \"%s\".", FilePath);
 					return false;
 				}
 				VertexShaderSource = TokenisedSource;
@@ -193,8 +188,7 @@ namespace Durna
 			{
 				if (FoundFragmentShader)
 				{
-					//TODO: log class
-					std::cout << "There is already a fragment shader defined in '" << FilePath << "'!\n";
+					LOG(LogShader, Error, "There is already a fragment shader defined in shader file \"%s\".", FilePath);
 					return false;
 				}
 				FragmentShaderSource = TokenisedSource;
@@ -203,8 +197,7 @@ namespace Durna
 
 			else
 			{
-				//TODO: log class
-				std::cout << "Wrong shader type" << Type << "in '" << FilePath << "'!\n";
+				LOG(LogShader, Error, "Invalid shader type \"%s\" in shader file \"%s\".", Type.c_str(), FilePath);
 				return false;
 			}
 
