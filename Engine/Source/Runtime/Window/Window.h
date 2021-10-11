@@ -7,18 +7,9 @@ namespace Durna
 	class Window
 	{
 	public:
-		Window(std::string InTitle, int InWidth, int InHeight)
-			: Title		(InTitle)
-			, Width		(InWidth)
-			, Height	(InHeight)
-			, window	(nullptr)
-		{
-		}
+		Window(std::string InTitle, int InWidth, int InHeight);
 
-		~Window()
-		{
-			//delete window;
-		}
+		~Window();
 
 		void Init();
 

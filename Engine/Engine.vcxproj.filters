@@ -43,6 +43,8 @@
     <ClInclude Include="Source\Runtime\Misc\Path.h" />
     <ClInclude Include="Source\Runtime\Misc\Log.h" />
     <ClInclude Include="Source\Durna.h" />
+    <ClInclude Include="Source\Runtime\Misc\Assert.h" />
+    <ClInclude Include="Source\Runtime\Misc\HelperMacro.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DurnaPCH.cpp" />
@@ -67,5 +69,7 @@
     <ClCompile Include="Source\Runtime\Misc\Path.cpp" />
     <ClCompile Include="Source\Runtime\Misc\Log.cpp" />
     <ClCompile Include="Source\Durna.cpp" />
+    <ClCompile Include="Source\Runtime\Misc\Assert.cpp" />
+    <ClCompile Include="Source\Runtime\Misc\HelperMacro.cpp" />
   </ItemGroup>
 </Project>

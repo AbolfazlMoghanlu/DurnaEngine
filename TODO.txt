@@ -1,1 +1,5 @@
-make a ENSURE macro for asserting
+make render command class
+make actor class
+make component class
+make primitive component class
+make base shape primitive child(sphere, box, ...)

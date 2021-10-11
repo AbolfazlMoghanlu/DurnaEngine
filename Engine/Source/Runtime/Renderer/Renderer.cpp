@@ -31,7 +31,6 @@ namespace Durna
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		MainWindow = new Window("DurnaEngine", 800, 600);
-		MainWindow->Init();
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{

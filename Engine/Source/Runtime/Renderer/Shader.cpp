@@ -28,7 +28,7 @@ namespace Durna
 			}
 		}
 	}
-
+	
 	Shader::Shader(const std::string& FilePath) : Shader(FilePath.c_str())
 	{
 	}

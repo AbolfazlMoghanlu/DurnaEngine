@@ -8,6 +8,21 @@ LOG_DEFINE_CATEGORY(LogWindow, "Window");
 
 namespace Durna
 {
+	Window::Window(std::string InTitle, int InWidth, int InHeight)
+		: Title(InTitle)
+		, Width(InWidth)
+		, Height(InHeight)
+		, window(nullptr)
+	{
+		Init();
+	}
+
+	Window::~Window()
+	{
+		LOG(LogWindow, Info, "Destroying \"%s\" window.", Title.c_str());
+		glfwDestroyWindow(window);
+	}
+
 	void Window::Init()
 	{
 		LOG(LogWindow, Info, "Initializing \"%s\" window in %i * %i.", Title.c_str(), Width, Height);
