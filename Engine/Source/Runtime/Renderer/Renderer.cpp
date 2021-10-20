@@ -60,41 +60,26 @@ namespace Durna
 			1.0		, 1.0		, 1.0		, 1.0 
 		};
 
-		unsigned int indices[] =
+		std::vector<int> indices =
 		{
 			0, 1, 3,
 			1, 2, 3
 		};
-		
-		//VertexBuffer vb = VertexBuffer(vp, vc);
-		VertexBuffer vb;
 
-// 		VertexBuffer vsa = VertexBuffer({ 
-// 			VertexBufferLayout(&vp, GL_FALSE, 3)
-// 			,VertexBufferLayout(&vc, GL_FALSE, 4)
-// 			});
 
-		vb.AddLayout(VertexBufferLayout(&vp, GL_FALSE, 3));
-		vb.AddLayout(VertexBufferLayout(&vc, GL_FALSE, 4));
-
-		vb.UpdateVertexData();
+		VertexBuffer vb({
+			VertexBufferLayout(&vp, GL_FALSE, 3),
+			VertexBufferLayout(&vc, GL_FALSE, 4) });
 
 		vb.Bind();
-
-		//vsa.Bind();
+		
+		ElementBuffer eb(indices);
+		eb.Bind();
 
 		Shader shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		shader.Use();
 
-		unsigned int elementbufferobject;
-		glGenBuffers(1, &elementbufferobject);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbufferobject);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-
 	}
 
 	void Renderer::Tick(float DeltaTime)

@@ -21,6 +21,10 @@ namespace Durna
 		
 	}
 
+// --------------------------------------------------------------
+// ----------------- Vertexbuffer -------------------------------
+// --------------------------------------------------------------
+
 	VertexBuffer::VertexBuffer()
 	{
 		glGenBuffers(1, &ID);
@@ -28,6 +32,8 @@ namespace Durna
 
 	VertexBuffer::VertexBuffer(const std::vector<VertexBufferLayout>& Layouts)
 	{
+		glGenBuffers(1, &ID);
+		glBindBuffer(GL_ARRAY_BUFFER, ID);
 		for (const VertexBufferLayout& Layout : Layouts)
 		{
 			AddLayout(Layout);
@@ -44,7 +50,7 @@ namespace Durna
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
 
-		int VertexCount = Layouts[0].Data->size() / 3;
+		int VertexCount = (int)Layouts[0].Data->size() / 3;
 
 		LOG(LogBuffer, Info, "VertexCount: %i", VertexCount);
 
@@ -87,7 +93,7 @@ namespace Durna
 			//TODO: support primary types
 			const VertexBufferLayout& Layout = Layouts[i];
 			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, Layouts[i].Count, GL_FLOAT, Layouts[i].bNormalized, Stride, (void*)Layouts[i].Offset);
+			glVertexAttribPointer(i, Layouts[i].Count, GL_FLOAT, Layouts[i].bNormalized, Stride, (void*)(size_t)Layouts[i].Offset);
 		}
 	}
 
@@ -110,5 +116,41 @@ namespace Durna
 	void VertexBuffer::UnBind()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+// ---------------------------------------------------------------
+// --------------------- Elementbuffer ---------------------------
+// ---------------------------------------------------------------
+
+	ElementBuffer::ElementBuffer()
+	{
+		glGenBuffers(1, &ID);
+	}
+
+	ElementBuffer::ElementBuffer(const std::vector<int>& Elements)
+	{
+		glGenBuffers(1, &ID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+		UpdateBuffer(Elements);
+	}
+
+	ElementBuffer::~ElementBuffer()
+	{
+		glDeleteBuffers(1, &ID);
+	}
+
+	void ElementBuffer::Bind()
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+	}
+
+	void ElementBuffer::Unbind()
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	void ElementBuffer::UpdateBuffer(const std::vector<int>& Elements) const
+	{
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Elements) * sizeof(int), &Elements[0], bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 	}
 }

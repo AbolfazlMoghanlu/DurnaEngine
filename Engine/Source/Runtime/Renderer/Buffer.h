@@ -10,9 +10,9 @@ namespace Durna
 		~VertexBufferLayout();
 
 		std::vector<float>* Data;
-		unsigned int Offset;
+		int Offset;
 		bool bNormalized;
-		unsigned int Count;
+		int Count;
 	};
 
 	class VertexBuffer
@@ -48,7 +48,8 @@ namespace Durna
 	class ElementBuffer
 	{
 	public:
-		ElementBuffer(const std::vector<float>& Elements);
+		ElementBuffer();
+		ElementBuffer(const std::vector<int>& Elements);
 
 		~ElementBuffer();
 
@@ -57,10 +58,11 @@ namespace Durna
 		void Unbind();
 
 	private:
-		void UpdateBuffer(const std::vector<float>& Elements) const;
+		void UpdateBuffer(const std::vector<int>& Elements) const;
 
 		unsigned int ID;
 
+		bool bDynamic = false;
 	};
 }
 
