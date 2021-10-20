@@ -57,7 +57,7 @@ namespace Durna
 			1.0		, 0.0		, 0.0		, 1.0,
 			0.0		, 1.0		, 0.0		, 1.0,
 			0.0		, 0.0		, 1.0		, 1.0,
-			1.0		, 1.0		, 1.0		, 1.0
+			1.0		, 1.0		, 1.0		, 1.0 
 		};
 
 		unsigned int indices[] =
@@ -66,18 +66,25 @@ namespace Durna
 			1, 2, 3
 		};
 		
-		VertexBuffer vb = VertexBuffer(vp, vc);
+		//VertexBuffer vb = VertexBuffer(vp, vc);
+		VertexBuffer vb;
+
+// 		VertexBuffer vsa = VertexBuffer({ 
+// 			VertexBufferLayout(&vp, GL_FALSE, 3)
+// 			,VertexBufferLayout(&vc, GL_FALSE, 4)
+// 			});
+
+		vb.AddLayout(VertexBufferLayout(&vp, GL_FALSE, 3));
+		vb.AddLayout(VertexBufferLayout(&vc, GL_FALSE, 4));
+
+		vb.UpdateVertexData();
+
+		vb.Bind();
+
+		//vsa.Bind();
 
 		Shader shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		shader.Use();
-
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-
 
 		unsigned int elementbufferobject;
 		glGenBuffers(1, &elementbufferobject);

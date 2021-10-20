@@ -8,11 +8,31 @@ LOG_DEFINE_CATEGORY(LogBuffer, "Buffer");
 
 namespace Durna
 {
-	VertexBuffer::VertexBuffer(const std::vector<float>& VertexPosition, const std::vector<float>& VertexColor)
+	VertexBufferLayout::VertexBufferLayout(std::vector<float>* InData, bool InbNormalized, unsigned int InCount)
+		: Data(InData)
+		, bNormalized(InbNormalized)
+		, Count(InCount)
+	{
+		
+	}
+
+	VertexBufferLayout::~VertexBufferLayout()
+	{
+		
+	}
+
+	VertexBuffer::VertexBuffer()
 	{
 		glGenBuffers(1, &ID);
+	}
 
-		GenerateVertexBuffer(VertexPosition, VertexColor);
+	VertexBuffer::VertexBuffer(const std::vector<VertexBufferLayout>& Layouts)
+	{
+		for (const VertexBufferLayout& Layout : Layouts)
+		{
+			AddLayout(Layout);
+		}
+		UpdateVertexData();
 	}
 
 	VertexBuffer::~VertexBuffer()
@@ -20,45 +40,75 @@ namespace Durna
 		glDeleteBuffers(1, &ID);
 	}
 
-	bool VertexBuffer::GenerateVertexBuffer(const std::vector<float>& VertexPosition, const std::vector<float>& VertexColor)
+	void VertexBuffer::UpdateVertexData()
 	{
-		if (VertexPosition.size() % 3 != 0 || VertexColor.size() % 4 != 0 
-			|| VertexPosition.size() / 3 != VertexColor.size() / 4)
+		glBindBuffer(GL_ARRAY_BUFFER, ID);
+
+		int VertexCount = Layouts[0].Data->size() / 3;
+
+		LOG(LogBuffer, Info, "VertexCount: %i", VertexCount);
+
+		// TODO: only in debug 
+		for (const VertexBufferLayout Layout : Layouts)
 		{
-			LOG(LogBuffer, Error, "Couldn't generate vertexbuffer because of bad vertexposition and vertexcolor size");
-			return false;
+			ensure(Layout.Data->size() / Layout.Count == VertexCount 
+				&& Layout.Data->size() % Layout.Count == 0,
+				"VertexBuffer data size is invalid");
 		}
 
-		VertexBufferData.clear();
-		VertexBufferData.reserve(VertexPosition.size() + VertexColor.size());
+		std::vector<float> VertexData;
+		VertexData.resize(Stride * VertexCount);
 
- 		for (int i = 0; i * 3 < VertexPosition.size() ; i++)
- 		{
-			for (int j = 0; j < 3; j++)
+		int Offset = 0;
+
+		for (int i = 0; i < Layouts.size(); i++)
+		{
+			for (int j = 0; j < Layouts[i].Count; j++)
 			{
-				VertexBufferData.push_back(VertexPosition[(i * 3) + j]);
+				for (int k = 0; k < VertexCount; k++)
+				{
+					int VertexDataIndex = (k * Stride / sizeof(float)) + Offset + j;
+					VertexData[VertexDataIndex] = Layouts[i].Data->at((Layouts[i].Count * k) + j);
+				}
 			}
 
-			for (int j = 0; j < 4; j++)
-			{
-				VertexBufferData.push_back(VertexColor[(i * 4) + j]);
-			}
- 		}
+			Offset += Layouts[i].Count;
+		}
 
+		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * sizeof(float), &VertexData[0], bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+	}
+
+	void VertexBuffer::UpdateVertexAttributes()
+	{
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexBufferData) * sizeof(float), &VertexBufferData[0], GL_STATIC_DRAW);
+		
+		for (int i = 0; i < Layouts.size(); i++)
+		{
+			//TODO: support primary types
+			const VertexBufferLayout& Layout = Layouts[i];
+			glEnableVertexAttribArray(i);
+			glVertexAttribPointer(i, Layouts[i].Count, GL_FLOAT, Layouts[i].bNormalized, Stride, (void*)Layouts[i].Offset);
+		}
+	}
 
-		return true;
+	void VertexBuffer::AddLayout(VertexBufferLayout Layout)
+	{
+		Layout.Offset = Stride;
+		Layouts.push_back(Layout);
+		
+		//TODO: support primary types 
+		Stride += Layout.Count * sizeof(float);
 	}
 
 	void VertexBuffer::Bind()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
+
+		UpdateVertexAttributes();
 	}
 
 	void VertexBuffer::UnBind()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-
 }
