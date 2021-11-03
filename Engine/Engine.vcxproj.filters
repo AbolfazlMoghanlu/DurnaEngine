@@ -45,6 +45,10 @@
     <ClInclude Include="Source\Durna.h" />
     <ClInclude Include="Source\Runtime\Misc\Assert.h" />
     <ClInclude Include="Source\Runtime\Misc\HelperMacro.h" />
+    <ClInclude Include="Source\Runtime\Components\PrimitiveComponent.h" />
+    <ClInclude Include="Source\Runtime\Engine\StaticMesh.h" />
+    <ClInclude Include="Source\Runtime\Renderer\RenderCommands.h" />
+    <ClInclude Include="Source\Runtime\Engine\BaseShapes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\DurnaPCH.cpp" />
@@ -71,5 +75,9 @@
     <ClCompile Include="Source\Durna.cpp" />
     <ClCompile Include="Source\Runtime\Misc\Assert.cpp" />
     <ClCompile Include="Source\Runtime\Misc\HelperMacro.cpp" />
+    <ClCompile Include="Source\Runtime\Components\PrimitiveComponent.cpp" />
+    <ClCompile Include="Source\Runtime\Engine\StaticMesh.cpp" />
+    <ClCompile Include="Source\Runtime\Renderer\RenderCommands.cpp" />
+    <ClCompile Include="Source\Runtime\Engine\BaseShapes.cpp" />
   </ItemGroup>
 </Project>

@@ -143,6 +143,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Runtime\Renderer\RenderCommands.h" />
+    <ClInclude Include="Source\Runtime\Engine\BaseShapes.h" />
+    <ClInclude Include="Source\Runtime\Components\PrimitiveComponent.h" />
     <ClInclude Include="Source\Runtime\Misc\HelperMacro.h" />
     <ClInclude Include="Source\Runtime\Misc\Assert.h" />
     <ClInclude Include="Source\Durna.h" />
@@ -156,8 +159,12 @@
     <ClInclude Include="Source\Runtime\Launch\LaunchEngineLoop.h" />
     <ClInclude Include="Source\Runtime\Renderer\Renderer.h" />
     <ClInclude Include="Source\Runtime\Window\Window.h" />
+    <ClInclude Include="Source\Runtime\Engine\StaticMesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Runtime\Renderer\RenderCommands.cpp" />
+    <ClCompile Include="Source\Runtime\Engine\BaseShapes.cpp" />
+    <ClCompile Include="Source\Runtime\Components\PrimitiveComponent.cpp" />
     <ClCompile Include="Source\Runtime\Misc\HelperMacro.cpp" />
     <ClCompile Include="Source\Runtime\Misc\Assert.cpp" />
     <ClCompile Include="Source\Runtime\Misc\Log.cpp" />
@@ -176,6 +183,7 @@
     <ClCompile Include="Source\ThirdParty\Glad\glad.c">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Runtime\Engine\StaticMesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

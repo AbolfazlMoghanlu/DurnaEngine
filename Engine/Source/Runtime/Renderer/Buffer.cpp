@@ -63,7 +63,7 @@ namespace Durna
 		}
 
 		std::vector<float> VertexData;
-		VertexData.resize(Stride * VertexCount);
+		VertexData.resize(Stride * VertexCount / sizeof(float));
 
 		int Offset = 0;
 
@@ -110,7 +110,7 @@ namespace Durna
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
 
-		UpdateVertexAttributes();
+		//UpdateVertexAttributes();
 	}
 
 	void VertexBuffer::UnBind()

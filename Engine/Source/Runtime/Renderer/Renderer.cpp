@@ -9,6 +9,9 @@
 
 //todo remove dependancy
 #include "Runtime/Renderer/Buffer.h"
+#include "Runtime/Engine/BaseShapes.h"
+#include "Runtime/Components/PrimitiveComponent.h"
+#include "Runtime/Renderer/RenderCommands.h"
 
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
@@ -44,14 +47,6 @@ namespace Durna
 		glGenVertexArrays(1, &vertexarrayobject);
 		glBindVertexArray(vertexarrayobject);
 
-		std::vector<float> vp = 
-		{	
-			 0.5f,  0.5f, 0.0f,  // top right
-			 0.5f, -0.5f, 0.0f,  // bottom right
-			-0.5f, -0.5f, 0.0f,  // bottom left
-			-0.5f,  0.5f, 0.0f   // top left
-		};
-
 		std::vector<float> vc = 
 		{	
 			1.0		, 0.0		, 0.0		, 1.0,
@@ -60,26 +55,12 @@ namespace Durna
 			1.0		, 1.0		, 1.0		, 1.0 
 		};
 
-		std::vector<int> indices =
-		{
-			0, 1, 3,
-			1, 2, 3
-		};
-
-
-		VertexBuffer vb({
-			VertexBufferLayout(&vp, GL_FALSE, 3),
-			VertexBufferLayout(&vc, GL_FALSE, 4) });
-
-		vb.Bind();
-		
-		ElementBuffer eb(indices);
-		eb.Bind();
-
 		Shader shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		shader.Use();
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		PrimitiveComponent* pr = new PrimitiveComponent(&BaseShapes::Plane, &shader);
+		pr->UpdateVertexColor(vc);
+		RenderCommands::DrawPrimitive(*pr);
 	}
 
 	void Renderer::Tick(float DeltaTime)
