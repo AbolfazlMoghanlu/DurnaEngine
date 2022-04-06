@@ -387,5 +387,8 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
+*.vcxproj
+*.vcxproj.*
+
 Intermediate/
 Bin/
