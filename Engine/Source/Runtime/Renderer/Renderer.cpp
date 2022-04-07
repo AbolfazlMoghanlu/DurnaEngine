@@ -75,8 +75,8 @@ namespace Durna
 
 	void Renderer::Shutdown()
 	{
-		LOG(LogRenderer, Info, "Shutingdown");
 		delete MainWindow;
+		LOG(LogRenderer, Info, "Shutingdown");
 
 		glfwTerminate();
 	}

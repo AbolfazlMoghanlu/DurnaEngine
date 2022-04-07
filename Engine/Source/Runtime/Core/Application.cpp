@@ -31,8 +31,8 @@ namespace Durna
 
 	void Application::Shutdown()
 	{
-		LOG(LogApp, Info, "shutingdown.");
 		Renderer::Shutdown();
+		LOG(LogApp, Info, "shutingdown.");
 	}
 
 	bool Application::IsRunning() const

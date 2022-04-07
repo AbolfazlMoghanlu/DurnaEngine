@@ -31,9 +31,11 @@ namespace Durna
 
 	void Engineloop::Shutdown()
 	{
-		LOG(LogEngine, Info, "Shutingdown.");
+		LOG(LogEngine, Info, "End play. Shuting down.");
 
 		delete App;
+
+		LOG(LogEngine, Info, "Shut down successfully.");
 	}
 
 	void Engineloop::MainLoop()
