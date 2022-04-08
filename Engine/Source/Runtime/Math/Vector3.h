@@ -2,8 +2,6 @@
 
 namespace Durna
 {
-	
-
 	template<typename T>
 	struct Vector3
 	{
