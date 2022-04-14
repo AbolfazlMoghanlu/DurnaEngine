@@ -20,8 +20,28 @@ namespace Durna
 		Vector3() : X(0), Y(0), Z(0) {};
 		Vector3(T InF) : X(InF), Y(InF), Z(InF) {};
 		Vector3(T InX, T InY, T InZ) : X(InX), Y(InY), Z(InZ) {};
+		
+		const Vector3<T> operator+(Vector3<T> Vec3) const
+		{
+			return Vector3<T>(X + Vec3.X, Y + Vec3.Y, Z + Vec3.Z);
+		}
 
+		void operator+=(Vector3<T> Vec3)
+		{
+			X += Vec3.X;
+			Y += Vec3.Y;
+			Z += Vec3.Z;
+		}
 
+		const void operator*(Vector3<T> Vec3) const
+		{
+			return Vector3<T>(X * Vec3.X, Y * Vec3.Y, Z * Vec3.Z);
+		}
+
+		const Vector3 operator*(float f) const
+		{
+			return Vector3<T>(X * f, Y * f, Z * f);
+		}
 	};
 
 

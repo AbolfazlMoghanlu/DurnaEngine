@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Runtime/Math/Vector3.h>
+
 namespace Durna
 {
 	class Shader
@@ -14,6 +16,9 @@ namespace Durna
 		bool CompileShader(const char* VertexShaderSource, const char* FragmentShaderSource);
 
 		void Use();
+
+		void SetUniformVec3f(char* UniformName, Vector3f Vec3);
+
 
 	private:
 

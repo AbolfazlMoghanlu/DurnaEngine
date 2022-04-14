@@ -3,6 +3,7 @@
 
 #include "Runtime/Window/Window.h"
 #include "Runtime/Renderer/Shader.h"
+#include "Runtime/Engine/Camera/CameraManager.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -18,6 +19,10 @@ LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 namespace Durna
 {
 	Window* Renderer::MainWindow = nullptr;
+
+	Shader* Renderer::shader;
+
+	PrimitiveComponent* Renderer::pr;
 
 	Renderer::Renderer()
 	{
@@ -47,6 +52,21 @@ namespace Durna
 		glGenVertexArrays(1, &vertexarrayobject);
 		glBindVertexArray(vertexarrayobject);
 
+		std::vector<float> vc =
+		{
+			1.0		, 0.0		, 0.0		, 1.0,
+			0.0		, 1.0		, 0.0		, 1.0,
+			0.0		, 0.0		, 1.0		, 1.0,
+			1.0		, 1.0		, 1.0		, 1.0
+		};
+
+ 		shader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
+ 		shader->Use();
+
+		pr = new PrimitiveComponent(&BaseShapes::Plane, shader);
+		pr->UpdateVertexColor(vc);
+
+		/*
 		std::vector<float> vc = 
 		{	
 			1.0		, 0.0		, 0.0		, 1.0,
@@ -58,17 +78,24 @@ namespace Durna
 		Shader shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		shader.Use();
 
-		PrimitiveComponent* pr = new PrimitiveComponent(&BaseShapes::Plane, &shader);
+		PrimitiveComponent* c;
 		pr->UpdateVertexColor(vc);
+
+		shader.SetUniformVec3f("CameraPosition", Vector3f(0.5, 0, 0));
+
 		RenderCommands::DrawPrimitive(*pr);
+		*/
 	}
 
 	void Renderer::Tick(float DeltaTime)
 	{
 		MainWindow->Tick(DeltaTime);
 
-		//glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
-		//glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		shader->SetUniformVec3f("CameraPosition", CameraManager::GetCameraPosition());
+		RenderCommands::DrawPrimitive(*pr);
 
 		glfwPollEvents();
 	}

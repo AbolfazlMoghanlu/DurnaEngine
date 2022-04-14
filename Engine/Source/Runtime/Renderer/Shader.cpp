@@ -69,7 +69,13 @@ namespace Durna
 		glUseProgram(ID);
 	}
 
-	bool Shader::CompileVertexShader(const char* VertexShaderSource, unsigned int &ID)
+	void Shader::SetUniformVec3f(char* UniformName, Vector3f Vec3)
+	{
+		int UniformLocation = glGetUniformLocation(ID, UniformName);
+		glUniform3f(UniformLocation, Vec3.X, Vec3.Y, Vec3.Z);
+	}
+
+	bool Shader::CompileVertexShader(const char* VertexShaderSource, unsigned int& ID)
 	{
 		ID = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(ID, 1, &VertexShaderSource, nullptr);

@@ -4,6 +4,10 @@ namespace Durna
 {
 	class Window;
 
+	class Shader;
+
+	class PrimitiveComponent;
+
 	class Renderer
 	{
 	public:
@@ -16,6 +20,11 @@ namespace Durna
 		static void Shutdown();
 
 		static Window* MainWindow;
+
+		// TODO: Move to static mesh class
+		 static Shader* shader;
+		// TODO: Remove
+		 static PrimitiveComponent* pr;
 	};
 }
 

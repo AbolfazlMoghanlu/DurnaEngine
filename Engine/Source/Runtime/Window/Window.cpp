@@ -1,5 +1,6 @@
 #include "DurnaPCH.h"
 #include "Window.h"
+#include "Runtime/Engine/Camera/CameraManager.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -35,6 +36,9 @@ namespace Durna
 				LOG(LogWindow, Info, "Changed window size to %i * %i.",  InWidth, InHeight);
 				glViewport(0, 0, InWidth, InHeight);
 			});
+
+		// TODO: Move somewhere more suitable
+		CameraManager::SetActiveCamera(new Camera);
 	}
 
 	
@@ -50,6 +54,26 @@ namespace Durna
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
 			glfwSetWindowShouldClose(window, true);
+		}
+
+		else if (glfwGetKey(window, GLFW_KEY_D) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldOffset(Vector3f(1.0f, 0.0f, 0.0f));
+		}
+
+		else if (glfwGetKey(window, GLFW_KEY_A) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldOffset(Vector3f(-1.0f, 0.0f, 0.0f));
+		}
+
+		else if (glfwGetKey(window, GLFW_KEY_W) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldOffset(Vector3f(0.0f, 0.0f, 1.0f));
+		}
+
+		else if (glfwGetKey(window, GLFW_KEY_S) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldOffset(Vector3f(0.0f, 0.0f, -1.0f));
 		}
 	}
 
