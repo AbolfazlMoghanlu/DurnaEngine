@@ -5,7 +5,8 @@ namespace Durna
 {
 	Camera* CameraManager::ActiveCamera;
 
-	float CameraManager::CameraSpeed = 0.01f;
+	float CameraManager::CameraMoveSpeed = 0.01f;
+	float CameraManager::CameraRotationSpeed = 1.0f;
 
 	Vector3f CameraManager::GetCameraPosition()
 	{
@@ -24,9 +25,16 @@ namespace Durna
 
 	void CameraManager::AddActiveCameraWorldOffset(const Vector3f& Offset)
 	{
-		ActiveCamera->AddCameraWorldOffset(Offset * CameraSpeed);
+		ActiveCamera->AddCameraWorldOffset(Offset * CameraMoveSpeed);
 	}
 
-	
+	Rotatorf CameraManager::GetActiveCameraRotation()
+	{
+		return ActiveCamera ? ActiveCamera->GetCameraRotation() : Rotatorf::ZeroRotator;
+	}
 
+	void CameraManager::AddActiveCameraWorldRotation(const Rotatorf& InRotator)
+	{
+		ActiveCamera->AddCameraWorldRotation(InRotator * CameraRotationSpeed);
+	}
 }

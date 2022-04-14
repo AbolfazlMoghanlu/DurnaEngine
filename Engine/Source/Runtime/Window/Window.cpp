@@ -37,6 +37,8 @@ namespace Durna
 				glViewport(0, 0, InWidth, InHeight);
 			});
 
+		
+
 		// TODO: Move somewhere more suitable
 		CameraManager::SetActiveCamera(new Camera);
 	}
@@ -45,6 +47,8 @@ namespace Durna
 
 	void Window::Tick(float DeltaTime)
 	{
+		std::printf("%f\n", CameraManager::GetActiveCameraRotation().Pitch);
+
 		glfwSwapBuffers(window);
 		ProcessInput();
 	}
@@ -56,24 +60,35 @@ namespace Durna
 			glfwSetWindowShouldClose(window, true);
 		}
 
-		else if (glfwGetKey(window, GLFW_KEY_D) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(window, GLFW_KEY_D) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraManager::AddActiveCameraWorldOffset(Vector3f(1.0f, 0.0f, 0.0f));
 		}
 
-		else if (glfwGetKey(window, GLFW_KEY_A) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraManager::AddActiveCameraWorldOffset(Vector3f(-1.0f, 0.0f, 0.0f));
 		}
 
-		else if (glfwGetKey(window, GLFW_KEY_W) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(window, GLFW_KEY_W) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraManager::AddActiveCameraWorldOffset(Vector3f(0.0f, 0.0f, 1.0f));
 		}
 
-		else if (glfwGetKey(window, GLFW_KEY_S) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(window, GLFW_KEY_S) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraManager::AddActiveCameraWorldOffset(Vector3f(0.0f, 0.0f, -1.0f));
+		}
+
+		
+		if (glfwGetKey(window, GLFW_KEY_E) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldRotation(Rotatorf(1.0f, 0.0f, 0.0f));
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_Q) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-1.0f, 0.0f, 0.0f));
 		}
 	}
 

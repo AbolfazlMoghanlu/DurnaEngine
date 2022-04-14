@@ -14,4 +14,13 @@ namespace Durna
 		Position += PositionOffset;
 	}
 
+	Rotatorf Camera::GetCameraRotation() const
+	{
+		return Rotation;
+	}
+
+	void Camera::AddCameraWorldRotation(const Rotatorf& RotationOffset)
+	{
+		Rotation = Rotatorf::CombineRotators(Rotation, RotationOffset);
+	}
 }

@@ -17,6 +17,15 @@ namespace Durna
 		/** (1, 1, 1) */
 		static const Vector3<T> OneVector;
 
+		/** (0, 0, 1) */
+		static const Vector3<T> UpVector;
+
+		/** (1, 0, 0) */
+		static const Vector3<T> ForwardVector;
+
+		/** (0, 1, 0) */
+		static const Vector3<T> RightVector;
+
 		Vector3() : X(0), Y(0), Z(0) {};
 		Vector3(T InF) : X(InF), Y(InF), Z(InF) {};
 		Vector3(T InX, T InY, T InZ) : X(InX), Y(InY), Z(InZ) {};
@@ -50,6 +59,15 @@ namespace Durna
 
 	template<typename T>
 	const Vector3<T> Vector3<T>::OneVector = Vector3<T>(1);
+
+	template<typename T>
+	const Vector3<T> Vector3<T>::UpVector = Vector3<T>(0, 0, 0);
+
+	template<typename T>
+	const Vector3<T> Vector3<T>::ForwardVector = Vector3<T>(1, 0, 0);
+
+	template<typename T>
+	const Vector3<T> Vector3<T>::RightVector = Vector3<T>(0, 1, 0);
 
 
 	typedef Vector3<float> Vector3f;
