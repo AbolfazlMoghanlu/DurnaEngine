@@ -51,7 +51,62 @@ namespace Durna
 		std::vector<float>(16, 1.0f)
 	);
 
-	
-	//StaticMesh BaseShapes::Cube;
 
+	StaticMesh BaseShapes::Cube(
+		// position
+		{
+			// top
+			-0.5f,  0.5f,  0.5f,
+			 0.5f,  0.5f,  0.5f,
+			 0.5f, -0.5f,  0.5f,
+			-0.5f, -0.5f,  0.5f,
+
+			// bottom
+			-0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f, -0.5f,
+			 0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f
+		},
+
+		// indices
+		{
+			// top
+			0, 1, 2,
+			0, 2, 3,
+
+			// bottom
+			4, 6, 5,
+			4, 7, 6,
+
+			// front
+			2, 1, 5,
+			2, 5, 6,
+
+			// back
+			0, 3, 7,
+			0, 7, 4,
+
+			// right
+			1, 0, 4,
+			1, 4, 5,
+
+			// left
+			3, 2, 6,
+			3, 6, 7
+		},
+		{},
+		{},
+
+		// vertex colors
+		{
+			1, 0, 0, 1,
+			0, 1, 0, 1,
+			0, 0, 1, 1,
+			0, 0, 0, 0,
+			1, 0, 0, 1,
+			0, 1, 0, 1,
+			0, 0, 1, 1,
+			0, 0, 0, 0
+		}
+	);
 }

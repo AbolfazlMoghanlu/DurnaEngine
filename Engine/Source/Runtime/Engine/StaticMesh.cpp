@@ -3,12 +3,7 @@
 
 namespace Durna
 {
-
-
-
-	
-
-	StaticMesh::StaticMesh(const std::vector<float>& InVertexPositions, const std::vector<int>& InVertexIndices,
+	StaticMesh::StaticMesh(const std::vector<float>& InVertexPositions, const std::vector<uint32>& InVertexIndices,
 		const std::vector<float>& InUVs, const std::vector<float>& InNormals, const std::vector<float>& InVertexColor)
 		: VertexPositions(InVertexPositions)
 		, VertexIndices(InVertexIndices)
@@ -16,7 +11,7 @@ namespace Durna
 		, VertexNormal(InNormals)
 		, VertexColors(InVertexColor)
 	{
-		VertexCount = (int)(InVertexPositions.size() / 3);
+		VertexCount = (uint32)(InVertexPositions.size() / 3);
 	}
 
 	StaticMesh::~StaticMesh()

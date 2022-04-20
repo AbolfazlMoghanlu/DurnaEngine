@@ -41,8 +41,6 @@ namespace Durna
 		std::vector<float> OverridedVertexColor;
 
 		VertexBuffer* VB;
-		ElementBuffer* EB;
-
-		bool bDirtyBuffer = true;
+		VertexElementBuffer* EB;
 	};
 }

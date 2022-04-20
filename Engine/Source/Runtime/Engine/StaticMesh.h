@@ -5,7 +5,7 @@ namespace Durna
 	{
 	public:
 		StaticMesh(const std::vector<float>& InVertexPositions,
-			const std::vector<int>& InVertexIndices,
+			const std::vector<uint32>& InVertexIndices,
 			const std::vector<float>& InUVs,
 			const std::vector<float>& InNormals,
 			const std::vector<float>& InVertexColor);
@@ -19,7 +19,7 @@ namespace Durna
 		 */
 		std::vector<float> VertexPositions;
 
-		std::vector<int> VertexIndices;
+		std::vector<uint32> VertexIndices;
 
 		/*
 		 * List of vertex UVs.

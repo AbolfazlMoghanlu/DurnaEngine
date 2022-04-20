@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Runtime/Math/Math.h"
+#include "Runtime/Math/Vector3.h"
 
 namespace Durna
 {
@@ -33,6 +34,28 @@ namespace Durna
 		const Rotator<T> operator*(float F) const
 		{
 			return Rotator<T>(Pitch * F, Yaw * F, Roll * F);
+		}
+
+		Vector3<T> AsVector()
+		{
+			return Vector3<T>(Pitch, Yaw, Roll);
+		}
+
+		Vector3<T> Vector()
+		{
+			const T PithClamped = Math::Mod(Pitch, (T)360.0);
+			const T YawClamped = Math::Mod(Yaw, (T)360.0);
+
+			T CP, SP, CY, SY;
+			Math::SinCos(&SP, &CP, Math::DegreesToRadians(PithClamped));
+			Math::SinCos(&SY, &CY, Math::DegreesToRadians(YawClamped));
+
+			return Vector3(CP * CY, CP * SY, SP);
+		}
+
+		Vector3<T> GetForwardVector()
+		{
+			return AsVector();
 		}
 
 		static Rotator<T> CombineRotators(Rotator<T> R1, Rotator<T> R2)

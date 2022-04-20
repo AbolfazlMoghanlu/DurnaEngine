@@ -52,49 +52,37 @@ namespace Durna
 		glGenVertexArrays(1, &vertexarrayobject);
 		glBindVertexArray(vertexarrayobject);
 
-		std::vector<float> vc =
-		{
-			1.0		, 0.0		, 0.0		, 1.0,
-			0.0		, 1.0		, 0.0		, 1.0,
-			0.0		, 0.0		, 1.0		, 1.0,
-			1.0		, 1.0		, 1.0		, 1.0
-		};
-
  		shader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
  		shader->Use();
 
-		pr = new PrimitiveComponent(&BaseShapes::Plane, shader);
-		pr->UpdateVertexColor(vc);
-
-		/*
-		std::vector<float> vc = 
-		{	
-			1.0		, 0.0		, 0.0		, 1.0,
-			0.0		, 1.0		, 0.0		, 1.0,
-			0.0		, 0.0		, 1.0		, 1.0,
-			1.0		, 1.0		, 1.0		, 1.0 
-		};
-
-		Shader shader(Path::ShaderRelativePath("BaseShader.glsl"));
-		shader.Use();
-
-		PrimitiveComponent* c;
-		pr->UpdateVertexColor(vc);
-
-		shader.SetUniformVec3f("CameraPosition", Vector3f(0.5, 0, 0));
-
-		RenderCommands::DrawPrimitive(*pr);
-		*/
+		pr = new PrimitiveComponent(&BaseShapes::Cube, shader);
 	}
 
 	void Renderer::Tick(float DeltaTime)
 	{
 		MainWindow->Tick(DeltaTime);
 
-		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
 
-		shader->SetUniformVec3f("CameraPosition", CameraManager::GetCameraPosition());
+		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDepthFunc(GL_LESS);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CW);
+
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+//		shader->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
+
+		float M[16];
+		CameraManager::GetCameraViewMatrix(M);
+
+		int l = glGetUniformLocation(shader->ID, "view");
+
+		glUniformMatrix4fv(l, 1, false, M);
+
 		RenderCommands::DrawPrimitive(*pr);
 
 		glfwPollEvents();

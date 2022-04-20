@@ -21,19 +21,13 @@ namespace Durna
 	void RenderCommands::DrawPrimitive(PrimitiveComponent& Comp)
 	{
 		Comp.VB->Bind();
-		
-		if(Comp.bDirtyBuffer)
-		{
-			Comp.VB->UpdateVertexData();
-			Comp.bDirtyBuffer = false;
-		}
+		Comp.VB->UpdateAttributes();
 
-		Comp.VB->UpdateVertexAttributes();
-		Comp.EB->Bind();
+ 		Comp.EB->Bind();
+		Comp.EB->UpdateBuffer();
 		
 		Comp.MeshShader->Use();
 		
-		glDrawElements(GL_TRIANGLES, (int)Comp.Mesh->VertexIndices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, Comp.EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
-
 }

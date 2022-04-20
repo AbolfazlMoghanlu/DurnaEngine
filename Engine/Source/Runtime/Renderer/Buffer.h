@@ -2,67 +2,58 @@
 
 namespace Durna
 {
+	// TODO: Support more data types, now only support float
+
 	struct VertexBufferLayout
 	{
 	public:
-		VertexBufferLayout(std::vector<float>* InData, bool InbNormalized, unsigned int InCount);
+		VertexBufferLayout()
+			: Data(nullptr), Count(0), bNormalized(false)
+		{}
 
-		~VertexBufferLayout();
+		VertexBufferLayout(std::vector<float>* InData, uint32 InCount, bool InbNormalized)
+			: Data(InData), Count(InCount), bNormalized(InbNormalized)
+		{}
 
 		std::vector<float>* Data;
-		int Offset;
+		uint32 Count;
 		bool bNormalized;
-		int Count;
 	};
 
 	class VertexBuffer
 	{
 	public:
-		
-		VertexBuffer();
-		VertexBuffer(const std::vector<VertexBufferLayout>& Layouts);
-
+		VertexBuffer(uint32 InVertexCount);
 		~VertexBuffer();
 
-		void UpdateVertexData();
-
-		void UpdateVertexAttributes();
-
-		void AddLayout(VertexBufferLayout Layout);
-
-		void Bind();
-
-		void UnBind();
+		void Bind() const;
+		void AddLayout(const VertexBufferLayout& Layout);
+		void UpdateLayout();
+		void UpdateAttributes();
 
 	private:
-
-		unsigned int ID;
-	
-		std::vector<VertexBufferLayout>	Layouts;
-
-		unsigned int Stride = 0;
-
-		bool bDynamic = false;
+		uint32 VertexCount;
+		uint32 VertexElementCount;
+		std::vector<VertexBufferLayout> Layouts;
+		std::vector<float> Buffer;
+		uint32 ID;
 	};
 
-	class ElementBuffer
+	class VertexElementBuffer
 	{
 	public:
-		ElementBuffer();
-		ElementBuffer(const std::vector<int>& Elements);
+		VertexElementBuffer();
+		VertexElementBuffer(const std::vector<uint32>& InIndices);
+		~VertexElementBuffer();
 
-		~ElementBuffer();
-
-		void Bind();
-
-		void Unbind();
+		void Bind() const;
+		void SetIndices(const std::vector<uint32>& InIndices);
+		uint32 GetCount() const;
+		void UpdateBuffer() const;
 
 	private:
-		void UpdateBuffer(const std::vector<int>& Elements) const;
-
-		unsigned int ID;
-
-		bool bDynamic = false;
+		std::vector<uint32> Indices;
+		uint32 ID;
 	};
 }
 

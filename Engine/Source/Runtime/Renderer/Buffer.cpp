@@ -8,37 +8,10 @@ LOG_DEFINE_CATEGORY(LogBuffer, "Buffer");
 
 namespace Durna
 {
-	VertexBufferLayout::VertexBufferLayout(std::vector<float>* InData, bool InbNormalized, unsigned int InCount)
-		: Data(InData)
-		, bNormalized(InbNormalized)
-		, Count(InCount)
-	{
-		
-	}
-
-	VertexBufferLayout::~VertexBufferLayout()
-	{
-		
-	}
-
-// --------------------------------------------------------------
-// ----------------- Vertex buffer -------------------------------
-// --------------------------------------------------------------
-
-	VertexBuffer::VertexBuffer()
+	VertexBuffer::VertexBuffer(uint32 InVertexCount)
+		: VertexCount(InVertexCount), VertexElementCount(0)
 	{
 		glGenBuffers(1, &ID);
-	}
-
-	VertexBuffer::VertexBuffer(const std::vector<VertexBufferLayout>& Layouts)
-	{
-		glGenBuffers(1, &ID);
-		glBindBuffer(GL_ARRAY_BUFFER, ID);
-		for (const VertexBufferLayout& Layout : Layouts)
-		{
-			AddLayout(Layout);
-		}
-		UpdateVertexData();
 	}
 
 	VertexBuffer::~VertexBuffer()
@@ -46,111 +19,89 @@ namespace Durna
 		glDeleteBuffers(1, &ID);
 	}
 
-	void VertexBuffer::UpdateVertexData()
+	void VertexBuffer::Bind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, ID);
+	}
 
-		int VertexCount = (int)Layouts[0].Data->size() / 3;
+	void VertexBuffer::AddLayout(const VertexBufferLayout& Layout)
+	{
+		ensure(Layout.Data->size() == (size_t)VertexCount * (size_t)Layout.Count,
+			"Bad vertex layout data size.");
+		Layouts.push_back(Layout);
+		VertexElementCount += Layout.Count;
+	}
 
-		LOG(LogBuffer, Info, "VertexCount: %i", VertexCount);
+	void VertexBuffer::UpdateLayout()
+	{
+		Buffer.empty();
 
-		// TODO: only in debug 
-		for (const VertexBufferLayout Layout : Layouts)
+		Buffer.resize((size_t)VertexElementCount * (size_t)VertexCount);
+
+		uint32 Offset = 0;
+
+		for (uint32 i = 0; i < Layouts.size(); i++)
 		{
-			ensure(Layout.Data->size() / Layout.Count == VertexCount 
-				&& Layout.Data->size() % Layout.Count == 0,
-				"VertexBuffer data size is invalid");
-		}
-
-		std::vector<float> VertexData;
-		VertexData.resize(Stride * VertexCount / sizeof(float));
-
-		int Offset = 0;
-
-		for (int i = 0; i < Layouts.size(); i++)
-		{
-			for (int j = 0; j < Layouts[i].Count; j++)
+			for (uint32 j = 0; j < VertexCount; j++)
 			{
-				for (int k = 0; k < VertexCount; k++)
+				for (uint32 k = 0; k < Layouts[i].Count; k++)
 				{
-					int VertexDataIndex = (k * Stride / sizeof(float)) + Offset + j;
-					VertexData[VertexDataIndex] = Layouts[i].Data->at((Layouts[i].Count * k) + j);
+					Buffer[(size_t)j * VertexElementCount + k + Offset] = Layouts[i].Data->at((size_t)j * Layouts[i].Count + k);
 				}
 			}
 
 			Offset += Layouts[i].Count;
 		}
-
-		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * sizeof(float), &VertexData[0], bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 	}
 
-	void VertexBuffer::UpdateVertexAttributes()
+	void VertexBuffer::UpdateAttributes()
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, ID);
-		
-		for (int i = 0; i < Layouts.size(); i++)
+		glBufferData(GL_ARRAY_BUFFER, (size_t)VertexElementCount * (size_t)VertexCount * sizeof(float), &Buffer[0], GL_STATIC_DRAW);
+
+		uint32 Offset = 0;
+		for (uint32 i = 0; i < Layouts.size(); i++)
 		{
-			//TODO: support primary types
-			const VertexBufferLayout& Layout = Layouts[i];
 			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, Layouts[i].Count, GL_FLOAT, Layouts[i].bNormalized, Stride, (void*)(size_t)Layouts[i].Offset);
+			glVertexAttribPointer(i, Layouts[i].Count, GL_FLOAT, Layouts[i].bNormalized
+				, VertexElementCount * sizeof(float), (void*)(size_t)Offset);
+		
+			Offset += Layouts[i].Count * sizeof(float);
 		}
 	}
 
-	void VertexBuffer::AddLayout(VertexBufferLayout Layout)
-	{
-		Layout.Offset = Stride;
-		Layouts.push_back(Layout);
-		
-		//TODO: support primary types 
-		Stride += Layout.Count * sizeof(float);
-	}
-
-	void VertexBuffer::Bind()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, ID);
-
-		//UpdateVertexAttributes();
-	}
-
-	void VertexBuffer::UnBind()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-// ---------------------------------------------------------------
-// --------------------- Element buffer ---------------------------
-// ---------------------------------------------------------------
-
-	ElementBuffer::ElementBuffer()
+	VertexElementBuffer::VertexElementBuffer()
 	{
 		glGenBuffers(1, &ID);
 	}
 
-	ElementBuffer::ElementBuffer(const std::vector<int>& Elements)
+	VertexElementBuffer::VertexElementBuffer(const std::vector<uint32>& InIndices)
+		: VertexElementBuffer()
 	{
-		glGenBuffers(1, &ID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
-		UpdateBuffer(Elements);
+		SetIndices(InIndices);
 	}
 
-	ElementBuffer::~ElementBuffer()
+	VertexElementBuffer::~VertexElementBuffer()
 	{
 		glDeleteBuffers(1, &ID);
 	}
 
-	void ElementBuffer::Bind()
+	void VertexElementBuffer::Bind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
 	}
 
-	void ElementBuffer::Unbind()
+	void VertexElementBuffer::SetIndices(const std::vector<uint32>& InIndices)
 	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		Indices = InIndices;
 	}
 
-	void ElementBuffer::UpdateBuffer(const std::vector<int>& Elements) const
+	uint32 VertexElementBuffer::GetCount() const
 	{
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Elements) * sizeof(int), &Elements[0], bDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+		return Indices.size();
+	}
+
+	void VertexElementBuffer::UpdateBuffer() const
+	{
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(float), &Indices[0], GL_STATIC_DRAW);
 	}
 }

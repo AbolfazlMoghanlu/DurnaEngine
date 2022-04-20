@@ -30,19 +30,19 @@ namespace Durna
 		Vector3(T InF) : X(InF), Y(InF), Z(InF) {};
 		Vector3(T InX, T InY, T InZ) : X(InX), Y(InY), Z(InZ) {};
 		
-		const Vector3<T> operator+(Vector3<T> Vec3) const
+		const Vector3<T> operator+(const Vector3<T>& Vec3) const
 		{
 			return Vector3<T>(X + Vec3.X, Y + Vec3.Y, Z + Vec3.Z);
 		}
 
-		void operator+=(Vector3<T> Vec3)
+		void operator+=(const Vector3<T>& Vec3)
 		{
 			X += Vec3.X;
 			Y += Vec3.Y;
 			Z += Vec3.Z;
 		}
 
-		const void operator*(Vector3<T> Vec3) const
+		const void operator*(const Vector3<T>& Vec3) const
 		{
 			return Vector3<T>(X * Vec3.X, Y * Vec3.Y, Z * Vec3.Z);
 		}
@@ -50,6 +50,23 @@ namespace Durna
 		const Vector3 operator*(float f) const
 		{
 			return Vector3<T>(X * f, Y * f, Z * f);
+		}
+
+		static Vector3<T> CrossProduct(const Vector3<T>& A, const Vector3<T>& B)
+		{
+			return Vector3<T>
+				(
+				A.Y * B.Z - A.Z * B.Y,
+				A.Z * B.X - A.X * B.Z,
+				A.X * B.Y - A.Y * B.X
+				);
+		}
+
+		Vector3<T> Normalize()
+		{
+			// TODO: fast sqrt
+			const T Scale = 1 / sqrt(X * X + Y * Y + Z * Z);
+			return Vector3<T>(X * Scale, Y * Scale, Z * Scale);
 		}
 	};
 
@@ -61,7 +78,7 @@ namespace Durna
 	const Vector3<T> Vector3<T>::OneVector = Vector3<T>(1);
 
 	template<typename T>
-	const Vector3<T> Vector3<T>::UpVector = Vector3<T>(0, 0, 0);
+	const Vector3<T> Vector3<T>::UpVector = Vector3<T>(0, 0, 1);
 
 	template<typename T>
 	const Vector3<T> Vector3<T>::ForwardVector = Vector3<T>(1, 0, 0);

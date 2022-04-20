@@ -12,11 +12,13 @@ namespace Durna
 		static Camera* GetActiveCamera();
 		static void SetActiveCamera(Camera* InCamera);
 
-		static Vector3f GetCameraPosition();
+		static Vector3f GetActiveCameraPosition();
 		static void AddActiveCameraWorldOffset(const Vector3f& Offset);
 
 		static Rotatorf GetActiveCameraRotation();
 		static void AddActiveCameraWorldRotation(const Rotatorf& InRotator);
+
+		static void GetCameraViewMatrix(float* A);
 
 		static float CameraMoveSpeed;
 		static float CameraRotationSpeed;

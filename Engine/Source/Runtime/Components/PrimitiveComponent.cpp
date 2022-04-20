@@ -10,11 +10,20 @@ namespace Durna
 		Mesh = InMesh;
 		OverridedVertexColor = InMesh->VertexColors;
 
-		VB = new VertexBuffer({
-			VertexBufferLayout(&Mesh->VertexPositions, false, 3),
-			VertexBufferLayout(&OverridedVertexColor, false, 4) });
+// 		VB = new VertexBuffer({
+// 			VertexBufferLayout(&Mesh->VertexPositions, false, 3),
+// 			VertexBufferLayout(&OverridedVertexColor, false, 4) });
 
-		EB = new ElementBuffer(Mesh->VertexIndices);
+		VB = new VertexBuffer(Mesh->VertexCount);
+		VB->AddLayout(VertexBufferLayout(&Mesh->VertexPositions, 3, false));
+		VB->AddLayout(VertexBufferLayout(&OverridedVertexColor, 4, false));
+		VB->UpdateLayout();
+		VB->Bind();
+		VB->UpdateAttributes();
+
+		EB = new VertexElementBuffer(Mesh->VertexIndices);
+		EB->Bind();
+		EB->UpdateBuffer();
 
 		MeshShader.reset(InShader);
 	}
@@ -28,7 +37,6 @@ namespace Durna
 	void PrimitiveComponent::UpdateVertexColor(const std::vector<float>& InVertexColor)
 	{
 		OverridedVertexColor = InVertexColor;
-		bDirtyBuffer = true;
 	}
 
 }

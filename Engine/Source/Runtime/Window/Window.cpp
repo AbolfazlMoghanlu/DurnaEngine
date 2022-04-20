@@ -47,7 +47,8 @@ namespace Durna
 
 	void Window::Tick(float DeltaTime)
 	{
-		std::printf("%f\n", CameraManager::GetActiveCameraRotation().Pitch);
+		float M[16];
+		CameraManager::GetCameraViewMatrix(M);
 
 		glfwSwapBuffers(window);
 		ProcessInput();
@@ -89,6 +90,16 @@ namespace Durna
 		if (glfwGetKey(window, GLFW_KEY_Q) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-1.0f, 0.0f, 0.0f));
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_C) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldRotation(Rotatorf(0.0f, 1.0f, 0.0f));
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_X) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-1.0f, -1.0f, 0.0f));
 		}
 	}
 

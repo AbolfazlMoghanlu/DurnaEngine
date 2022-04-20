@@ -6,9 +6,9 @@ namespace Durna
 	Camera* CameraManager::ActiveCamera;
 
 	float CameraManager::CameraMoveSpeed = 0.01f;
-	float CameraManager::CameraRotationSpeed = 1.0f;
+	float CameraManager::CameraRotationSpeed = 3.0f;
 
-	Vector3f CameraManager::GetCameraPosition()
+	Vector3f CameraManager::GetActiveCameraPosition()
 	{
 		return ActiveCamera ? ActiveCamera->GetCameraPosition() : Vector3f(0);
 	}
@@ -37,4 +37,30 @@ namespace Durna
 	{
 		ActiveCamera->AddCameraWorldRotation(InRotator * CameraRotationSpeed);
 	}
+
+	void CameraManager::GetCameraViewMatrix(float* A)
+	{
+		Vector3f CameraDirection = GetActiveCameraRotation().Vector();
+		Vector3f CameraRightVector = Vector3f::CrossProduct(Vector3f::UpVector, CameraDirection).Normalize();
+		Vector3f CameraUpVector = Vector3f::CrossProduct(CameraDirection, CameraRightVector);
+
+		float* M = new float[16];
+		A[0] = CameraRightVector.X;
+		A[1] = CameraRightVector.Y;
+		A[2] = CameraRightVector.Z;
+		A[3] = 0;
+		A[4] = CameraUpVector.X;
+		A[5] = CameraUpVector.Y;
+		A[6] = CameraUpVector.Z;
+		A[7] = 0;
+		A[8] = CameraDirection.X;
+		A[9] = CameraDirection.Y;
+		A[10] = CameraDirection.Z;
+		A[11] = 0;
+		A[12] = 0;
+		A[13] = 0;
+		A[14] = 0;
+		A[15] = 1;
+	}
+
 }
