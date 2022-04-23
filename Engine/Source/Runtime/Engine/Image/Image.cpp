@@ -20,6 +20,11 @@ namespace Durna
 		}
 	}
 
+	Image::~Image()
+	{
+		Unload();
+	}
+
 	bool Image::Load()
 	{
 		if (IsLoaded())
@@ -30,17 +35,16 @@ namespace Durna
 		unsigned char* Result;
 		int32 ImageWidth, ImageHeight, ImageNumberOfChannels;
 
-		Result = stbi_load(FilePath.c_str(),
-			&ImageWidth, &ImageHeight, &ImageNumberOfChannels, 0);
+ 		Result = stbi_load(FilePath.c_str(),
+ 			&ImageWidth, &ImageHeight, &ImageNumberOfChannels, 0);
 
 		if (Result)
 		{
-			// TODO: make custom data structure to avoid coppying inline data to std::vector
-			Data.assign((size_t)ImageWidth * (size_t)ImageHeight, *Result);
+			Data = Result;
 			Width = ImageWidth;
 			Height = ImageHeight;
 			NumberOfChannels = ImageNumberOfChannels;
-
+			
 			MarkLoaded();
 		}
 
@@ -55,6 +59,7 @@ namespace Durna
 
 	void Image::Unload()
 	{
+		stbi_image_free(Data);
 		MarkUnloaded();
 	}
 

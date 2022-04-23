@@ -8,6 +8,8 @@ namespace Durna
 		Image();
 		Image(const char* InPath, bool bLoad = true);
 
+		~Image();
+
 		bool Load();
 		void Unload();
 
@@ -19,9 +21,10 @@ namespace Durna
 		void MarkLoaded();
 		void MarkUnloaded();
 
+		unsigned char* Data = nullptr;
+
 	private:
 		
-		std::vector<unsigned char> Data;
 		std::string FilePath = "";
 		int32 Width = 0;
 		int32 Height = 0;

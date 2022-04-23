@@ -15,6 +15,8 @@
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Engine/Image/Image.h"
 
+#include "ThirdParty/Stb/stb_image.h"
+
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
@@ -87,6 +89,24 @@ namespace Durna
 		int l = glGetUniformLocation(shader->ID, "view");
 
 		glUniformMatrix4fv(l, 1, false, M);
+
+
+
+		unsigned int texture;
+		glGenTextures(1, &texture);
+
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img->GetWidth(), img->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img->Data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+
 
 		RenderCommands::DrawPrimitive(*pr);
 
