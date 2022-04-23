@@ -40,9 +40,9 @@ namespace Durna
 
 	void CameraManager::GetCameraViewMatrix(float* A)
 	{
-		Vector3f CameraDirection = GetActiveCameraRotation().Vector();
-		Vector3f CameraRightVector = Vector3f::CrossProduct(Vector3f::UpVector, CameraDirection).Normalize();
-		Vector3f CameraUpVector = Vector3f::CrossProduct(CameraDirection, CameraRightVector);
+		Vector3f CameraDirection = GetActiveCameraRotation().GetForwardVector();
+		Vector3f CameraRightVector = GetActiveCameraRotation().GetRightVector();
+		Vector3f CameraUpVector = GetActiveCameraRotation().GetUpVector();
 
 		float* M = new float[16];
 		A[0] = CameraRightVector.X;

@@ -9,7 +9,10 @@ layout (location = 1) in vec4 VColor;
 out vec4 V_Color;
 void main()
 {
-	gl_Position = view * vec4(aPos, 1.0f);	
+	vec3 a = CameraPosition - aPos;
+	gl_Position = view * vec4(a, 1);
+
+	//gl_Position = view * vec4(aPos, 1.0f);	
 	//gl_Position = vec4(aPos, 1.0f);
 
 	V_Color = VColor;

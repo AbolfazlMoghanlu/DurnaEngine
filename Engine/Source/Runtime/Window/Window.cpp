@@ -50,6 +50,12 @@ namespace Durna
 		float M[16];
 		CameraManager::GetCameraViewMatrix(M);
 
+// 		std::printf("Forward	: %s \n", CameraManager::GetActiveCameraRotation().GetForwardVector().ToString().c_str());
+// 		std::printf("Rotation	: %s \n", CameraManager::GetActiveCameraRotation().ToString().c_str());
+// 
+// 		std::printf("Right Vector : %s \n", CameraManager::GetActiveCameraRotation().GetRightVector().ToString().c_str());
+// 		std::printf("Up Vector : %s \n", CameraManager::GetActiveCameraRotation().GetUpVector().ToString().c_str());
+
 		glfwSwapBuffers(window);
 		ProcessInput();
 	}

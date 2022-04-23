@@ -13,6 +13,7 @@
 #include "Runtime/Engine/BaseShapes.h"
 #include "Runtime/Components/PrimitiveComponent.h"
 #include "Runtime/Renderer/RenderCommands.h"
+#include "Runtime/Engine/Image/Image.h"
 
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
@@ -23,6 +24,8 @@ namespace Durna
 	Shader* Renderer::shader;
 
 	PrimitiveComponent* Renderer::pr;
+
+	Durna::Image* Renderer::img;
 
 	Renderer::Renderer()
 	{
@@ -56,6 +59,8 @@ namespace Durna
  		shader->Use();
 
 		pr = new PrimitiveComponent(&BaseShapes::Cube, shader);
+
+		img = new Image(Path::TextureRelativePath("T_TiledTexureCoordiante.png").c_str());
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -68,13 +73,13 @@ namespace Durna
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDepthFunc(GL_LESS);
 
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);
+// 		glEnable(GL_CULL_FACE);
+// 		glCullFace(GL_BACK);
+// 		glFrontFace(GL_CW);
 
 //		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-//		shader->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
+		shader->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
 
 		float M[16];
 		CameraManager::GetCameraViewMatrix(M);

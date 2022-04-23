@@ -8,6 +8,8 @@ namespace Durna
 
 	class PrimitiveComponent;
 
+	class Image;
+
 	class Renderer
 	{
 	public:
@@ -25,6 +27,8 @@ namespace Durna
 		 static Shader* shader;
 		// TODO: Remove
 		 static PrimitiveComponent* pr;
+
+		 static Image* img;
 	};
 }
 

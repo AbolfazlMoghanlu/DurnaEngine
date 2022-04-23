@@ -55,7 +55,17 @@ namespace Durna
 
 		Vector3<T> GetForwardVector()
 		{
-			return AsVector();
+			return Vector();
+		}
+
+		Vector3<T> GetRightVector()
+		{
+			return Vector3f::CrossProduct(Vector3f::UpVector, GetForwardVector()).Normalize();
+		}
+
+		Vector3<T> GetUpVector()
+		{
+			return Vector3f::CrossProduct(GetForwardVector(), GetRightVector());
 		}
 
 		static Rotator<T> CombineRotators(Rotator<T> R1, Rotator<T> R2)
@@ -90,6 +100,11 @@ namespace Durna
 			}
 
 			return Angle;
+		}
+
+		std::string ToString()
+		{
+			return "(Pitch : " + std::to_string(Pitch) + ", Yaw : " + std::to_string(Yaw) + ", Roll : " + std::to_string(Roll) + ")";
 		}
 	};
 

@@ -68,6 +68,11 @@ namespace Durna
 			const T Scale = 1 / sqrt(X * X + Y * Y + Z * Z);
 			return Vector3<T>(X * Scale, Y * Scale, Z * Scale);
 		}
+
+		std::string ToString()
+		{
+			return "(X : " + std::to_string(X) + ", Y : " + std::to_string(Y) + ", Z : " + std::to_string(Z) + ")";
+		}
 	};
 
 
