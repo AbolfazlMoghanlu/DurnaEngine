@@ -40,6 +40,8 @@ namespace Durna
 
 		if (Result)
 		{
+			ReleaseResources();
+
 			Data = Result;
 			Width = ImageWidth;
 			Height = ImageHeight;
@@ -59,7 +61,7 @@ namespace Durna
 
 	void Image::Unload()
 	{
-		stbi_image_free(Data);
+		ReleaseResources();
 		MarkUnloaded();
 	}
 
@@ -92,4 +94,15 @@ namespace Durna
 	{
 		bLoaded = false;
 	}
+
+	void Image::ReleaseResources()
+	{
+		if (Data)
+		{
+			stbi_image_free(Data);
+		}
+	}
+
+	
+
 }

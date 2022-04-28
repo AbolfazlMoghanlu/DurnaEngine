@@ -14,6 +14,7 @@
 #include "Runtime/Components/PrimitiveComponent.h"
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Engine/Image/Image.h"
+#include "Runtime/Renderer/Texture.h"
 
 #include "ThirdParty/Stb/stb_image.h"
 
@@ -27,7 +28,15 @@ namespace Durna
 
 	PrimitiveComponent* Renderer::pr;
 
-	Durna::Image* Renderer::img;
+	float Renderer::Time = 0.0;
+
+	Durna::Image* Renderer::img1;
+
+	Durna::Image* Renderer::img2;
+
+	Durna::Texture* Renderer::Texture1;
+
+	Durna::Texture* Renderer::Texture2;
 
 	Renderer::Renderer()
 	{
@@ -62,7 +71,11 @@ namespace Durna
 
 		pr = new PrimitiveComponent(&BaseShapes::Cube, shader);
 
-		img = new Image(Path::TextureRelativePath("T_TiledTexureCoordiante.png").c_str());
+		img1 = new Image(Path::TextureRelativePath("T_TiledTexureCoordiante.png").c_str());
+		img2 = new Image(Path::TextureRelativePath("T_Wall.jpg").c_str());
+
+		Texture1 = new Texture(img1);
+		Texture2 = new Texture(img2);
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -91,22 +104,48 @@ namespace Durna
 		glUniformMatrix4fv(l, 1, false, M);
 
 
+		unsigned int texture1, texture2;
+		glGenTextures(1, &texture1);
+		glGenTextures(1, &texture2);
 
-		unsigned int texture;
-		glGenTextures(1, &texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);		
 
-		glBindTexture(GL_TEXTURE_2D, texture);
+// 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img1->GetWidth(), img1->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img1->Data);
+// 		glGenerateMipmap(GL_TEXTURE_2D);
+// 
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+// 		
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img->GetWidth(), img->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img->Data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		Texture1->Bind();
+		Texture1->UpdateTexture();
 		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
+// 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img2->GetWidth(), img2->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img2->Data);
+// 		glGenerateMipmap(GL_TEXTURE_2D);
+// 
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+// 
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+
+		Texture2->Bind();
+		Texture2->UpdateTexture();
+
+		glUniform1i(glGetUniformLocation(shader->ID, "texture1"), 0);
+		glUniform1i(glGetUniformLocation(shader->ID, "texture2"), 1);
+
+		Time += DeltaTime;
+		glUniform1f(glGetUniformLocation(shader->ID, "time"), Time);
 
 		RenderCommands::DrawPrimitive(*pr);
 

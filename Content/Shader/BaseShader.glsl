@@ -32,10 +32,14 @@ out vec4 FragColor;
 in vec4 V_Color;
 in vec2 TexCoord;
 
-uniform sampler2D ourTexture;
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+
+uniform float time;
 
 void main()
 {
 	//FragColor = V_Color;
-	FragColor = texture(ourTexture, TexCoord);
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), sin(time));
+	//FragColor = texture(texture2, TexCoord);
 }

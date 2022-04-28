@@ -10,6 +10,8 @@ namespace Durna
 
 	class Image;
 
+	class Texture;
+
 	class Renderer
 	{
 	public:
@@ -28,7 +30,13 @@ namespace Durna
 		// TODO: Remove
 		 static PrimitiveComponent* pr;
 
-		 static Image* img;
+		 static float Time;
+
+		 static Image* img1;
+		 static Image* img2;
+
+		 static Texture* Texture1;
+		 static Texture* Texture2;
 	};
 }
 
