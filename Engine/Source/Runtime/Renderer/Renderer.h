@@ -12,6 +12,8 @@ namespace Durna
 
 	class Texture;
 
+	class Material;
+
 	class Renderer
 	{
 	public:
@@ -37,6 +39,9 @@ namespace Durna
 
 		 static Texture* Texture1;
 		 static Texture* Texture2;
+
+		 static Material* Mat1;
+		 static Material* Mat2;
 	};
 }
 

@@ -15,6 +15,7 @@
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Engine/Image/Image.h"
 #include "Runtime/Renderer/Texture.h"
+#include "Runtime/Renderer/Material.h"
 
 #include "ThirdParty/Stb/stb_image.h"
 
@@ -37,6 +38,10 @@ namespace Durna
 	Durna::Texture* Renderer::Texture1;
 
 	Durna::Texture* Renderer::Texture2;
+
+	Durna::Material* Renderer::Mat1;
+
+	Durna::Material* Renderer::Mat2;
 
 	Renderer::Renderer()
 	{
@@ -76,6 +81,12 @@ namespace Durna
 
 		Texture1 = new Texture(img1);
 		Texture2 = new Texture(img2);
+
+		Mat1 = new Material(shader, 1);
+		Mat1->AddTextureElement(TextureElement("texture1", ETextureSlot::Texture0, Texture1));
+		Mat1->AddTextureElement(TextureElement("texture2", ETextureSlot::Texture1, Texture2));
+
+		Mat2 = new Material(shader, 1);
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -94,7 +105,7 @@ namespace Durna
 
 //		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		shader->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
+		Mat1->GetShader()->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
 
 		float M[16];
 		CameraManager::GetCameraViewMatrix(M);
@@ -104,12 +115,12 @@ namespace Durna
 		glUniformMatrix4fv(l, 1, false, M);
 
 
-		unsigned int texture1, texture2;
-		glGenTextures(1, &texture1);
-		glGenTextures(1, &texture2);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);		
+// 		unsigned int texture1, texture2;
+// 		glGenTextures(1, &texture1);
+// 		glGenTextures(1, &texture2);
+// 
+// 		glActiveTexture(GL_TEXTURE0);
+// 		glBindTexture(GL_TEXTURE_2D, texture1);		
 
 // 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img1->GetWidth(), img1->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img1->Data);
 // 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -120,13 +131,13 @@ namespace Durna
 // 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 // 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-		Texture1->Bind();
-		Texture1->UpdateTexture();
+// 		Texture1->Bind();
+// 		Texture1->UpdateTexture();
 		
 
 
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+// 		glActiveTexture(GL_TEXTURE1);
+// 		glBindTexture(GL_TEXTURE_2D, texture2);
 
 // 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img2->GetWidth(), img2->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, img2->Data);
 // 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -138,11 +149,13 @@ namespace Durna
 // 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 
-		Texture2->Bind();
-		Texture2->UpdateTexture();
+// 		Texture2->Bind();
+// 		Texture2->UpdateTexture();
+// 
+// 		glUniform1i(glGetUniformLocation(shader->ID, "texture1"), 0);
+// 		glUniform1i(glGetUniformLocation(shader->ID, "texture2"), 1);
 
-		glUniform1i(glGetUniformLocation(shader->ID, "texture1"), 0);
-		glUniform1i(glGetUniformLocation(shader->ID, "texture2"), 1);
+		Mat1->BindTextures();
 
 		Time += DeltaTime;
 		glUniform1f(glGetUniformLocation(shader->ID, "time"), Time);

@@ -52,6 +52,11 @@ namespace Durna
 		}
 	}
 
+	void Texture::ActivateTexture(ETextureSlot Slot)
+	{
+		glActiveTexture(static_cast<uint32>(Slot));
+	}
+
 	void Texture::SetSource(Image* Img)
 	{
 		SourceImage = Img;
