@@ -52,9 +52,9 @@ namespace Durna
 		}
 	}
 
-	void Texture::ActivateTexture(ETextureSlot Slot)
+	void Texture::ActivateTexture(uint8 Index)
 	{
-		glActiveTexture(static_cast<uint32>(Slot));
+		glActiveTexture(GetGLTextureSlot(Index));
 	}
 
 	void Texture::SetSource(Image* Img)
@@ -78,4 +78,8 @@ namespace Durna
 		bDirtyFlag = true;
 	}
 
+	uint32 Texture::GetGLTextureSlot(uint8 Index)
+	{
+		return GL_TEXTURE0 + Index;
+	}
 }

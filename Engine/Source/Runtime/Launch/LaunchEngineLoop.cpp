@@ -40,6 +40,9 @@ namespace Durna
 
 	void Engineloop::MainLoop()
 	{
+		std::chrono::duration<double, std::milli> TimeDuration = std::chrono::high_resolution_clock::now().time_since_epoch();
+		engineLoop.LastTickTime = TimeDuration.count() / 1000;
+
 		while (App->IsRunning())
 		{
 			// Calculating time dilation

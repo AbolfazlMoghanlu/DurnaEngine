@@ -40,6 +40,6 @@ uniform float time;
 void main()
 {
 	//FragColor = V_Color;
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), sin(time));
-	//FragColor = texture(texture2, TexCoord);
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), abs(sin(time)));
+	//FragColor = vec4(sin(time));
 }

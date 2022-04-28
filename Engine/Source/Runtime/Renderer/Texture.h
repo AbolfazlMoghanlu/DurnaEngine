@@ -36,13 +36,15 @@ namespace Durna
 		void UnBind() const;
 		void UpdateTexture();
 
-		static void ActivateTexture(ETextureSlot Slot);
+		static void ActivateTexture(uint8 Index);
 
 		void SetSource(Image* Img);
 		Image* GetSource() const;
 
 		bool IsDirty() const;
 		void MarkDirty();
+
+		static uint32 GetGLTextureSlot(uint8 Index);
 
 	private:
 		unsigned int ID;

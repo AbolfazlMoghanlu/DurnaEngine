@@ -8,12 +8,11 @@ namespace Durna
 
 	struct TextureElement
 	{
-		TextureElement(std::string InName, ETextureSlot InSlot, Texture* InTexture)
-			: Name(InName), TextureSlot(InSlot), SourceTexture(InTexture)
+		TextureElement(std::string InName, Texture* InTexture)
+			: Name(InName), SourceTexture(InTexture)
 		{}
 
 		std::string Name;
-		ETextureSlot TextureSlot;
 		Texture* SourceTexture;
 	};
 
@@ -24,6 +23,8 @@ namespace Durna
 		Material(Shader* InShader);
 		Material(Shader* InShader, uint32 TextureSlotSize);
 		~Material();
+
+		void Use();
 
 		void SetShader(Shader* InShader);
 		Shader* GetShader() const;

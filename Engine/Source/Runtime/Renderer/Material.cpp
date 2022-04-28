@@ -25,6 +25,12 @@ namespace Durna
 		ResetTextureElements();
 	}
 
+	void Material::Use()
+	{
+		SourceShader->Use();
+		BindTextures();
+	}
+
 	void Material::SetShader(Shader* InShader)
 	{
 		SourceShader = InShader;
@@ -41,7 +47,7 @@ namespace Durna
 		{
 			const TextureElement& Element = TextureElements[i];
 
-			Texture::ActivateTexture(Element.TextureSlot);
+			Texture::ActivateTexture(i);
 			Element.SourceTexture->Bind();
 			Element.SourceTexture->UpdateTexture();
 
@@ -59,14 +65,6 @@ namespace Durna
 					"Element with name \"%s\" was already in layout.\nFailed to add elemnent to texture layout.", Element.Name.c_str());
 				return;
 			}
-
-			if (InElement.TextureSlot == Element.TextureSlot)
-			{
-				LOG(LogMaterial, Error,
-					"Element with slot \"%i\" was already in layout.\nFailed to add elemnent to texture layout.",
-					static_cast<uint32>(Element.TextureSlot));
-				return;
-			}
 		}
 
 		TextureElements.push_back(InElement);
@@ -76,4 +74,5 @@ namespace Durna
 	{
 		TextureElements.empty();
 	}
+
 }

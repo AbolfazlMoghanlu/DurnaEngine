@@ -1,10 +1,12 @@
 #include "DurnaPCH.h"
 #include "RenderCommands.h"
 
+#include "Runtime/Renderer/Material.h"
+#include "Runtime/Renderer/Buffer.h"
+#include "Runtime/Engine/BaseShapes.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-
-#include "Runtime/Engine/BaseShapes.h"
 
 namespace Durna
 {
@@ -26,7 +28,7 @@ namespace Durna
  		Comp.EB->Bind();
 		Comp.EB->UpdateBuffer();
 		
-		Comp.MeshShader->Use();
+		Comp.SourceMaterial->Use();
 		
 		glDrawElements(GL_TRIANGLES, Comp.EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}

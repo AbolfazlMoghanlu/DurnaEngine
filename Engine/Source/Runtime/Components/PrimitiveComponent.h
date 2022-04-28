@@ -1,15 +1,12 @@
 #pragma once
 
-#include "Runtime/Renderer/Shader.h"
-#include "Runtime/Renderer/Buffer.h"
-
-#include "Runtime/Engine/StaticMesh.h"
-
-class StaticMesh;
-class Shader;
-
 namespace Durna
 {
+	class StaticMesh;
+	class Material;
+	class VertexBuffer;
+	class VertexElementBuffer;
+
 	/*
 	 * A component that can have visual representation or physics collision. 
 	 */
@@ -17,8 +14,7 @@ namespace Durna
 	class PrimitiveComponent
 	{
 	public:
-		PrimitiveComponent(StaticMesh* InMesh, Shader* InShader);
-
+		PrimitiveComponent(StaticMesh* InMesh, Material* InMaterial);
 		~PrimitiveComponent();
 
 	private:
@@ -30,10 +26,7 @@ namespace Durna
 		void UpdateVertexColor(const std::vector<float>& InVertexColor);
 
 		StaticMesh* Mesh;
-
-		// TODO: make material class wrapper
-		/** Shader that gonna shade the visual */
-		std::shared_ptr<Shader> MeshShader;
+		Material* SourceMaterial;
 
 		/** Mesh has its own vertex color, its just gonna work as a ref for instances.
 		* each primitive component has its own vertex color.

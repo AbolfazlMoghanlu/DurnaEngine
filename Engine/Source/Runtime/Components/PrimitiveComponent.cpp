@@ -2,17 +2,15 @@
 #include "PrimitiveComponent.h"
 
 #include "Runtime/Engine/StaticMesh.h"
+#include "Runtime/Renderer/Material.h"
+#include "Runtime/Renderer/Buffer.h"
 
 namespace Durna
 {
-	PrimitiveComponent::PrimitiveComponent(StaticMesh* InMesh, Shader* InShader)
+	PrimitiveComponent::PrimitiveComponent(StaticMesh* InMesh, Material* InMaterial)
 	{
 		Mesh = InMesh;
 		OverridedVertexColor = InMesh->VertexColors;
-
-// 		VB = new VertexBuffer({
-// 			VertexBufferLayout(&Mesh->VertexPositions, false, 3),
-// 			VertexBufferLayout(&OverridedVertexColor, false, 4) });
 
 		VB = new VertexBuffer(Mesh->VertexCount);
 		VB->AddLayout(VertexBufferLayout(&Mesh->VertexPositions, 3, false));
@@ -26,7 +24,7 @@ namespace Durna
 		EB->Bind();
 		EB->UpdateBuffer();
 
-		MeshShader.reset(InShader);
+		SourceMaterial = InMaterial;
 	}
 
 	PrimitiveComponent::~PrimitiveComponent()
