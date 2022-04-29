@@ -8,7 +8,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-//todo remove dependancy
+//todo remove dependency
 #include "Runtime/Math/Math.h"
 #include "Runtime/Engine/BaseShapes.h"
 #include "Runtime/Components/PrimitiveComponent.h"
@@ -28,6 +28,8 @@ namespace Durna
 
 	// TODO: Remove
 	PrimitiveComponent* Renderer::pr;
+
+	PrimitiveComponent* Renderer::pr1;
 
 	float Renderer::Time = 0.0f;
 
@@ -66,10 +68,11 @@ namespace Durna
 		AssetLibrary::Init();
 		
 		pr = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
+		pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
 
 		Actor1 = new Actor();
 		Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
-
+		Actor1->AttachSceneComponent(pr1, pr);
 		
 	}
 
@@ -103,25 +106,11 @@ namespace Durna
 		
 		Time += DeltaTime;
 
-		Actor1->GetRoot()->WorldLocation = Vector3f(Math::Sin(Time), Math::Cos(Time), 0);
+		Actor1->GetRoot()->WorldLocation = Vector3f(Math::Sin(Time), 0, 0);
+		pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0));
 		Actor1->GetRoot()->MarkDirtyLocationRecursive();
 
 		Actor1->Tick(DeltaTime);
-
-
-		//glUniform1f(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "time"), Time);
-
-		//PrLocation = Vector3f(Math::Sin(Time), Math::Cos(Time), 0);
-
-		
-
-		//TranslationMatrix<float> Trans = TranslationMatrix<float>(PrLocation);
-
-		//TranslationMatrix<float> Trans = TranslationMatrix<float>();
-
-		//glUniformMatrix4fv(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "Translation"), 1, false, Trans.M[0]);
-
-		//RenderCommands::DrawPrimitive(*pr);
 
 		glfwPollEvents();
 	}

@@ -13,7 +13,7 @@ namespace Durna
 
 		for (SceneComponent* SceneComp : Childs)
 		{
-			Tick(DeltaTime);
+			SceneComp->Tick(DeltaTime);
 		}
 	}
 

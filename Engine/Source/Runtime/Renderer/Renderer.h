@@ -26,6 +26,7 @@ namespace Durna
 
 		// TODO: Remove
 		 static PrimitiveComponent* pr;
+		 static PrimitiveComponent* pr1;
 
 		 static float Time;
 
