@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Runtime/Components/SceneComponent.h"
+
 namespace Durna
 {
 	class StaticMesh;
@@ -11,9 +13,11 @@ namespace Durna
 	 * A component that can have visual representation or physics collision. 
 	 */
 	//TODO: inherit from component class
-	class PrimitiveComponent
+	class PrimitiveComponent : public SceneComponent
 	{
 	public:
+		void Tick(float DeltaTime) override;
+
 		PrimitiveComponent(StaticMesh* InMesh, Material* InMaterial);
 		~PrimitiveComponent();
 

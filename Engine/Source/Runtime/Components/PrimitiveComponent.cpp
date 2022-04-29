@@ -5,8 +5,17 @@
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/Buffer.h"
 
+#include "Runtime/Renderer/RenderCommands.h"
+
 namespace Durna
 {
+	void PrimitiveComponent::Tick(float DeltaTime)
+	{
+		SceneComponent::Tick(DeltaTime);
+
+		RenderCommands::DrawPrimitive(*this);
+	}
+
 	PrimitiveComponent::PrimitiveComponent(StaticMesh* InMesh, Material* InMaterial)
 	{
 		Mesh = InMesh;

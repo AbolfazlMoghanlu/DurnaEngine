@@ -42,6 +42,11 @@ namespace Durna
 			Z += Vec3.Z;
 		}
 
+		const Vector3<T> operator-(const Vector3<T>& Vec3) const
+		{
+			return Vector3<T>(X - Vec3.X, Y - Vec3.Y, Z - Vec3.Z);
+		}
+
 		const void operator*(const Vector3<T>& Vec3) const
 		{
 			return Vector3<T>(X * Vec3.X, Y * Vec3.Y, Z * Vec3.Z);

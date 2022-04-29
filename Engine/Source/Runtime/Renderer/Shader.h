@@ -17,8 +17,10 @@ namespace Durna
 
 		void Use();
 
-		void SetUniformVec3f(char* UniformName, Vector3f Vec3);
 		void SetUniform1i(const std::string& UniformName, int32 Value);
+		void SetUniform1f(const std::string& UniformName, float Value);
+		void SetUniformVec3f(char* UniformName, Vector3f Vec3);
+		void SetUniformMatrix4f(const std::string& UniformName, float* Value);
 
 
 	private:

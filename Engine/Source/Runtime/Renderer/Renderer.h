@@ -9,6 +9,8 @@ namespace Durna
 	// TODO: Remove
 	class PrimitiveComponent;
 
+	class Actor;
+
 	class Renderer
 	{
 	public:
@@ -28,6 +30,8 @@ namespace Durna
 		 static float Time;
 
 		 static Vector3f PrLocation;
+
+		 static Actor* Actor1;
 	};
 }
 

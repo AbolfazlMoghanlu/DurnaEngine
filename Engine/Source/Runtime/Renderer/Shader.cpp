@@ -81,6 +81,18 @@ namespace Durna
 		glUniform1i(UniformLocation, Value);
 	}
 
+	void Shader::SetUniform1f(const std::string& UniformName, float Value)
+	{
+		int UniformLocation = glGetUniformLocation(ID, UniformName.c_str());
+		glUniform1f(UniformLocation, Value);
+	}
+
+	void Shader::SetUniformMatrix4f(const std::string& UniformName, float* Value)
+	{
+		int UniformLocation = glGetUniformLocation(ID, UniformName.c_str());
+		glUniformMatrix4fv(UniformLocation, 1, false, Value);
+	}
+
 	bool Shader::CompileVertexShader(const char* VertexShaderSource, unsigned int& ID)
 	{
 		ID = glCreateShader(GL_VERTEX_SHADER);

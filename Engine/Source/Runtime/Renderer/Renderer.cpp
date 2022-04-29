@@ -15,6 +15,7 @@
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Math/TranslationMatrix.h"
+#include "Runtime/Engine/Actor.h"
 
 #include "Runtime/Assets/AssetLibrary.h"
 
@@ -31,6 +32,8 @@ namespace Durna
 	float Renderer::Time = 0.0f;
 
 	Vector3f Renderer::PrLocation = Vector3f(0);
+
+	Actor* Renderer::Actor1;
 
 	Renderer::Renderer()
 	{
@@ -63,6 +66,11 @@ namespace Durna
 		AssetLibrary::Init();
 		
 		pr = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
+
+		Actor1 = new Actor();
+		Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
+
+		
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -81,6 +89,7 @@ namespace Durna
 
 //		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+		/*
 		pr->SourceMaterial->GetShader()->Use();
 
 		pr->SourceMaterial->GetShader()->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
@@ -90,16 +99,29 @@ namespace Durna
 
 		int l = glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "view");
 		glUniformMatrix4fv(l, 1, false, M);
-
+		*/
+		
 		Time += DeltaTime;
-		glUniform1f(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "time"), Time);
 
-		PrLocation = Vector3f(Math::Sin(Time), Math::Cos(Time), 0);
-		TranslationMatrix<float> Trans = TranslationMatrix<float>(PrLocation);
+		Actor1->GetRoot()->WorldLocation = Vector3f(Math::Sin(Time), Math::Cos(Time), 0);
+		Actor1->GetRoot()->MarkDirtyLocationRecursive();
 
-		glUniformMatrix4fv(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "Translation"), 1, false, Trans.M[0]);
+		Actor1->Tick(DeltaTime);
 
-		RenderCommands::DrawPrimitive(*pr);
+
+		//glUniform1f(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "time"), Time);
+
+		//PrLocation = Vector3f(Math::Sin(Time), Math::Cos(Time), 0);
+
+		
+
+		//TranslationMatrix<float> Trans = TranslationMatrix<float>(PrLocation);
+
+		//TranslationMatrix<float> Trans = TranslationMatrix<float>();
+
+		//glUniformMatrix4fv(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "Translation"), 1, false, Trans.M[0]);
+
+		//RenderCommands::DrawPrimitive(*pr);
 
 		glfwPollEvents();
 	}
