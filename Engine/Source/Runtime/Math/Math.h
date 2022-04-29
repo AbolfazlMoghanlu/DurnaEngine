@@ -3,6 +3,7 @@
 #define SMALL_NUMBER		(1.e-8f)
 #define KINDA_SMALL_NUMBER	(1.e-4f)
 #define PI 3.14159
+#define PI_ON_180_DEGREES 0.0174532778 // PI / 180
 
 namespace Durna
 {
@@ -17,7 +18,7 @@ namespace Durna
 		template<typename T>
 		static T DegreesToRadians(T const& Degrees)
 		{
-			return Degrees * (PI / 180.f);
+			return Degrees * (T)PI_ON_180_DEGREES;
 		}
 
 		static float Sin(float Value)

@@ -34,7 +34,7 @@ namespace Durna
 
 	void VertexBuffer::UpdateLayout()
 	{
-		Buffer.empty();
+		Buffer.clear();
 
 		Buffer.resize((size_t)VertexElementCount * (size_t)VertexCount);
 
@@ -97,7 +97,7 @@ namespace Durna
 
 	uint32 VertexElementBuffer::GetCount() const
 	{
-		return Indices.size();
+		return static_cast<uint32>(Indices.size());
 	}
 
 	void VertexElementBuffer::UpdateBuffer() const

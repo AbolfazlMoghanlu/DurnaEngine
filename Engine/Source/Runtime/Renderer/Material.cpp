@@ -72,7 +72,7 @@ namespace Durna
 
 	void Material::ResetTextureElements()
 	{
-		TextureElements.empty();
+		TextureElements.clear();
 	}
 
 }

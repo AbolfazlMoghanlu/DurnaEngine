@@ -9,7 +9,7 @@ extern LogCategory Category;
 LogCategory Category(Name);
 
 #define LOG(Category , Verbose , Format , ...)																\
-if (!Category.Suppressed && Verbose <= Log::VerboseLevel)													\
+if (!Category.Suppressed && Verbosity::##Verbose <= Log::VerboseLevel)													\
 {																											\
 	std::unordered_map<const Verbosity, int>::const_iterator f = Log::ColorCodes.find(Verbosity::##Verbose);\
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);																\
@@ -30,7 +30,7 @@ Category.Suppressed = false;
 #define LOG_DISABLE_CATEGORY(Category)																		\
 Category.Suppressed = true;
 
-enum Verbosity : unsigned short int
+enum class Verbosity : unsigned short int
 {
 	Error = 0,
 	Warning,

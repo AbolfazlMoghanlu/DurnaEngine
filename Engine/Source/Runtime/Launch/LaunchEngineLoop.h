@@ -21,7 +21,7 @@ namespace Durna
 
 		private:
 
-		Application* App;
+		Application* App = nullptr;
 
 		float MaxTimeDilation;
 		double LastTickTime;

@@ -40,7 +40,7 @@ namespace Durna
 
 	bool Shader::CompileShader(const char* VertexShaderSource, const char* FragmentShaderSource)
 	{
-		unsigned int VS, FS;
+		unsigned int VS = 0, FS = 0;
 		if (!CompileVertexShader(VertexShaderSource, VS) || !CompileFragmentShader(FragmentShaderSource, FS))
 		{
 			glDeleteShader(VS);
