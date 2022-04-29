@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Runtime/Math/Vector3.h"
+
 namespace Durna
 {
 	class Window;
@@ -24,6 +26,8 @@ namespace Durna
 		 static PrimitiveComponent* pr;
 
 		 static float Time;
+
+		 static Vector3f PrLocation;
 	};
 }
 

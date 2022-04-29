@@ -9,10 +9,12 @@
 #include <GLFW/glfw3.h>
 
 //todo remove dependancy
+#include "Runtime/Math/Math.h"
 #include "Runtime/Engine/BaseShapes.h"
 #include "Runtime/Components/PrimitiveComponent.h"
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Renderer/Material.h"
+#include "Runtime/Math/TranslationMatrix.h"
 
 #include "Runtime/Assets/AssetLibrary.h"
 
@@ -27,6 +29,8 @@ namespace Durna
 	PrimitiveComponent* Renderer::pr;
 
 	float Renderer::Time = 0.0f;
+
+	Vector3f Renderer::PrLocation = Vector3f(0);
 
 	Renderer::Renderer()
 	{
@@ -85,11 +89,15 @@ namespace Durna
 		CameraManager::GetCameraViewMatrix(M);
 
 		int l = glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "view");
-
 		glUniformMatrix4fv(l, 1, false, M);
 
 		Time += DeltaTime;
 		glUniform1f(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "time"), Time);
+
+		PrLocation = Vector3f(Math::Sin(Time), Math::Cos(Time), 0);
+		TranslationMatrix<float> Trans = TranslationMatrix<float>(PrLocation);
+
+		glUniformMatrix4fv(glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "Translation"), 1, false, Trans.M[0]);
 
 		RenderCommands::DrawPrimitive(*pr);
 
