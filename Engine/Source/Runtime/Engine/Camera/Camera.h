@@ -34,13 +34,13 @@ namespace Durna
 		{}
 
 		OrthographicProjectionData()
-			: OrthographicProjectionData(800.0f, 600.0f, 0.01f, 2.0f)
+			: OrthographicProjectionData(800.0f, 600.0f, 0.005f, 150.0f)
 		{}
 
 		float Width = 800.0f;
 		float Heigth = 600.0f;
-		float ZScale = 0.01f;
-		float ZOffset = 2.0f;
+		float ZScale = 0.005f;
+		float ZOffset = 150.0f;
 	};
 
 	class Camera
@@ -71,6 +71,19 @@ namespace Durna
 
 		void SetPerspectiveMaxZ(float InMaxZ);
 		float GetPerspectiveMaxZ() const;
+
+		void SetOrthographicWidth(float InWidth);
+		float GetOrthographicWidth() const;
+
+		void SetOrthographicHeight(float InHeight);
+		float GetOrthographicHeight() const;
+
+		void SetOrthographicZScale(float InZScale);
+		float GetOrthographicZScale() const;
+
+		void SetOrthographicZOffset(float InZOffset);
+		float GetOrthographicZOffset() const;
+
 
 	private:
 		Vector3f Position = Vector3f::ZeroVector;

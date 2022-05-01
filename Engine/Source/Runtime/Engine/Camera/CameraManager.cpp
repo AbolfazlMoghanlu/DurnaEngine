@@ -36,7 +36,8 @@ namespace Durna
 
 			else if (ActiveCamera->GetProjectionMode() == EProjectionMode::Orthographic)
 			{
-
+				ProjectionMatrix = OrthoMatrix(ActiveCamera->GetOrthographicWidth(), ActiveCamera->GetOrthographicHeight(),
+					ActiveCamera->GetOrthographicZScale(), ActiveCamera->GetOrthographicZOffset());
 			}
 		}
 	}
@@ -46,8 +47,11 @@ namespace Durna
 		if (ActiveCamera)
 		{
 			return ActiveCamera->GetProjectionMode() == EProjectionMode::Perspective ?
-				ActiveCamera->GetPerspectiveMaxZ() - ActiveCamera->GetPerspectiveMinZ() : 1.0f;
+				ActiveCamera->GetPerspectiveMaxZ() - ActiveCamera->GetPerspectiveMinZ() : 
+				ActiveCamera->GetOrthographicZScale();
 		}
+
+		return 1.0f;
 	}
 
 	bool CameraManager::IsDirtyProjection()

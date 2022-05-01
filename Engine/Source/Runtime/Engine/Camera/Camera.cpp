@@ -96,4 +96,48 @@ namespace Durna
 		return PerspectiveData.MaxZ;
 	}
 
+	void Camera::SetOrthographicWidth(float InWidth)
+	{
+		OrthographicData.Width = InWidth;
+		CameraManager::MarkDirtyProjection();
+	}
+
+	float Camera::GetOrthographicWidth() const
+	{
+		return OrthographicData.Width;
+	}
+
+	void Camera::SetOrthographicHeight(float InHeight)
+	{
+		OrthographicData.Heigth = InHeight;
+		CameraManager::MarkDirtyProjection();
+	}
+
+	float Camera::GetOrthographicHeight() const
+	{
+		return OrthographicData.Heigth;
+	}
+
+	void Camera::SetOrthographicZScale(float InZScale)
+	{
+		OrthographicData.ZScale = InZScale;
+		CameraManager::MarkDirtyProjection();
+	}
+
+	float Camera::GetOrthographicZScale() const
+	{
+		return OrthographicData.ZScale;
+	}
+
+	void Camera::SetOrthographicZOffset(float InZOffset)
+	{
+		OrthographicData.ZOffset = InZOffset;
+		CameraManager::MarkDirtyProjection();
+	}
+
+	float Camera::GetOrthographicZOffset() const
+	{
+		return OrthographicData.ZOffset;
+	}
+
 }

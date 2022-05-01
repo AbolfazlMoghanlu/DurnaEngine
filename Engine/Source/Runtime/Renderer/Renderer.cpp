@@ -109,7 +109,9 @@ namespace Durna
 
 		CameraManager::GetActiveCamera()->SetFOV(Math::Sin(Time) * 60);
 
-		Actor1->SetActorLocation(Vector3f(0, 0, 2));
+		CameraManager::GetActiveCamera()->SetProjectionMode(EProjectionMode::Orthographic);
+
+		Actor1->SetActorLocation(Vector3f(0, 0, 6));
 		Actor1->SetActorRotation(Rotatorf(Math::Sin(Time) * 360, Math::Cos(Time) * 360, Math::Cos(Math::Sin(Time)) * 360));
 		
 		//Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 3));
