@@ -3,6 +3,7 @@
 #include "Runtime\Engine\Camera\Camera.h"
 #include "Runtime/Math/Vector3.h"
 #include "Runtime/Math/Rotator.h"
+#include "Runtime/Math/Matrix.h"
 
 namespace Durna
 {
@@ -23,8 +24,18 @@ namespace Durna
 		static float CameraMoveSpeed;
 		static float CameraRotationSpeed;
 
+		static float* GetProjectionMatrix();
+		static void UpdateProjectionMatrix();
+		static float GetWFactor();
+
+		static bool IsDirtyProjection();
+		static void MarkDirtyProjection();
+
 	private:
 		static Camera* ActiveCamera;
+		static bool bDirtyProjection;
+
+		static Matrix<float> ProjectionMatrix;
 	};
 }
 

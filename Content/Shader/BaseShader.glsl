@@ -3,9 +3,8 @@
 uniform vec3 CameraPosition;
 uniform vec3 CameraRotation;
 uniform mat4 view;
-uniform mat4 Translation;
-uniform mat4 Rotation;
-uniform mat4 Scale;
+
+uniform float WFactor;
 uniform mat4 Transform;
 uniform mat4 Projection;
 
@@ -18,16 +17,7 @@ out vec2 TexCoord;
 
 void main()
 {
-	//gl_Position = view * vec4(aPos, 1.0f);	
-	//gl_Position = vec4(aPos, 1.0f);
-	
-	//gl_Position = Translation * vec4(aPos, 1.0f);
-	//gl_Position = Rotation * vec4(aPos, 1.0f);
-	//gl_Position = Translation * Rotation * vec4(aPos, 1.0f);
-	//gl_Position = Translation * Rotation * Scale * vec4(aPos, 1.0f);
-//	gl_Position =  vec4(0, 0, 2, 0) + vec4(aPos, 1.0f);
-	gl_Position =  Projection *  Transform * vec4(aPos, 20.0f);
-//	gl_Position = Projection * Transform * vec4(aPos, 1.0f);
+	gl_Position =  Projection *  Transform * vec4(aPos, WFactor);
 
 	V_Color = VColor;
 	TexCoord = aTexCoord;
@@ -51,5 +41,4 @@ void main()
 {
 	//FragColor = V_Color;
 	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), abs(sin(time)));
-	//FragColor = vec4(sin(time));
 }

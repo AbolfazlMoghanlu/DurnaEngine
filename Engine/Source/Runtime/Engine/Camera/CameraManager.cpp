@@ -1,12 +1,64 @@
 #include "DurnaPCH.h"
 #include "CameraManager.h"
 
+#include "Runtime/Math/PrespectiveMatrix.h"
+#include "Runtime/Math/OrthoMatrix.h"
+
 namespace Durna
 {
 	Camera* CameraManager::ActiveCamera;
+	bool CameraManager::bDirtyProjection = true;
+
+	Matrix<float> CameraManager::ProjectionMatrix;
 
 	float CameraManager::CameraMoveSpeed = 0.01f;
 	float CameraManager::CameraRotationSpeed = 3.0f;
+
+	float* CameraManager::GetProjectionMatrix()
+	{
+		if (IsDirtyProjection())
+		{
+			UpdateProjectionMatrix();
+			bDirtyProjection = false;
+		}
+		return ProjectionMatrix.M[0];
+	}
+
+	void CameraManager::UpdateProjectionMatrix()
+	{
+		if (ActiveCamera)
+		{
+			if (ActiveCamera->GetProjectionMode() == EProjectionMode::Perspective)
+			{
+				ProjectionMatrix = PrespectiveMatrix(ActiveCamera->GetFOV(), ActiveCamera->GetPerspectiveWidth(),
+					ActiveCamera->GetPerspectiveHeight(), ActiveCamera->GetPerspectiveMinZ(), ActiveCamera->GetPerspectiveMaxZ());
+			}
+
+			else if (ActiveCamera->GetProjectionMode() == EProjectionMode::Orthographic)
+			{
+
+			}
+		}
+	}
+
+	float CameraManager::GetWFactor()
+	{
+		if (ActiveCamera)
+		{
+			return ActiveCamera->GetProjectionMode() == EProjectionMode::Perspective ?
+				ActiveCamera->GetPerspectiveMaxZ() - ActiveCamera->GetPerspectiveMinZ() : 1.0f;
+		}
+	}
+
+	bool CameraManager::IsDirtyProjection()
+	{
+		return bDirtyProjection;
+	}
+
+	void CameraManager::MarkDirtyProjection()
+	{
+		bDirtyProjection = true;
+	}
 
 	Vector3f CameraManager::GetActiveCameraPosition()
 	{
@@ -21,6 +73,7 @@ namespace Durna
 	void CameraManager::SetActiveCamera(Camera* InCamera)
 	{
 		ActiveCamera = InCamera;
+		MarkDirtyProjection();
 	}
 
 	void CameraManager::AddActiveCameraWorldOffset(const Vector3f& Offset)
