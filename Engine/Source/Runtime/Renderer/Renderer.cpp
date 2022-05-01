@@ -68,11 +68,11 @@ namespace Durna
 		AssetLibrary::Init();
 		
 		pr = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
-		pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
+//		pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
 
 		Actor1 = new Actor();
 		Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
-		Actor1->AttachSceneComponent(pr1, pr);
+//		Actor1->AttachSceneComponent(pr1, pr);
 		
 	}
 
@@ -106,14 +106,17 @@ namespace Durna
 		
 		Time += DeltaTime;
 
-		Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 0));
-		pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0), false);
+		Actor1->SetActorLocation(Vector3f(0, -0.1, .25));
+		Actor1->SetActorRotation(Rotatorf::CombineRotators(Actor1->GetActorRotation(), Rotatorf(DeltaTime, 0.0, 0)));
+		
+		//Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 3));
+		//pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0), false);
 
-		const Rotatorf Rot = Rotatorf::CombineRotators(Actor1->GetActorRotation(), Rotatorf(Math::Sin(Time), Math::Cos(Time), Time));
-		Actor1->SetActorRotation(Rot);
-
-		Actor1->SetActorScale(Vector3f(Math::Sin(Time), Math::Sin(Time), Math::Sin(Time)));
-		pr1->SetRelativeScale(Vector3f(1, Math::Cos(Time), 1), false);
+// 		const Rotatorf Rot = Rotatorf::CombineRotators(Actor1->GetActorRotation(), Rotatorf(Math::Sin(Time), Math::Cos(Time), Time));
+// 		Actor1->SetActorRotation(Rot);
+// 
+// 		Actor1->SetActorScale(Vector3f(Math::Sin(Time), Math::Sin(Time), Math::Sin(Time)));
+// 		pr1->SetRelativeScale(Vector3f(1, Math::Cos(Time), 1), false);
 
 		Actor1->Tick(DeltaTime);
 

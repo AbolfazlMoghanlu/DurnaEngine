@@ -46,5 +46,10 @@ namespace Durna
 			*SinRes = Sin(Value);
 			*CosRes = Cos(Value);
 		}
+
+		static float Tan(float Value)
+		{
+			return tanf(Value);
+		}
 	};
 }
