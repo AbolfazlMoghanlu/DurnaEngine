@@ -8,6 +8,7 @@
 #include "Runtime/Math/TranslationMatrix.h"
 #include "Runtime/Math/RotationMatrix.h"
 #include "Runtime/Math/ScaleMatrix.h"
+#include "Runtime/Math/ScaleRotationTranslationMatrix.h"
 #include "Runtime/Renderer/Renderer.h"
 
 #include "Runtime/Engine/Actor.h"
@@ -37,14 +38,8 @@ namespace Durna
 		
 		Comp.SourceMaterial->Use();
 
-		TranslationMatrix<float> Translation = TranslationMatrix<float>(Comp.GetWorldLocation());
-		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Translation", Translation.M[0]);
-
-		RotationMatrix<float> Rotation = RotationMatrix<float>(Comp.GetWorldRotation());
-		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Rotation", Rotation.M[0]);
-
-		ScaleMatrix<float> Scale = ScaleMatrix<float>(Comp.GetWorldScale());
-		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Scale", Scale.M[0]);
+		ScaleRotationTranslationMatrix<float> Transform(Comp.GetWorldScale(), Comp.GetWorldRotation(), Comp.GetWorldLocation());
+		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
 
 		Comp.SourceMaterial->GetShader()->SetUniform1f("time", Renderer::Time);
 		

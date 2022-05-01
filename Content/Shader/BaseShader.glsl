@@ -6,6 +6,7 @@ uniform mat4 view;
 uniform mat4 Translation;
 uniform mat4 Rotation;
 uniform mat4 Scale;
+uniform mat4 Transform;
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 VColor;
@@ -22,7 +23,9 @@ void main()
 	//gl_Position = Translation * vec4(aPos, 1.0f);
 	//gl_Position = Rotation * vec4(aPos, 1.0f);
 	//gl_Position = Translation * Rotation * vec4(aPos, 1.0f);
-	gl_Position = Translation * Rotation * Scale * vec4(aPos, 1.0f);
+	//gl_Position = Translation * Rotation * Scale * vec4(aPos, 1.0f);
+	gl_Position = Transform * vec4(aPos, 1.0f);
+
 
 	V_Color = VColor;
 	TexCoord = aTexCoord;

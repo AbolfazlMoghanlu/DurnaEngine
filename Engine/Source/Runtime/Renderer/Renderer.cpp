@@ -112,7 +112,8 @@ namespace Durna
 		const Rotatorf Rot = Rotatorf::CombineRotators(Actor1->GetActorRotation(), Rotatorf(Math::Sin(Time), Math::Cos(Time), Time));
 		Actor1->SetActorRotation(Rot);
 
-		Actor1->SetActorScale(Vector3f(Math::Sin(Time), Math::Cos(Time), 1));
+		Actor1->SetActorScale(Vector3f(Math::Sin(Time), Math::Sin(Time), Math::Sin(Time)));
+		pr1->SetRelativeScale(Vector3f(1, Math::Cos(Time), 1), false);
 
 		Actor1->Tick(DeltaTime);
 
