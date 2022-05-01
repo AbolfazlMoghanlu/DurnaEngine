@@ -31,13 +31,35 @@ namespace Durna
 
 	const Vector3f& Actor::GetActorLocation()
 	{
-		return Root->WorldLocation;
+		return Root->GetWorldLocation();
 	}
 
 	void Actor::SetActorLocation(const Vector3f& InLocation)
 	{
 		Root->WorldLocation = InLocation;
 		Root->MarkDirtyLocationRecursive();
+	}
+
+	const Rotatorf& Actor::GetActorRotation()
+	{
+		return Root->GetWorldRotation();
+	}
+
+	void Actor::SetActorRotation(const Rotatorf& InRotator)
+	{
+		Root->WorldRotation = InRotator;
+		Root->MarkDirtyRotationRecursive();
+	}
+
+	const Vector3f& Actor::GetActorScale()
+	{
+		return Root->GetWorldScale();
+	}
+
+	void Actor::SetActorScale(const Vector3f& InScale)
+	{
+		Root->WorldScale = InScale;
+		Root->MarkDirtyScaleRecursive();
 	}
 
 	void Actor::AttachSceneComponent(SceneComponent* InSceneComponent, SceneComponent* Target)

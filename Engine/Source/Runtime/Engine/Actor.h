@@ -2,6 +2,7 @@
 
 #include "Runtime/Components/SceneComponent.h"
 #include "Runtime/Math/Vector3.h"
+#include "Runtime/Math/Rotator.h"
 
 namespace Durna
 {
@@ -18,6 +19,12 @@ namespace Durna
 
 		const Vector3f& GetActorLocation();
 		void SetActorLocation(const Vector3f& InLocation);
+
+		const Rotatorf& GetActorRotation();
+		void SetActorRotation(const Rotatorf& InRotator);
+
+		const Vector3f& GetActorScale();
+		void SetActorScale(const Vector3f& InScale);
 			
 		void AttachSceneComponent(SceneComponent* InSceneComponent, SceneComponent* Target);
 		void AddComponent(Component* InComponent);

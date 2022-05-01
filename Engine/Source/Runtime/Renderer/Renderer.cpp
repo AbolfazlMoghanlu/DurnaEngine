@@ -106,9 +106,13 @@ namespace Durna
 		
 		Time += DeltaTime;
 
-		Actor1->GetRoot()->WorldLocation = Vector3f(Math::Sin(Time), 0, 0);
-		pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0));
-		Actor1->GetRoot()->MarkDirtyLocationRecursive();
+		Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 0));
+		pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0), false);
+
+		const Rotatorf Rot = Rotatorf::CombineRotators(Actor1->GetActorRotation(), Rotatorf(Math::Sin(Time), Math::Cos(Time), Time));
+		Actor1->SetActorRotation(Rot);
+
+		Actor1->SetActorScale(Vector3f(Math::Sin(Time), Math::Cos(Time), 1));
 
 		Actor1->Tick(DeltaTime);
 

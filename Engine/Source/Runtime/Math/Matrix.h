@@ -14,11 +14,19 @@ namespace Durna
 		Matrix(const Plane<T>& InX, const Plane<T>& InY, const Plane<T>& InZ, const Plane<T>& InW);
 		Matrix(const Vector3<T>& InX, const Vector3<T>& InY, const Vector3<T>& InZ, const Vector3<T>& InW);
 
+		Matrix();
+
 		static const Matrix Identity;
 
 
 	private:
 	};
+
+	template<typename T>
+	Matrix<T>::Matrix()
+	{
+
+	}
 
 	template<typename T>
 	Matrix<T>::Matrix(const Plane<T>& InX, const Plane<T>& InY, const Plane<T>& InZ, const Plane<T>& InW)

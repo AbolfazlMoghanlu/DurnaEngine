@@ -10,6 +10,8 @@ namespace Durna
 		Component::Tick(DeltaTime);
 
 		UpdateLocation();
+		UpdateRotation();
+		UpdateScale();
 
 		for (SceneComponent* SceneComp : Childs)
 		{
@@ -28,12 +30,17 @@ namespace Durna
 		return Childs;
 	}
 
-	Vector3f SceneComponent::GetRelativeLocation()
+	Vector3f SceneComponent::GetRelativeLocation() const
 	{
 		return RelativeLocation;
 	}
 
-	Vector3f SceneComponent::GetWorldLocation()
+	Vector3f SceneComponent::GetLocalLocation() const
+	{
+		return LocalLocation;
+	}
+
+	Vector3f SceneComponent::GetWorldLocation()const
 	{
 		return WorldLocation;
 	}
@@ -47,13 +54,13 @@ namespace Durna
 		}
 	}
 
-	void SceneComponent::SetWorldLocation(const Vector3f& Inlocation, bool bMarkDirty /*= true*/)
+	void SceneComponent::SetLocalLocation(const Vector3f& Inlocation, bool bMarkDirty /*= true*/)
 	{
+
 	}
 
-	Vector3f SceneComponent::GetLocalLocation()
+	void SceneComponent::SetWorldLocation(const Vector3f& Inlocation, bool bMarkDirty /*= true*/)
 	{
-		return LocalLocation;
 	}
 
 	void SceneComponent::UpdateLocation()
@@ -63,8 +70,8 @@ namespace Durna
 
 		if (bDirtyLocation)
 		{
-			LocalLocation = GetWorldLocation() - GetOwningActor()->GetActorLocation();
 			WorldLocation = RelativeLocation + Parent->GetWorldLocation();
+			LocalLocation = WorldLocation - GetOwningActor()->GetActorLocation();
 
 			bDirtyLocation = false;
 		}
@@ -87,6 +94,143 @@ namespace Durna
 		for (SceneComponent* Comp : Childs)
 		{
 			Comp->MarkDirtyLocationRecursive();
+		}
+	}
+
+	Rotatorf SceneComponent::GetRelativeRotation() const
+	{
+		return RelativeRotation;
+	}
+
+	Rotatorf SceneComponent::GetLocalRotation() const
+	{
+		return LocalRotation;
+	}
+
+	Rotatorf SceneComponent::GetWorldRotation() const
+	{
+		return WorldRotation;
+	}
+
+	void SceneComponent::SetRelativeRotation(const Rotatorf& InRotator, bool bMarkDirty /*= true*/)
+	{
+		RelativeRotation = InRotator;
+		if (bMarkDirty)
+		{
+			MarkDirtyRotationRecursive();
+		}
+	}
+
+	void SceneComponent::SetLocalRotation(const Rotatorf& InRotator, bool bMarkDirty /*= true*/)
+	{
+
+	}
+
+	void SceneComponent::SetWorldRotation(const Rotatorf& InRotator, bool bMarkDirty /*= true*/)
+	{
+
+	}
+
+	void SceneComponent::UpdateRotation()
+	{
+		ensure(GetOwningActor(), "Invalid owner!");
+		ensure(Parent, "Invalid parent!");
+
+		if (bDirtyRotation)
+		{
+			WorldRotation = RelativeRotation + Parent->GetWorldRotation();
+			LocalRotation = Rotatorf::CombineRotators(WorldRotation, GetOwningActor()->GetActorRotation() * -1);
+
+			bDirtyRotation = false;
+		}
+	}
+
+	bool SceneComponent::IsDirtyRotation() const
+	{
+		return bDirtyRotation;
+	}
+
+	void SceneComponent::MarkDirtyRotation()
+	{
+		bDirtyRotation = true;
+	}
+
+	void SceneComponent::MarkDirtyRotationRecursive()
+	{
+		MarkDirtyRotation();
+
+		for (SceneComponent* Comp : Childs)
+		{
+			Comp->MarkDirtyRotationRecursive();
+		}
+	}
+
+	Vector3f SceneComponent::GetRelativeScale() const
+	{
+		return RelativeScale;
+	}
+
+	Vector3f SceneComponent::GetLocalScale() const
+	{
+		return LocalScale;
+	}
+
+	Vector3f SceneComponent::GetWorldScale() const
+	{
+		return WorldScale;
+	}
+
+	void SceneComponent::SetRelativeScale(const Vector3f& InScale, bool bMarkDirty /*= true*/)
+	{
+		RelativeScale = InScale;
+
+		if (bMarkDirty)
+		{
+			MarkDirtyScaleRecursive();
+		}
+	}
+
+	void SceneComponent::SetLocalScale(const Vector3f& InScale, bool bMarkDirty /*= true*/)
+	{
+
+	}
+
+	void SceneComponent::SetWorldScale(const Vector3f& InScale, bool bMarkDirty /*= true*/)
+	{
+
+	}
+
+	void SceneComponent::UpdateScale()
+	{
+		ensure(GetOwningActor(), "Invalid owner!");
+		ensure(Parent, "Invalid parent!");
+
+		if (bDirtyScale)
+		{
+			WorldScale = RelativeScale * Parent->GetWorldScale();
+			LocalScale = WorldScale / GetOwningActor()->GetActorScale();
+
+			bDirtyScale = false;
+		}
+	}
+
+	bool SceneComponent::IsDirtyScale() const
+	{
+		return bDirtyScale;
+	}
+
+	void SceneComponent::MarkDirtyScale()
+	{
+		bDirtyScale = true;
+	}
+
+	void SceneComponent::MarkDirtyScaleRecursive()
+	{
+		MarkDirtyScale();
+
+		for (SceneComponent* Comp : Childs)
+		{
+			Comp->MarkDirtyScaleRecursive();
 		}
 	}
 

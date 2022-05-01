@@ -47,14 +47,26 @@ namespace Durna
 			return Vector3<T>(X - Vec3.X, Y - Vec3.Y, Z - Vec3.Z);
 		}
 
-		const void operator*(const Vector3<T>& Vec3) const
+		const Vector3<T> operator*(const Vector3<T>& Vec3) const
 		{
 			return Vector3<T>(X * Vec3.X, Y * Vec3.Y, Z * Vec3.Z);
+		}
+
+		const Vector3<T> operator/(const Vector3<T>& Vec3) const
+		{
+			return Vector3<T>(X / Vec3.X, Y / Vec3.Y, Z / Vec3.Z);
 		}
 
 		const Vector3 operator*(float f) const
 		{
 			return Vector3<T>(X * f, Y * f, Z * f);
+		}
+
+		void operator*=(float f)
+		{
+			X = X * f;
+			Y = Y * f;
+			Z = Z * f;
 		}
 
 		static Vector3<T> CrossProduct(const Vector3<T>& A, const Vector3<T>& B)

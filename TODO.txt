@@ -1,5 +1,8 @@
-make render command class
-make actor class
-make component class
-make primitive component class
+make transform matrix
+
+make world context
+
+add camera projection matrix
+fix camera rotation bug
+
 make base shape primitive child(sphere, box, ...)
