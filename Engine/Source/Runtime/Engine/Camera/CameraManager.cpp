@@ -7,15 +7,83 @@
 namespace Durna
 {
 	Camera* CameraManager::ActiveCamera = nullptr;
-	bool CameraManager::bDirtyProjection = true;
 
-	bool CameraManager::bDirtyView = true;
+	Vector3f CameraManager::ForwardVector(1.0f, 0.0f, 0.0f);
+	Vector3f CameraManager::RightVector(0.0f, 1.0f, 0.0f);
+	Vector3f CameraManager::UpVector(0.0f, 0.0f, 1.0f);
 
 	Matrix<float> CameraManager::ProjectionMatrix;
-	Matrix<float> CameraManager::ViewMatrix;
+	bool CameraManager::bDirtyProjection = true;
 
-	float CameraManager::CameraMoveSpeed = 0.01f;
+	Matrix<float> CameraManager::ViewMatrix;
+	bool CameraManager::bDirtyView = true;
+
+	float CameraManager::CameraMoveSpeed = 2.0f;
 	float CameraManager::CameraRotationSpeed = 3.0f;
+
+
+	void CameraManager::Tick(float DeltaTime)
+	{
+		UpdateCameraVectors();
+	}
+
+	void CameraManager::UpdateCameraVectors()
+	{
+		ForwardVector = GetActiveCameraRotation().GetForwardVector();
+		RightVector = Vector3f::CrossProduct(Vector3f::UpVector, ForwardVector).Normalize();
+		UpVector = Vector3f::CrossProduct(ForwardVector, RightVector).Normalize();
+	}
+
+
+
+	Camera* CameraManager::GetActiveCamera()
+	{
+		return ActiveCamera;
+	}
+
+	void CameraManager::SetActiveCamera(Camera* InCamera)
+	{
+		ActiveCamera = InCamera;
+		MarkDirtyProjection();
+		MarkDirtyView();
+	}
+
+	Vector3f CameraManager::GetActiveCameraLocation()
+	{
+		return ActiveCamera ? ActiveCamera->GetCameraLocation() : Vector3f(0);
+	}
+
+	void CameraManager::AddActiveCameraWorldOffset(const Vector3f& Offset)
+	{
+		ActiveCamera->AddCameraWorldOffset(Offset * CameraMoveSpeed);
+	}
+
+	void CameraManager::SetActiveCameraLocation(const Vector3f& InLocation)
+	{
+		ActiveCamera->SetCameraWorldLocation(InLocation);
+	}
+
+	void CameraManager::MoveForward(float Delta)
+	{
+		SetActiveCameraLocation(GetActiveCameraLocation() + ForwardVector * Delta * CameraMoveSpeed);
+	}
+
+	void CameraManager::MoveRight(float Delta)
+	{
+		SetActiveCameraLocation(GetActiveCameraLocation() + RightVector * Delta * CameraMoveSpeed);
+	}
+
+	Rotatorf CameraManager::GetActiveCameraRotation()
+	{
+		return ActiveCamera ? ActiveCamera->GetCameraRotation() : Rotatorf::ZeroRotator;
+	}
+
+	void CameraManager::AddActiveCameraWorldRotation(const Rotatorf& InRotator)
+	{
+		ActiveCamera->AddCameraWorldRotation(InRotator * CameraRotationSpeed);
+	}
+
+
 
 	float* CameraManager::GetProjectionMatrix()
 	{
@@ -67,37 +135,6 @@ namespace Durna
 		bDirtyProjection = true;
 	}
 
-	Vector3f CameraManager::GetActiveCameraPosition()
-	{
-		return ActiveCamera ? ActiveCamera->GetCameraPosition() : Vector3f(0);
-	}
-
-	Camera* CameraManager::GetActiveCamera()
-	{
-		return ActiveCamera;
-	}
-
-	void CameraManager::SetActiveCamera(Camera* InCamera)
-	{
-		ActiveCamera = InCamera;
-		MarkDirtyProjection();
-	}
-
-	void CameraManager::AddActiveCameraWorldOffset(const Vector3f& Offset)
-	{
-		ActiveCamera->AddCameraWorldOffset(Offset * CameraMoveSpeed);
-	}
-
-	Rotatorf CameraManager::GetActiveCameraRotation()
-	{
-		return ActiveCamera ? ActiveCamera->GetCameraRotation() : Rotatorf::ZeroRotator;
-	}
-
-	void CameraManager::AddActiveCameraWorldRotation(const Rotatorf& InRotator)
-	{
-		ActiveCamera->AddCameraWorldRotation(InRotator * CameraRotationSpeed);
-	}
-
 	bool CameraManager::IsDirtyView()
 	{
 		return bDirtyView;
@@ -120,64 +157,24 @@ namespace Durna
 
 	void CameraManager::UpdateViewMatrix()
 	{
-		Vector3f CameraPostition = GetActiveCameraPosition();
+		Vector3f CameraPostition = GetActiveCameraLocation();
 
-		Vector3f CameraDirection = GetActiveCameraRotation().GetForwardVector();
-		Vector3f CameraRightVector = GetActiveCameraRotation().GetRightVector();
-		Vector3f CameraUpVector = GetActiveCameraRotation().GetUpVector();
-
-		const Vector3f ZAxis = GetActiveCameraRotation().GetForwardVector();
-		const Vector3f XAxis = GetActiveCameraRotation().GetRightVector();
-		const Vector3f YAxis = GetActiveCameraRotation().GetUpVector();
+		const Vector3f& ZAxis = ForwardVector;
+		const Vector3f& XAxis = RightVector;
+		const Vector3f& YAxis = UpVector;
 
 		for (int32 RowIndex = 0; RowIndex < 3; RowIndex++)
 		{
-			if (RowIndex == 0)
-			{
-				ViewMatrix.M[RowIndex][0] = XAxis.X;
-				ViewMatrix.M[RowIndex][1] = YAxis.X;
-				ViewMatrix.M[RowIndex][2] = ZAxis.X;
-				ViewMatrix.M[RowIndex][3] = 0.0f;
-			}
-			else if (RowIndex == 1)
-			{
-				ViewMatrix.M[RowIndex][0] = XAxis.Y;
-				ViewMatrix.M[RowIndex][1] = YAxis.Y;
-				ViewMatrix.M[RowIndex][2] = ZAxis.Y;
-				ViewMatrix.M[RowIndex][3] = 0.0f;
-			}
-			else if (RowIndex == 2)
-			{
-				ViewMatrix.M[RowIndex][0] = XAxis.Z;
-				ViewMatrix.M[RowIndex][1] = YAxis.Z;
-				ViewMatrix.M[RowIndex][2] = ZAxis.Z;
-				ViewMatrix.M[RowIndex][3] = 0.0f;
-			}
+			ViewMatrix.M[RowIndex][0] = RowIndex == 0 ? XAxis.X : RowIndex == 1 ? XAxis.Y : XAxis.Z;
+			ViewMatrix.M[RowIndex][1] = RowIndex == 0 ? YAxis.X : RowIndex == 1 ? YAxis.Y : YAxis.Z;
+			ViewMatrix.M[RowIndex][2] = RowIndex == 0 ? ZAxis.X : RowIndex == 1 ? ZAxis.Y : ZAxis.Z;
+			ViewMatrix.M[RowIndex][3] = 0.0f;
 		}
 
 		ViewMatrix.M[3][0] = Vector3f::DotProduct(CameraPostition * -1, XAxis);
 		ViewMatrix.M[3][1] = Vector3f::DotProduct(CameraPostition * -1, YAxis);
 		ViewMatrix.M[3][2] = Vector3f::DotProduct(CameraPostition * -1, ZAxis);
 		ViewMatrix.M[3][3] = 1.0f;
-
-		/*
-		ViewMatrix.M[0] = CameraRightVector.X;
-		ViewMatrix.M[1] = CameraRightVector.Y;
-		ViewMatrix.M[2] = CameraRightVector.Z;
-		ViewMatrix.M[3] = 0;
-		ViewMatrix.M[4] = CameraUpVector.X;
-		ViewMatrix.M[5] = CameraUpVector.Y;
-		ViewMatrix.M[6] = CameraUpVector.Z;
-		ViewMatrix.M[7] = 0;
-		ViewMatrix.M[8] = CameraDirection.X;
-		ViewMatrix.M[9] = CameraDirection.Y;
-		ViewMatrix.M[10] = CameraDirection.Z;
-		ViewMatrix.M[11] = 0;
-		ViewMatrix.M[12] = 0;
-		ViewMatrix.M[13] = 0;
-		ViewMatrix.M[14] = 0;
-		ViewMatrix.M[15] = 1;
-		*/
 	}
 
 }

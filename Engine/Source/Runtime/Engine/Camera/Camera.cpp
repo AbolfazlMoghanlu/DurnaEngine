@@ -11,7 +11,7 @@ namespace Durna
 
 	}
 
-	Vector3f Camera::GetCameraPosition() const
+	Vector3f Camera::GetCameraLocation() const
 	{
 		return Position;
 	}
@@ -19,6 +19,12 @@ namespace Durna
 	void Camera::AddCameraWorldOffset(const Vector3f& PositionOffset)
 	{
 		Position += PositionOffset;
+		CameraManager::MarkDirtyView();
+	}
+
+	void Camera::SetCameraWorldLocation(const Vector3f& InLocation)
+	{
+		Position = InLocation;
 		CameraManager::MarkDirtyView();
 	}
 

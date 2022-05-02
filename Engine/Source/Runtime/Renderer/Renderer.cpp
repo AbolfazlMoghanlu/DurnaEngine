@@ -79,6 +79,7 @@ namespace Durna
 	void Renderer::Tick(float DeltaTime)
 	{
 		MainWindow->Tick(DeltaTime);
+		CameraManager::Tick(DeltaTime);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -95,11 +96,11 @@ namespace Durna
 		
 		Time += DeltaTime;
 
-		CameraManager::GetActiveCamera()->SetFOV(Math::Sin(Time) * 60);
+		CameraManager::GetActiveCamera()->SetFOV(45);
 
-		CameraManager::GetActiveCamera()->SetProjectionMode(EProjectionMode::Orthographic);
+		//CameraManager::GetActiveCamera()->SetProjectionMode(EProjectionMode::Orthographic);
 
-		Actor1->SetActorLocation(Vector3f(0, 0, 6));
+		Actor1->SetActorLocation(Vector3f(2.5, 0, 0));
 //		Actor1->SetActorRotation(Rotatorf(0, Math::Sin(Time) * 360, 0));
 		
 		//Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 3));

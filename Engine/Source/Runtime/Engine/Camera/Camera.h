@@ -48,8 +48,9 @@ namespace Durna
 	public:
 		Camera();
 
-		Vector3f GetCameraPosition() const;
+		Vector3f GetCameraLocation() const;
 		void AddCameraWorldOffset(const Vector3f& PositionOffset);
+		void SetCameraWorldLocation(const Vector3f& InLocation);
 
 		Rotatorf GetCameraRotation() const;
 		void AddCameraWorldRotation(const Rotatorf& RotationOffset);

@@ -65,7 +65,7 @@ namespace Durna
 
 		Vector3<T> GetUpVector()
 		{
-			return Vector3f::CrossProduct(GetForwardVector(), GetRightVector());
+			return Vector3f::CrossProduct(GetForwardVector(), GetRightVector()).Normalize();
 		}
 
 		static Rotator<T> CombineRotators(Rotator<T> R1, Rotator<T> R2)

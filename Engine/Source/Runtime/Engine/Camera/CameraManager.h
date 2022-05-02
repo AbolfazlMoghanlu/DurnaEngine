@@ -10,14 +10,23 @@ namespace Durna
 	class CameraManager
 	{
 	public:
+		static void Tick(float DeltaTime);
+		static void UpdateCameraVectors();
+
+
 		static Camera* GetActiveCamera();
 		static void SetActiveCamera(Camera* InCamera);
 
-		static Vector3f GetActiveCameraPosition();
+		static Vector3f GetActiveCameraLocation();
 		static void AddActiveCameraWorldOffset(const Vector3f& Offset);
+		static void SetActiveCameraLocation(const Vector3f& InLocation);
+
+		static void MoveForward(float Delta);
+		static void MoveRight(float Delta);
 
 		static Rotatorf GetActiveCameraRotation();
 		static void AddActiveCameraWorldRotation(const Rotatorf& InRotator);
+
 
 
 		static float* GetCameraViewMatrix();
@@ -41,6 +50,10 @@ namespace Durna
 		static Camera* ActiveCamera;
 		static bool bDirtyProjection;
 		static bool bDirtyView;
+
+		static Vector3f ForwardVector;
+		static Vector3f RightVector;
+		static Vector3f UpVector;
 
 		static Matrix<float> ProjectionMatrix;
 		static Matrix<float> ViewMatrix;

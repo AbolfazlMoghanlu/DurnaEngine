@@ -16,7 +16,7 @@ namespace Durna
 		void Tick(float DeltaTime);
 
 		// TODO: move to input class
-		void ProcessInput();
+		void ProcessInput(float DeltaTime);
 
 		bool IsClosing() const;
 

@@ -48,10 +48,10 @@ namespace Durna
 	void Window::Tick(float DeltaTime)
 	{
 		glfwSwapBuffers(window);
-		ProcessInput();
+		ProcessInput(DeltaTime);
 	}
 
-	void Window::ProcessInput()
+	void Window::ProcessInput(float DeltaTime)
 	{
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
@@ -60,22 +60,22 @@ namespace Durna
 
 		if (glfwGetKey(window, GLFW_KEY_D) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::AddActiveCameraWorldOffset(Vector3f(1.0f, 0.0f, 0.0f));
+			CameraManager::MoveRight(DeltaTime);
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::AddActiveCameraWorldOffset(Vector3f(-1.0f, 0.0f, 0.0f));
+			CameraManager::MoveRight(-DeltaTime);
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_W) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::AddActiveCameraWorldOffset(Vector3f(0.0f, 0.0f, 1.0f));
+			CameraManager::MoveForward(DeltaTime);
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_S) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::AddActiveCameraWorldOffset(Vector3f(0.0f, 0.0f, -1.0f));
+			CameraManager::MoveForward(-DeltaTime);
 		}
 
 		
