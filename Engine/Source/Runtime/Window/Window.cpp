@@ -2,8 +2,12 @@
 #include "Window.h"
 #include "Runtime/Engine/Camera/CameraManager.h"
 
+#include "Runtime/Math/Math.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+
+
 
 LOG_DEFINE_CATEGORY(LogWindow, "Window");
 
@@ -37,10 +41,11 @@ namespace Durna
 				glViewport(0, 0, InWidth, InHeight);
 			});
 
-		
+		glfwSetScrollCallback(window, OnScroll);
 
 		// TODO: Move somewhere more suitable
 		CameraManager::SetActiveCamera(new Camera);
+		
 	}
 
 	
@@ -100,6 +105,12 @@ namespace Durna
 		}
 	}
 
+	void Window::OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset)
+	{
+		float ClampedFOV = Math::Clamp(CameraManager::GetActiveCamera()->GetFOV() + YOffset * 5.0, 1.0, 90.0);
+		CameraManager::GetActiveCamera()->SetFOV(ClampedFOV);
+	}
+
 	bool Window::IsClosing() const
 	{
 		if (window)
@@ -108,6 +119,8 @@ namespace Durna
 		}
 		return true;
 	}
+
+	
 
 }
 

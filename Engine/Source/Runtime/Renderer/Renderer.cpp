@@ -73,6 +73,8 @@ namespace Durna
 		Actor1 = new Actor();
 		Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
 //		Actor1->AttachSceneComponent(pr1, pr);
+
+		CameraManager::GetActiveCamera()->SetFOV(45);
 		
 	}
 
@@ -96,7 +98,7 @@ namespace Durna
 		
 		Time += DeltaTime;
 
-		CameraManager::GetActiveCamera()->SetFOV(45);
+
 
 		//CameraManager::GetActiveCamera()->SetProjectionMode(EProjectionMode::Orthographic);
 

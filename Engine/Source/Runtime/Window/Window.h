@@ -22,8 +22,9 @@ namespace Durna
 
 	private:
 
-		GLFWwindow* window;
+		static void OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset);
 
+		GLFWwindow* window;
 		std::string Title;
 
 		int Width;
