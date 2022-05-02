@@ -6,7 +6,10 @@ uniform mat4 view;
 
 uniform float WFactor;
 uniform mat4 Transform;
+uniform mat4 View;
 uniform mat4 Projection;
+
+uniform float time;
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 VColor;
@@ -17,7 +20,7 @@ out vec2 TexCoord;
 
 void main()
 {
-	gl_Position =  Projection *  Transform * vec4(aPos, WFactor);
+	gl_Position =  Projection * View * Transform * vec4(aPos, WFactor);
 
 	V_Color = VColor;
 	TexCoord = aTexCoord;
@@ -40,5 +43,5 @@ uniform float time;
 void main()
 {
 	//FragColor = V_Color;
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), abs(sin(time)));
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
 }

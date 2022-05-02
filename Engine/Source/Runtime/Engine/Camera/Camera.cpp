@@ -2,6 +2,8 @@
 #include "Camera.h"
 #include "CameraManager.h"
 
+#include "Runtime/Math/Math.h"
+
 namespace Durna
 {
 	Camera::Camera()
@@ -17,6 +19,7 @@ namespace Durna
 	void Camera::AddCameraWorldOffset(const Vector3f& PositionOffset)
 	{
 		Position += PositionOffset;
+		CameraManager::MarkDirtyView();
 	}
 
 	Rotatorf Camera::GetCameraRotation() const
@@ -26,7 +29,12 @@ namespace Durna
 
 	void Camera::AddCameraWorldRotation(const Rotatorf& RotationOffset)
 	{
-		Rotation = Rotatorf::CombineRotators(Rotation, RotationOffset);
+		Rotatorf CombinedRotation = Rotation + RotationOffset;
+		float ClampedPitch = Math::Clamp<float>(CombinedRotation.Pitch, MinPitch, MaxPitch);
+		CombinedRotation.Pitch = ClampedPitch;
+
+		Rotation = CombinedRotation;
+		CameraManager::MarkDirtyView();
 	}
 
 
@@ -34,6 +42,7 @@ namespace Durna
 	{
 		ProjectionMode = InProjectionMode;
 		CameraManager::MarkDirtyProjection();
+		CameraManager::MarkDirtyView();
 	}
 
 	EProjectionMode Camera::GetProjectionMode() const

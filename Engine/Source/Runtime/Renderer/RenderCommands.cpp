@@ -44,6 +44,10 @@ namespace Durna
 		ScaleRotationTranslationMatrix<float> Transform(Comp.GetWorldScale(), Comp.GetWorldRotation(), Comp.GetWorldLocation());
 		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
 
+		
+		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("View", CameraManager::GetCameraViewMatrix());
+
+
 		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::GetProjectionMatrix());
 		Comp.SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::GetWFactor());
 

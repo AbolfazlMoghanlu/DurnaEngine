@@ -21,6 +21,12 @@ namespace Durna
 			return Degrees * (T)PI_ON_180_DEGREES;
 		}
 
+		template<typename T>
+		static T Clamp(T Value, T Min, T Max)
+		{
+			return (Value < Min) ? Min : (Value < Max) ? Value : Max;
+		}
+
 		static float Sin(float Value)
 		{
 			return sinf(Value);

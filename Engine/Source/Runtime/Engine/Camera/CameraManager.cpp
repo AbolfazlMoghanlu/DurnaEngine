@@ -6,10 +6,13 @@
 
 namespace Durna
 {
-	Camera* CameraManager::ActiveCamera;
+	Camera* CameraManager::ActiveCamera = nullptr;
 	bool CameraManager::bDirtyProjection = true;
 
+	bool CameraManager::bDirtyView = true;
+
 	Matrix<float> CameraManager::ProjectionMatrix;
+	Matrix<float> CameraManager::ViewMatrix;
 
 	float CameraManager::CameraMoveSpeed = 0.01f;
 	float CameraManager::CameraRotationSpeed = 3.0f;
@@ -95,29 +98,86 @@ namespace Durna
 		ActiveCamera->AddCameraWorldRotation(InRotator * CameraRotationSpeed);
 	}
 
-	void CameraManager::GetCameraViewMatrix(float* A)
+	bool CameraManager::IsDirtyView()
 	{
+		return bDirtyView;
+	}
+
+	void CameraManager::MarkDirtyView()
+	{
+		bDirtyView = true;
+	}
+
+	float* CameraManager::GetCameraViewMatrix()
+	{
+		if (IsDirtyView())
+		{
+			UpdateViewMatrix();
+			bDirtyView = false;
+		}
+		return ViewMatrix.M[0];
+	}
+
+	void CameraManager::UpdateViewMatrix()
+	{
+		Vector3f CameraPostition = GetActiveCameraPosition();
+
 		Vector3f CameraDirection = GetActiveCameraRotation().GetForwardVector();
 		Vector3f CameraRightVector = GetActiveCameraRotation().GetRightVector();
 		Vector3f CameraUpVector = GetActiveCameraRotation().GetUpVector();
 
-		float* M = new float[16];
-		A[0] = CameraRightVector.X;
-		A[1] = CameraRightVector.Y;
-		A[2] = CameraRightVector.Z;
-		A[3] = 0;
-		A[4] = CameraUpVector.X;
-		A[5] = CameraUpVector.Y;
-		A[6] = CameraUpVector.Z;
-		A[7] = 0;
-		A[8] = CameraDirection.X;
-		A[9] = CameraDirection.Y;
-		A[10] = CameraDirection.Z;
-		A[11] = 0;
-		A[12] = 0;
-		A[13] = 0;
-		A[14] = 0;
-		A[15] = 1;
+		const Vector3f ZAxis = GetActiveCameraRotation().GetForwardVector();
+		const Vector3f XAxis = GetActiveCameraRotation().GetRightVector();
+		const Vector3f YAxis = GetActiveCameraRotation().GetUpVector();
+
+		for (int32 RowIndex = 0; RowIndex < 3; RowIndex++)
+		{
+			if (RowIndex == 0)
+			{
+				ViewMatrix.M[RowIndex][0] = XAxis.X;
+				ViewMatrix.M[RowIndex][1] = YAxis.X;
+				ViewMatrix.M[RowIndex][2] = ZAxis.X;
+				ViewMatrix.M[RowIndex][3] = 0.0f;
+			}
+			else if (RowIndex == 1)
+			{
+				ViewMatrix.M[RowIndex][0] = XAxis.Y;
+				ViewMatrix.M[RowIndex][1] = YAxis.Y;
+				ViewMatrix.M[RowIndex][2] = ZAxis.Y;
+				ViewMatrix.M[RowIndex][3] = 0.0f;
+			}
+			else if (RowIndex == 2)
+			{
+				ViewMatrix.M[RowIndex][0] = XAxis.Z;
+				ViewMatrix.M[RowIndex][1] = YAxis.Z;
+				ViewMatrix.M[RowIndex][2] = ZAxis.Z;
+				ViewMatrix.M[RowIndex][3] = 0.0f;
+			}
+		}
+
+		ViewMatrix.M[3][0] = Vector3f::DotProduct(CameraPostition * -1, XAxis);
+		ViewMatrix.M[3][1] = Vector3f::DotProduct(CameraPostition * -1, YAxis);
+		ViewMatrix.M[3][2] = Vector3f::DotProduct(CameraPostition * -1, ZAxis);
+		ViewMatrix.M[3][3] = 1.0f;
+
+		/*
+		ViewMatrix.M[0] = CameraRightVector.X;
+		ViewMatrix.M[1] = CameraRightVector.Y;
+		ViewMatrix.M[2] = CameraRightVector.Z;
+		ViewMatrix.M[3] = 0;
+		ViewMatrix.M[4] = CameraUpVector.X;
+		ViewMatrix.M[5] = CameraUpVector.Y;
+		ViewMatrix.M[6] = CameraUpVector.Z;
+		ViewMatrix.M[7] = 0;
+		ViewMatrix.M[8] = CameraDirection.X;
+		ViewMatrix.M[9] = CameraDirection.Y;
+		ViewMatrix.M[10] = CameraDirection.Z;
+		ViewMatrix.M[11] = 0;
+		ViewMatrix.M[12] = 0;
+		ViewMatrix.M[13] = 0;
+		ViewMatrix.M[14] = 0;
+		ViewMatrix.M[15] = 1;
+		*/
 	}
 
 }

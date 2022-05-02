@@ -84,6 +84,8 @@ namespace Durna
 		void SetOrthographicZOffset(float InZOffset);
 		float GetOrthographicZOffset() const;
 
+		float MinPitch = -90.0f;
+		float MaxPitch = 90.0f;
 
 	private:
 		Vector3f Position = Vector3f::ZeroVector;

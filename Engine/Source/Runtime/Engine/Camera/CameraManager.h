@@ -19,7 +19,13 @@ namespace Durna
 		static Rotatorf GetActiveCameraRotation();
 		static void AddActiveCameraWorldRotation(const Rotatorf& InRotator);
 
-		static void GetCameraViewMatrix(float* A);
+
+		static float* GetCameraViewMatrix();
+		static void UpdateViewMatrix();
+
+		static bool IsDirtyView();
+		static void MarkDirtyView();
+
 
 		static float CameraMoveSpeed;
 		static float CameraRotationSpeed;
@@ -34,8 +40,10 @@ namespace Durna
 	private:
 		static Camera* ActiveCamera;
 		static bool bDirtyProjection;
+		static bool bDirtyView;
 
 		static Matrix<float> ProjectionMatrix;
+		static Matrix<float> ViewMatrix;
 	};
 }
 

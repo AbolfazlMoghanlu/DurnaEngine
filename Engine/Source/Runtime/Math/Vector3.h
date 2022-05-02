@@ -79,6 +79,11 @@ namespace Durna
 				);
 		}
 
+		static float DotProduct(const Vector3<T>& A, const Vector3<T>& B)
+		{
+			return A.X * B.X + A.Y * B.Y + A.Z * B.Z;
+		}
+
 		Vector3<T> Normalize()
 		{
 			// TODO: fast sqrt

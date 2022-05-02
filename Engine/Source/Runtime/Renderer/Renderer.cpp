@@ -92,18 +92,6 @@ namespace Durna
 		glFrontFace(GL_CW);
 
 //		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-		/*
-		pr->SourceMaterial->GetShader()->Use();
-
-		pr->SourceMaterial->GetShader()->SetUniformVec3f("CameraPosition", CameraManager::GetActiveCameraPosition());
-
-		float M[16];
-		CameraManager::GetCameraViewMatrix(M);
-
-		int l = glGetUniformLocation(pr->SourceMaterial->GetShader()->ID, "view");
-		glUniformMatrix4fv(l, 1, false, M);
-		*/
 		
 		Time += DeltaTime;
 
@@ -112,7 +100,7 @@ namespace Durna
 		CameraManager::GetActiveCamera()->SetProjectionMode(EProjectionMode::Orthographic);
 
 		Actor1->SetActorLocation(Vector3f(0, 0, 6));
-		Actor1->SetActorRotation(Rotatorf(Math::Sin(Time) * 360, Math::Cos(Time) * 360, Math::Cos(Math::Sin(Time)) * 360));
+//		Actor1->SetActorRotation(Rotatorf(0, Math::Sin(Time) * 360, 0));
 		
 		//Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 3));
 		//pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0), false);
