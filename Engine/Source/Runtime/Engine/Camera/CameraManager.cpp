@@ -19,7 +19,7 @@ namespace Durna
 	bool CameraManager::bDirtyView = true;
 
 	float CameraManager::CameraMoveSpeed = 2.0f;
-	float CameraManager::CameraRotationSpeed = 3.0f;
+	float CameraManager::CameraRotationSpeed = 0.1f;
 
 
 	void CameraManager::Tick(float DeltaTime)

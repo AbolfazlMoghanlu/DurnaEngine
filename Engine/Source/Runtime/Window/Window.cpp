@@ -13,6 +13,9 @@ LOG_DEFINE_CATEGORY(LogWindow, "Window");
 
 namespace Durna
 {
+	float Window::MouseLastX = 0.0f;
+	float Window::MouseLastY = 0.0f;
+
 	Window::Window(std::string InTitle, int InWidth, int InHeight)
 		: Title(InTitle)
 		, Width(InWidth)
@@ -41,11 +44,16 @@ namespace Durna
 				glViewport(0, 0, InWidth, InHeight);
 			});
 
+		MouseLastX = Width / 2;
+		MouseLastY = Height / 2;
+
 		glfwSetScrollCallback(window, OnScroll);
+		glfwSetCursorPosCallback(window, OnMouseMove);
 
 		// TODO: Move somewhere more suitable
 		CameraManager::SetActiveCamera(new Camera);
 		
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	
@@ -82,33 +90,26 @@ namespace Durna
 		{
 			CameraManager::MoveForward(-DeltaTime);
 		}
-
-		
-		if (glfwGetKey(window, GLFW_KEY_E) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
-		{
-			CameraManager::AddActiveCameraWorldRotation(Rotatorf(1.0f, 0.0f, 0.0f));
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_Q) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
-		{
-			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-1.0f, 0.0f, 0.0f));
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_C) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
-		{
-			CameraManager::AddActiveCameraWorldRotation(Rotatorf(0.0f, 1.0f, 0.0f));
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_X) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
-		{
-			CameraManager::AddActiveCameraWorldRotation(Rotatorf(0.0f, -1.0f, 0.0f));
-		}
 	}
 
 	void Window::OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset)
 	{
 		float ClampedFOV = Math::Clamp(CameraManager::GetActiveCamera()->GetFOV() + YOffset * 5.0, 1.0, 90.0);
 		CameraManager::GetActiveCamera()->SetFOV(ClampedFOV);
+	}
+
+	void Window::OnMouseMove(GLFWwindow* InWindow, double XPos, double YPos)
+	{
+		float XOffset = XPos - MouseLastX;
+		float YOffset = YPos - MouseLastY;
+
+		MouseLastX = XPos;
+		MouseLastY = YPos;
+
+		if (glfwGetMouseButton(InWindow, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-YOffset, XOffset, 0.0f));
+		}
 	}
 
 	bool Window::IsClosing() const

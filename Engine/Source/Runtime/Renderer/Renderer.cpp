@@ -68,11 +68,11 @@ namespace Durna
 		AssetLibrary::Init();
 		
 		pr = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
-//		pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
+		pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
 
 		Actor1 = new Actor();
 		Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
-//		Actor1->AttachSceneComponent(pr1, pr);
+		Actor1->AttachSceneComponent(pr1, pr);
 
 		CameraManager::GetActiveCamera()->SetFOV(45);
 		
@@ -100,19 +100,12 @@ namespace Durna
 
 
 
-		//CameraManager::GetActiveCamera()->SetProjectionMode(EProjectionMode::Orthographic);
 
 		Actor1->SetActorLocation(Vector3f(2.5, 0, 0));
-//		Actor1->SetActorRotation(Rotatorf(0, Math::Sin(Time) * 360, 0));
-		
-		//Actor1->SetActorLocation(Vector3f(Math::Sin(Time), 0, 3));
-		//pr1->SetRelativeLocation(Vector3f(0, Math::Cos(Time), 0), false);
 
-// 		const Rotatorf Rot = Rotatorf::CombineRotators(Actor1->GetActorRotation(), Rotatorf(Math::Sin(Time), Math::Cos(Time), Time));
-// 		Actor1->SetActorRotation(Rot);
-// 
-// 		Actor1->SetActorScale(Vector3f(Math::Sin(Time), Math::Sin(Time), Math::Sin(Time)));
-// 		pr1->SetRelativeScale(Vector3f(1, Math::Cos(Time), 1), false);
+		pr1->SetRelativeLocation(Vector3f(Math::Sin(Time), Math::Cos(Time), 0));
+		pr1->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Time) * 360.0, 0.0));
+ 		pr1->SetRelativeScale(Vector3f(Math::Sin(Time) / 2 + 0.5));
 
 		Actor1->Tick(DeltaTime);
 

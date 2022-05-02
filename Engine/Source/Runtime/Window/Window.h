@@ -23,12 +23,16 @@ namespace Durna
 	private:
 
 		static void OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset);
+		static void OnMouseMove(GLFWwindow* InWindow, double XPos, double YPos);
 
 		GLFWwindow* window;
 		std::string Title;
 
 		int Width;
 		int Height;
+
+		static float MouseLastX;
+		static float MouseLastY;
 	};
 }
 
