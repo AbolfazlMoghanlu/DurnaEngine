@@ -48,6 +48,7 @@ namespace Durna
 
 		AssetLibrary::Init();
 		
+		ModelLoader::Load(Path::ModelRelativePath("Cube.obj"));
 	}
 
 	void Renderer::Tick(float DeltaTime)

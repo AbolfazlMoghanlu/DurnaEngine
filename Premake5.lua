@@ -9,9 +9,6 @@ workspace "DurnaEngine"
 	"Dist"
 	}
 	
--- IncludeDir = {}
--- IncludeDir[GLFW] = "ThirdParty/Header"
-	
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 	
 	
@@ -52,8 +49,6 @@ project "Engine"
 	
 	links
 	{
---		"glfw3.lib",
-		"assimp-vc142-mt.lib",
 		"glfw3_mt.lib",
 		"opengl32.lib"
 	}

@@ -5,7 +5,7 @@ namespace Durna
 	class ModelLoader
 	{
 	public:
-		void Load(const std::string& InPath);
+		static void Load(const std::string& InPath);
 
 	};
 
