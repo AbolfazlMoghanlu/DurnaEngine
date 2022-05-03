@@ -22,7 +22,8 @@ void GameApplication::Init()
 	Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
 	Actor1->AttachSceneComponent(pr1, pr);
 
-	CameraManager::GetActiveCamera()->SetFOV(45);
+	CameraManager::GetActiveCamera()->SetFOV(45.0);
+	CameraManager::GetActiveCamera()->SetPerspectiveMinZ(0.1f);
 }
 
 void GameApplication::Tick(float DeltaTime)

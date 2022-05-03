@@ -9,6 +9,7 @@
 
 #include "Runtime/Assets/AssetLibrary.h"
 
+#include "Runtime/Misc/ModelLoader.h"
 
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 

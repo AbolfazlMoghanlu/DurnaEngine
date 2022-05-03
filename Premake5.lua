@@ -53,6 +53,7 @@ project "Engine"
 	links
 	{
 --		"glfw3.lib",
+		"assimp-vc142-mt.lib",
 		"glfw3_mt.lib",
 		"opengl32.lib"
 	}
