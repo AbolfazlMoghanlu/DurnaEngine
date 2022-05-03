@@ -22,17 +22,12 @@ namespace Durna
 
 		static void Shutdown();
 
+		static Window* GetWindow();
+		static float GetTime();
+
+	private:
 		static Window* MainWindow;
-
-		// TODO: Remove
-		 static PrimitiveComponent* pr;
-		 static PrimitiveComponent* pr1;
-
-		 static float Time;
-
-		 static Vector3f PrLocation;
-
-		 static Actor* Actor1;
+		static float Time;
 	};
 }
 

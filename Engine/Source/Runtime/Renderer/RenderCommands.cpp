@@ -51,7 +51,7 @@ namespace Durna
 		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::GetProjectionMatrix());
 		Comp.SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::GetWFactor());
 
-		Comp.SourceMaterial->GetShader()->SetUniform1f("time", Renderer::Time);
+		Comp.SourceMaterial->GetShader()->SetUniform1f("time", Renderer::GetTime());
 		
 		glDrawElements(GL_TRIANGLES, Comp.EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}

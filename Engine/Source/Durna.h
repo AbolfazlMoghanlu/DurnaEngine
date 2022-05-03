@@ -1,6 +1,6 @@
 #pragma once
 
-LOG_DECLARE_CATEGORY(LogTemp);
+//LOG_DECLARE_CATEGORY(LogTemp);
 
 typedef unsigned char 		uint8;
 typedef unsigned short int	uint16;

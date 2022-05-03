@@ -5,6 +5,8 @@
 
 LOG_DEFINE_CATEGORY(LogEngine, "Engine");
 
+extern Durna::Application* CreateApplication();
+
 namespace Durna
 {
 	Engineloop engineLoop;
@@ -24,15 +26,22 @@ namespace Durna
 	bool Engineloop::Init()
 	{
 		LOG(LogEngine, Info, "Initalizing.");
-		App = new Application();
 
-		return true;
+		App = CreateApplication();
+		if (App)
+		{
+			App->Init();
+			return true;
+		}
+
+		return App != nullptr;
 	}
 
 	void Engineloop::Shutdown()
 	{
 		LOG(LogEngine, Info, "End play. Shuting down.");
 
+		App->Shutdown();
 		delete App;
 
 		LOG(LogEngine, Info, "Shut down successfully.");

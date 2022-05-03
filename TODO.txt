@@ -1,5 +1,4 @@
 make world context
-extract game code from engine code
 
 make sky sphere
 

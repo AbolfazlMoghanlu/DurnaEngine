@@ -10,12 +10,12 @@ namespace Durna
 {
 	Application::Application()
 	{
-		Init();
+		
 	}
 
 	Application::~Application()
 	{
-		Shutdown();
+		
 	}
 
 	void Application::Init()
@@ -37,7 +37,7 @@ namespace Durna
 
 	bool Application::IsRunning() const
 	{
-		return Running && !Renderer::MainWindow->IsClosing();
+		return Running && !Renderer::GetWindow()->IsClosing();
 	}
 
 }

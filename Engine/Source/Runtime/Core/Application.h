@@ -11,9 +11,9 @@ namespace Durna
 
 		~Application();
 
-		void Init();
+		virtual void Init();
 
-		void Tick(float DeltaTime);
+		virtual void Tick(float DeltaTime);
 
 		void Shutdown();
 
