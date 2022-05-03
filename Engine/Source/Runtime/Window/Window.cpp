@@ -8,7 +8,6 @@
 #include "GLFW/glfw3.h"
 
 
-
 LOG_DEFINE_CATEGORY(LogWindow, "Window");
 
 namespace Durna

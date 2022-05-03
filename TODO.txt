@@ -1,8 +1,8 @@
-make transform matrix
-
 make world context
+extract game code from engine code
 
-add camera projection matrix
-fix camera rotation bug
+make sky sphere
 
 make base shape primitive child(sphere, box, ...)
+
+handle garbage collection
