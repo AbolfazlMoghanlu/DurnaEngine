@@ -103,9 +103,9 @@ namespace Durna
 
 		Actor1->SetActorLocation(Vector3f(2.5, 0, 0));
 
-		pr1->SetRelativeLocation(Vector3f(Math::Sin(Time), Math::Cos(Time), 0));
-		pr1->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Time) * 360.0, 0.0));
- 		pr1->SetRelativeScale(Vector3f(Math::Sin(Time) / 2 + 0.5));
+		pr1->SetRelativeLocation(Vector3f(Math::Sin(Time), Math::Cos(Time), 0.0f));
+		pr1->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Time) * 360.0f, 0.0f));
+ 		pr1->SetRelativeScale(Vector3f(Math::Sin(Time) / 2.0f + 0.5f));
 
 		Actor1->Tick(DeltaTime);
 

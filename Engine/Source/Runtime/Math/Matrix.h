@@ -9,7 +9,7 @@ namespace Durna
 	class Matrix
 	{
 	public:
-		T M[4][4];
+		T M[4][4] = { 0 };
 
 		Matrix(const Plane<T>& InX, const Plane<T>& InY, const Plane<T>& InZ, const Plane<T>& InW);
 		Matrix(const Vector3<T>& InX, const Vector3<T>& InY, const Vector3<T>& InZ, const Vector3<T>& InW);

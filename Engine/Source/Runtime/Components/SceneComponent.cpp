@@ -30,17 +30,17 @@ namespace Durna
 		return Childs;
 	}
 
-	Vector3f SceneComponent::GetRelativeLocation() const
+	const Vector3f& SceneComponent::GetRelativeLocation() const
 	{
 		return RelativeLocation;
 	}
 
-	Vector3f SceneComponent::GetLocalLocation() const
+	const Vector3f& SceneComponent::GetLocalLocation() const
 	{
 		return LocalLocation;
 	}
 
-	Vector3f SceneComponent::GetWorldLocation()const
+	const Vector3f& SceneComponent::GetWorldLocation()const
 	{
 		return WorldLocation;
 	}
@@ -97,17 +97,17 @@ namespace Durna
 		}
 	}
 
-	Rotatorf SceneComponent::GetRelativeRotation() const
+	const Rotatorf& SceneComponent::GetRelativeRotation() const
 	{
 		return RelativeRotation;
 	}
 
-	Rotatorf SceneComponent::GetLocalRotation() const
+	const Rotatorf& SceneComponent::GetLocalRotation() const
 	{
 		return LocalRotation;
 	}
 
-	Rotatorf SceneComponent::GetWorldRotation() const
+	const Rotatorf& SceneComponent::GetWorldRotation() const
 	{
 		return WorldRotation;
 	}
@@ -165,17 +165,17 @@ namespace Durna
 		}
 	}
 
-	Vector3f SceneComponent::GetRelativeScale() const
+	const Vector3f& SceneComponent::GetRelativeScale() const
 	{
 		return RelativeScale;
 	}
 
-	Vector3f SceneComponent::GetLocalScale() const
+	const Vector3f& SceneComponent::GetLocalScale() const
 	{
 		return LocalScale;
 	}
 
-	Vector3f SceneComponent::GetWorldScale() const
+	const Vector3f& SceneComponent::GetWorldScale() const
 	{
 		return WorldScale;
 	}

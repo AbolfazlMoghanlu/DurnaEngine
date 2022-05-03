@@ -17,9 +17,9 @@ namespace Durna
 		const std::vector<SceneComponent*>& GetChilds() const;
 
 		// ------------------ location -----------------
-		Vector3f GetRelativeLocation() const;
-		Vector3f GetLocalLocation() const;
-		Vector3f GetWorldLocation() const;
+		const Vector3f& GetRelativeLocation() const;
+		const Vector3f& GetLocalLocation() const;
+		const Vector3f& GetWorldLocation() const;
 
 		void SetRelativeLocation(const Vector3f& Inlocation, bool bMarkDirty = true);
 		void SetLocalLocation(const Vector3f& Inlocation, bool bMarkDirty = true);
@@ -32,9 +32,9 @@ namespace Durna
 		void MarkDirtyLocationRecursive();
 
 		// ------------------ rotation --------------------
-		Rotatorf GetRelativeRotation() const;
-		Rotatorf GetLocalRotation() const;
-		Rotatorf GetWorldRotation() const;
+		const Rotatorf& GetRelativeRotation() const;
+		const Rotatorf& GetLocalRotation() const;
+		const Rotatorf& GetWorldRotation() const;
 
 		void SetRelativeRotation(const Rotatorf& InRotator, bool bMarkDirty = true);
 		void SetLocalRotation(const Rotatorf& InRotator, bool bMarkDirty = true);
@@ -47,9 +47,9 @@ namespace Durna
 		void MarkDirtyRotationRecursive();
 
 		// ------------------ scale ------------------------
-		Vector3f GetRelativeScale() const;
-		Vector3f GetLocalScale() const;
-		Vector3f GetWorldScale() const;
+		const Vector3f& GetRelativeScale() const;
+		const Vector3f& GetLocalScale() const;
+		const Vector3f& GetWorldScale() const;
 
 		void SetRelativeScale(const Vector3f& InScale, bool bMarkDirty = true);
 		void SetLocalScale(const Vector3f& InScale, bool bMarkDirty = true);

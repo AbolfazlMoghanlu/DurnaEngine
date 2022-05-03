@@ -44,8 +44,8 @@ namespace Durna
 				glViewport(0, 0, InWidth, InHeight);
 			});
 
-		MouseLastX = Width / 2;
-		MouseLastY = Height / 2;
+		MouseLastX = (float)Width / 2;
+		MouseLastY = (float)Height / 2;
 
 		glfwSetScrollCallback(window, OnScroll);
 		glfwSetCursorPosCallback(window, OnMouseMove);
@@ -94,21 +94,26 @@ namespace Durna
 
 	void Window::OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset)
 	{
-		float ClampedFOV = Math::Clamp(CameraManager::GetActiveCamera()->GetFOV() + YOffset * 5.0, 1.0, 90.0);
+		float ClampedFOV = Math::Clamp<float>(CameraManager::GetActiveCamera()->GetFOV() + (float)YOffset * 5.0f, 1.0f, 90.0f);
 		CameraManager::GetActiveCamera()->SetFOV(ClampedFOV);
 	}
 
 	void Window::OnMouseMove(GLFWwindow* InWindow, double XPos, double YPos)
 	{
-		float XOffset = XPos - MouseLastX;
-		float YOffset = YPos - MouseLastY;
+		float XOffset = (float)XPos - MouseLastX;
+		float YOffset = (float)YPos - MouseLastY;
 
-		MouseLastX = XPos;
-		MouseLastY = YPos;
+		MouseLastX = (float)XPos;
+		MouseLastY = (float)YPos;
 
 		if (glfwGetMouseButton(InWindow, GLFW_MOUSE_BUTTON_RIGHT))
 		{
+			glfwSetInputMode(InWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-YOffset, XOffset, 0.0f));
+		}
+		else
+		{
+			glfwSetInputMode(InWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 	}
 
