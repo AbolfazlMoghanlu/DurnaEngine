@@ -14,6 +14,11 @@ namespace Durna
 		VertexCount = (uint32)(InVertexPositions.size() / 3);
 	}
 
+	StaticMesh::StaticMesh()
+	{
+
+	}
+
 	StaticMesh::~StaticMesh()
 	{
 

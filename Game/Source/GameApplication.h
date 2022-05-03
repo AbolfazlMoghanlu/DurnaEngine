@@ -2,8 +2,6 @@
 
 #include <Runtime/Core/Application.h>
 
-//#include "Runtime/Engine/Actor.h"
-//#include "Runtime/Components/PrimitiveComponent.h"
 
 using namespace Durna;
 
@@ -11,6 +9,7 @@ namespace Durna
 {
 	class Actor;
 	class PrimitiveComponent;
+	class StaticMesh;
 }
 
 
@@ -25,5 +24,6 @@ private:
  	PrimitiveComponent* pr1 = nullptr;
 
 	Actor* Actor1 = nullptr;
+	Durna::StaticMesh* Cube;
 };
 

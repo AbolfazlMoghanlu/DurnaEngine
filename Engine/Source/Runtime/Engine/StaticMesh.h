@@ -4,6 +4,8 @@ namespace Durna
 	class StaticMesh
 	{
 	public:
+		StaticMesh();
+
 		StaticMesh(const std::vector<float>& InVertexPositions,
 			const std::vector<uint32>& InVertexIndices,
 			const std::vector<float>& InUVs,

@@ -10,12 +10,18 @@
 #include "Runtime/Engine/Camera/CameraManager.h"
 #include "Runtime/Renderer/Renderer.h"
 #include "Runtime/Math/Math.h"
+#include "Runtime/Engine/StaticMesh.h"
+#include "Runtime/Misc/ModelLoader.h"
+
 
 void GameApplication::Init()
 {
-	Application::Init();
+	Application::Init();	
 
-	pr = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
+	Cube = new Durna::StaticMesh;
+	ModelLoader::Load(Path::ModelRelativePath("Sphere.obj"), Cube);
+
+	pr = new PrimitiveComponent(Cube, AssetLibrary::BaseMaterial);
 	pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
 
 	Actor1 = new Actor();
@@ -24,6 +30,10 @@ void GameApplication::Init()
 
 	CameraManager::GetActiveCamera()->SetFOV(45.0);
 	CameraManager::GetActiveCamera()->SetPerspectiveMinZ(0.1f);
+
+	CameraManager::GetActiveCamera()->SetFOV(45.0);
+
+	
 }
 
 void GameApplication::Tick(float DeltaTime)

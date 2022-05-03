@@ -9,8 +9,6 @@
 
 #include "Runtime/Assets/AssetLibrary.h"
 
-#include "Runtime/Misc/ModelLoader.h"
-
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
@@ -47,8 +45,6 @@ namespace Durna
 		glBindVertexArray(vertexarrayobject);
 
 		AssetLibrary::Init();
-		
-		ModelLoader::Load(Path::ModelRelativePath("Cube.obj"));
 	}
 
 	void Renderer::Tick(float DeltaTime)
