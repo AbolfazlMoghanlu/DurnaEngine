@@ -1,7 +1,3 @@
 make world context
 
-make sky sphere
-
-make base shape primitive child(sphere, box, ...)
-
 handle garbage collection

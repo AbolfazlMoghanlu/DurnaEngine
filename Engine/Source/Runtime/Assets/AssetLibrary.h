@@ -14,13 +14,17 @@ namespace Durna
 
 		static Image* TileImage;
 		static Image* WallImage;
+		static Image* SkyImage;
 		
 		static Texture* TileTexture;
 		static Texture* WallTexture;
+		static Texture* SkyTexture;
 		
 		static Shader* BaseShader;
+		static Shader* SkyShader;
 		
 		static Material* BaseMaterial;
+		static Material* SkyMaterial;
 	};
 }
 

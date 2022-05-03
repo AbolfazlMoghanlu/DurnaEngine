@@ -20,10 +20,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	Actor* Actor1 = nullptr;
  	PrimitiveComponent* pr = nullptr;
  	PrimitiveComponent* pr1 = nullptr;
 
-	Actor* Actor1 = nullptr;
-	Durna::StaticMesh* Cube;
+	Actor* SkySphere = nullptr;
+	PrimitiveComponent* Mesh;
+	Durna::StaticMesh* FlipedSphere;
 };
 
