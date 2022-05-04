@@ -34,5 +34,6 @@ uniform float time;
 
 void main()
 {
-	FragColor = texture(SkyTexture, TexCoord);
+	vec4 SkySampled = pow(texture(SkyTexture, TexCoord), vec4(2.2));
+	FragColor = SkySampled;
 }

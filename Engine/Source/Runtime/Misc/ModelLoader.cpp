@@ -41,12 +41,20 @@ namespace Durna
 					tinyobj::real_t TX = attrib.texcoords[2 * idx.texcoord_index + 0];
 					tinyobj::real_t TY = attrib.texcoords[2 * idx.texcoord_index + 1];
 
+					tinyobj::real_t NX = attrib.normals[3 * idx.normal_index + 0];
+					tinyobj::real_t NY = attrib.normals[3 * idx.normal_index + 1];
+					tinyobj::real_t NZ = attrib.normals[3 * idx.normal_index + 2];
+
 					Target->VertexPositions.push_back(VX);
 					Target->VertexPositions.push_back(VY);
 					Target->VertexPositions.push_back(VZ);
 
 					Target->VertexUVs.push_back(TX);
 					Target->VertexUVs.push_back(TY);
+
+					Target->VertexNormal.push_back(NX);
+					Target->VertexNormal.push_back(NY);
+					Target->VertexNormal.push_back(NZ);
 
 					Target->VertexIndices.push_back(IndexOffset + v);
 				}

@@ -18,17 +18,20 @@ void GameApplication::Init()
 {
 	Application::Init();	
 
-	FlipedSphere = new Durna::StaticMesh;
-	ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), FlipedSphere);
+	SkyMesh = new Durna::StaticMesh;
+	ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), SkyMesh);
 
-	Mesh = new PrimitiveComponent(FlipedSphere, AssetLibrary::SkyMaterial);
+	CubeMesh = new Durna::StaticMesh;
+	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh);
+
+	SkyComponent = new PrimitiveComponent(SkyMesh, AssetLibrary::SkyMaterial);
 	SkySphere = new Actor();
-	SkySphere->AttachSceneComponent(Mesh, SkySphere->GetRoot());
+	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
 	SkySphere->SetActorScale(Vector3f(100000.0f));
 	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
 
-	pr = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
-	pr1 = new PrimitiveComponent(&BaseShapes::Cube, AssetLibrary::BaseMaterial);
+	pr = new PrimitiveComponent(CubeMesh, AssetLibrary::BaseMaterial);
+	pr1 = new PrimitiveComponent(CubeMesh, AssetLibrary::BaseMaterial);
 
 	Actor1 = new Actor();
 	Actor1->AttachSceneComponent(pr, Actor1->GetRoot());

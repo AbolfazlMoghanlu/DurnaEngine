@@ -25,6 +25,7 @@ namespace Durna
 		VB->AddLayout(VertexBufferLayout(&Mesh->VertexPositions, 3, false));
 		VB->AddLayout(VertexBufferLayout(&OverridedVertexColor, 4, false));
 		VB->AddLayout(VertexBufferLayout(&Mesh->VertexUVs, 2, false));
+		VB->AddLayout(VertexBufferLayout(&Mesh->VertexNormal, 3, false));
 		VB->UpdateLayout();
 		VB->Bind();
 		VB->UpdateAttributes();

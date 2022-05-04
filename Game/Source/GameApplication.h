@@ -25,7 +25,9 @@ private:
  	PrimitiveComponent* pr1 = nullptr;
 
 	Actor* SkySphere = nullptr;
-	PrimitiveComponent* Mesh;
-	Durna::StaticMesh* FlipedSphere;
+	PrimitiveComponent* SkyComponent;
+	Durna::StaticMesh* SkyMesh;
+
+	Durna::StaticMesh* CubeMesh;
 };
 
