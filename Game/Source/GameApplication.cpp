@@ -14,6 +14,7 @@
 #include "Runtime/Misc/ModelLoader.h"
 #include "Runtime/Engine/World.h"
 #include "Runtime/Engine/GameFramwork/StaticMeshActor.h"
+#include "Runtime/Renderer/CommonRenderUniforms.h"
 
 
 void GameApplication::Init()
@@ -39,7 +40,11 @@ void GameApplication::Init()
 	WorldGizmo = new StaticMeshActor();
 	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1);
 	WorldGizmo->GetMeshComponent()->SetMaterial(AssetLibrary::TextureColorMaterial);
-	//WorldGizmo->GetMeshComponent()->SetRelativeLocation(Vector3f(, 0, 0));
+	WorldGizmo->GetMeshComponent()->BindPreDraw(
+		[](Shader* InShader) 
+		{
+			CommonRenderUniforms::UploadCameraLocation(InShader);
+		});
 	WorldGizmo->GetMeshComponent()->SetRelativeScale(Vector3f(100));
 	World::AddActor(WorldGizmo);
 	
@@ -69,8 +74,10 @@ void GameApplication::Tick(float DeltaTime)
 {
 	Application::Tick(DeltaTime);
 
-	pr1->SetRelativeLocation(Vector3f(1.0, 1, 1));
+	pr1->SetRelativeLocation(Vector3f(1.0, 0, 0));
 
 	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
 	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
+
+	
 }

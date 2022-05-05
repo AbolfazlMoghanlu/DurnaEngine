@@ -4,6 +4,8 @@
 
 namespace Durna
 {
+	class Shader;
+
 	class RenderCommands
 	{
 	public:
@@ -12,6 +14,7 @@ namespace Durna
 
 		static void DrawPrimitive(PrimitiveComponent& Comp);
 
+		
 
 	private:
 

@@ -6,6 +6,7 @@ namespace Durna
 {
 	class StaticMesh;
 	class Material;
+	class Shader;
 	class VertexBuffer;
 	class VertexElementBuffer;
 
@@ -20,14 +21,14 @@ namespace Durna
 
 		void Tick(float DeltaTime) override;
 
+		void BindPreDraw(void (*InFunc)(Shader* InShader));
+		void UnbindPreDraw();
+
 		void SetStaticMesh(StaticMesh* InMesh, bool bUV = false, bool bNormal = false, bool bColor = false);
 		StaticMesh* GetStaticMesh() const;
 
 		void SetMaterial(Material* InMaterial);
 		Material* GetMaterial() const;
-
-
-		
 
 	private:
 		StaticMesh* Mesh;
@@ -35,6 +36,8 @@ namespace Durna
 
 		VertexBuffer* VB;
 		VertexElementBuffer* EB;
+
+		void (*PreDrawFunc)(Shader* InShader) = nullptr;
 
 		friend class RenderCommands;
 	};

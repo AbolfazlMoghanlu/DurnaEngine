@@ -3,6 +3,7 @@
 
 #include "Runtime/Engine/StaticMesh.h"
 #include "Runtime/Renderer/Material.h"
+#include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/Buffer.h"
 
 #include "Runtime/Renderer/RenderCommands.h"
@@ -17,6 +18,16 @@ namespace Durna
 		{
 			RenderCommands::DrawPrimitive(*this);
 		}
+	}
+
+	void PrimitiveComponent::BindPreDraw(void (*InFunc)(Shader* InShader))
+	{
+		PreDrawFunc = InFunc;
+	}
+
+	void PrimitiveComponent::UnbindPreDraw()
+	{
+		PreDrawFunc = nullptr;
 	}
 
 	void PrimitiveComponent::SetStaticMesh(StaticMesh* InMesh, bool bUV /*= false*/, bool bNormal /*= false*/, bool bColor /*= false*/)

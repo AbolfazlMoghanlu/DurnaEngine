@@ -41,18 +41,23 @@ namespace Durna
 		
 		Comp.SourceMaterial->Use();
 
+		//  ---------------- Matrices --------------------------
 		ScaleRotationTranslationMatrix<float> Transform(Comp.GetWorldScale(), Comp.GetWorldRotation(), Comp.GetWorldLocation());
 		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
 
-		
 		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("View", CameraManager::GetCameraViewMatrix());
-
 
 		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::GetProjectionMatrix());
 		Comp.SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::GetWFactor());
+		// -----------------------------------------------------
 
-		Comp.SourceMaterial->GetShader()->SetUniform1f("time", Renderer::GetTime());
-		
+		if (Comp.PreDrawFunc != nullptr)
+		{
+			Comp.PreDrawFunc(Comp.SourceMaterial->GetShader());
+		}
+
 		glDrawElements(GL_TRIANGLES, Comp.EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
+
+	
 }
