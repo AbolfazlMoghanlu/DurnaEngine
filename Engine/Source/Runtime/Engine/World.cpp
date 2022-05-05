@@ -13,9 +13,33 @@ namespace Durna
 
 	void World::Tick(float DeltaTime)
 	{
+		for (LinkedListIterator It(Actors); It; ++It)
+		{
+			if (It)
+			{
+				if (!It->IsMarkDestroy())
+				{
+					It->Tick(DeltaTime);
+				}
+
+				else
+				{
+					delete *It;
+					It.Remove();
+				}
+			}
+
+			else
+			{
+				It.Remove();
+			}
+		}
+
+		/*
 		LinkedListNode<Actor>* PrevNode = nullptr;
 		LinkedListNode<Actor>* Node = Actors.Root;
 
+		
 		while (Node)
 		{
 			bool bDestroyNode = false;
@@ -63,11 +87,12 @@ namespace Durna
 			}
 
 		}
+	*/
 	}
 
 	void World::AddActor(Actor* InActor)
 	{
-		Actors.Add(InActor);
+		Actors.AddFirst(InActor);
 	}
 
 	LinkedList<Actor> World::Actors;
