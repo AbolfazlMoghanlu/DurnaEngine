@@ -8,6 +8,7 @@ using namespace Durna;
 namespace Durna
 {
 	class Actor;
+	class StaticMeshActor;
 	class PrimitiveComponent;
 	class StaticMesh;
 }
@@ -20,16 +21,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	Actor* Actor1 = nullptr;
- 	PrimitiveComponent* pr = nullptr;
- 	PrimitiveComponent* pr1 = nullptr;
-
 	Actor* SkySphere = nullptr;
 	PrimitiveComponent* SkyComponent;
+
+	StaticMeshActor* WorldGizmo;
+
+	Actor* Actor1;
+ 	PrimitiveComponent* pr1 = nullptr;
+ 	PrimitiveComponent* pr2 = nullptr;
+
 	Durna::StaticMesh* SkyMesh;
-
 	Durna::StaticMesh* CubeMesh;
-
-	bool a = false; 
 };
 

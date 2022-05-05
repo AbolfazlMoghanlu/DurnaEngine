@@ -23,13 +23,15 @@ namespace Durna
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(uint32 InVertexCount);
+		VertexBuffer();
 		~VertexBuffer();
 
 		void Bind() const;
 		void AddLayout(const VertexBufferLayout& Layout);
+		void SetVertexCount(int32 InCount);
 		void UpdateLayout();
 		void UpdateAttributes();
+		void Clear();
 
 	private:
 		uint32 VertexCount;
@@ -43,16 +45,16 @@ namespace Durna
 	{
 	public:
 		VertexElementBuffer();
-		VertexElementBuffer(const std::vector<uint32>& InIndices);
 		~VertexElementBuffer();
 
 		void Bind() const;
-		void SetIndices(const std::vector<uint32>& InIndices);
+		void SetIndices(std::vector<uint32>* InIndices);
 		uint32 GetCount() const;
 		void UpdateBuffer() const;
+		void Clear();
 
 	private:
-		std::vector<uint32> Indices;
+		std::vector<uint32>* Indices = nullptr;
 		uint32 ID;
 	};
 }

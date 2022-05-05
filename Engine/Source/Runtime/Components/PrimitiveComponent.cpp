@@ -13,28 +13,54 @@ namespace Durna
 	{
 		SceneComponent::Tick(DeltaTime);
 
-		RenderCommands::DrawPrimitive(*this);
+		if (Mesh)
+		{
+			RenderCommands::DrawPrimitive(*this);
+		}
 	}
 
-	PrimitiveComponent::PrimitiveComponent(StaticMesh* InMesh, Material* InMaterial)
+	void PrimitiveComponent::SetStaticMesh(StaticMesh* InMesh, bool bUV /*= false*/, bool bNormal /*= false*/, bool bColor /*= false*/)
 	{
 		Mesh = InMesh;
-		OverridedVertexColor = InMesh->VertexColors;
+		VB->Clear();
+		EB->Clear();
 
-		VB = new VertexBuffer(Mesh->VertexCount);
-		VB->AddLayout(VertexBufferLayout(&Mesh->VertexPositions, 3, false));
-		VB->AddLayout(VertexBufferLayout(&OverridedVertexColor, 4, false));
-		VB->AddLayout(VertexBufferLayout(&Mesh->VertexUVs, 2, false));
-		VB->AddLayout(VertexBufferLayout(&Mesh->VertexNormal, 3, false));
-		VB->UpdateLayout();
-		VB->Bind();
-		VB->UpdateAttributes();
+		if (Mesh)
+		{
+			VB->SetVertexCount(Mesh->VertexCount);
+			VB->AddLayout(VertexBufferLayout(&Mesh->VertexPositions, 3, false));
 
-		EB = new VertexElementBuffer(Mesh->VertexIndices);
-		EB->Bind();
-		EB->UpdateBuffer();
+			if (bUV)
+			{
+				VB->AddLayout(VertexBufferLayout(&Mesh->VertexUVs, 2, false));
+			}
 
-		SourceMaterial = InMaterial;
+			if (bNormal)
+			{
+				VB->AddLayout(VertexBufferLayout(&Mesh->VertexNormal, 3, false));
+			}
+
+			if (bColor)
+			{
+				VB->AddLayout(VertexBufferLayout(&Mesh->VertexColors, 4, false));
+			}
+
+			VB->UpdateLayout();
+			VB->Bind();
+			VB->UpdateAttributes();
+
+			EB->SetIndices(&Mesh->VertexIndices);
+			EB->Bind();
+			EB->UpdateBuffer();
+		}
+	}
+
+	PrimitiveComponent::PrimitiveComponent()
+	{
+		Mesh = nullptr;
+		SourceMaterial = nullptr;
+		VB = new VertexBuffer;
+		EB = new VertexElementBuffer;
 	}
 
 	PrimitiveComponent::~PrimitiveComponent()
@@ -43,9 +69,20 @@ namespace Durna
 		delete EB;
 	}
 
-	void PrimitiveComponent::UpdateVertexColor(const std::vector<float>& InVertexColor)
+
+	StaticMesh* PrimitiveComponent::GetStaticMesh() const
 	{
-		OverridedVertexColor = InVertexColor;
+		return Mesh;
+	}
+
+	void PrimitiveComponent::SetMaterial(Material* InMaterial)
+	{
+		SourceMaterial = InMaterial;
+	}
+
+	Material* PrimitiveComponent::GetMaterial() const
+	{
+		return SourceMaterial;
 	}
 
 }

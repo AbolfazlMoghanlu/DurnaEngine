@@ -45,6 +45,10 @@ namespace Durna
 					tinyobj::real_t NY = attrib.normals[3 * idx.normal_index + 1];
 					tinyobj::real_t NZ = attrib.normals[3 * idx.normal_index + 2];
 
+					tinyobj::real_t CX = attrib.colors[3 * idx.vertex_index + 0];
+					tinyobj::real_t CY = attrib.colors[3 * idx.vertex_index + 1];
+					tinyobj::real_t CZ = attrib.colors[3 * idx.vertex_index + 2];
+
 					Target->VertexPositions.push_back(VX);
 					Target->VertexPositions.push_back(VY);
 					Target->VertexPositions.push_back(VZ);
@@ -56,6 +60,11 @@ namespace Durna
 					Target->VertexNormal.push_back(NY);
 					Target->VertexNormal.push_back(NZ);
 
+					Target->VertexColors.push_back(CX);
+					Target->VertexColors.push_back(CY);
+					Target->VertexColors.push_back(CZ);
+					Target->VertexColors.push_back(1);
+
 					Target->VertexIndices.push_back(IndexOffset + v);
 				}
 
@@ -64,13 +73,6 @@ namespace Durna
 
 
 			Target->VertexCount = Target->VertexPositions.size() / 3;
-
-			for (int32 i = 0; i < Target->VertexCount * 4; i++)
-			{
-				Target->VertexColors.push_back(1);
-			}
-
-
 		}
 		
 	}

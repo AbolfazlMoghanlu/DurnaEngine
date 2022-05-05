@@ -12,32 +12,30 @@ namespace Durna
 	/*
 	 * A component that can have visual representation or physics collision. 
 	 */
-	//TODO: inherit from component class
 	class PrimitiveComponent : public SceneComponent
 	{
 	public:
-		void Tick(float DeltaTime) override;
-
-		PrimitiveComponent(StaticMesh* InMesh, Material* InMaterial);
+		PrimitiveComponent();
 		~PrimitiveComponent();
 
+		void Tick(float DeltaTime) override;
+
+		void SetStaticMesh(StaticMesh* InMesh, bool bUV = false, bool bNormal = false, bool bColor = false);
+		StaticMesh* GetStaticMesh() const;
+
+		void SetMaterial(Material* InMaterial);
+		Material* GetMaterial() const;
+
+
+		
+
 	private:
-		
-		
-		
-
-	public:
-		void UpdateVertexColor(const std::vector<float>& InVertexColor);
-
 		StaticMesh* Mesh;
 		Material* SourceMaterial;
 
-		/** Mesh has its own vertex color, its just gonna work as a ref for instances.
-		* each primitive component has its own vertex color.
-		 */
-		std::vector<float> OverridedVertexColor;
-
 		VertexBuffer* VB;
 		VertexElementBuffer* EB;
+
+		friend class RenderCommands;
 	};
 }

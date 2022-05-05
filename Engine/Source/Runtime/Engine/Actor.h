@@ -26,7 +26,7 @@ namespace Durna
 		const Vector3f& GetActorScale();
 		void SetActorScale(const Vector3f& InScale);
 			
-		void AttachSceneComponent(SceneComponent* InSceneComponent, SceneComponent* Target);
+		void AttachSceneComponent(SceneComponent* InSceneComponent, SceneComponent* Target = nullptr);
 		void AddComponent(Component* InComponent);
 
 		SceneComponent* GetRoot() const;

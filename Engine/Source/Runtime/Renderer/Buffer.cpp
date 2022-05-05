@@ -8,8 +8,8 @@ LOG_DEFINE_CATEGORY(LogBuffer, "Buffer");
 
 namespace Durna
 {
-	VertexBuffer::VertexBuffer(uint32 InVertexCount)
-		: VertexCount(InVertexCount), VertexElementCount(0)
+	VertexBuffer::VertexBuffer()
+		: VertexElementCount(0) , VertexCount(0)
 	{
 		glGenBuffers(1, &ID);
 	}
@@ -30,6 +30,11 @@ namespace Durna
 			"Bad vertex layout data size.");
 		Layouts.push_back(Layout);
 		VertexElementCount += Layout.Count;
+	}
+
+	void VertexBuffer::SetVertexCount(int32 InCount)
+	{
+		VertexCount = InCount;
 	}
 
 	void VertexBuffer::UpdateLayout()
@@ -69,15 +74,16 @@ namespace Durna
 		}
 	}
 
+	void VertexBuffer::Clear()
+	{
+		SetVertexCount(0);
+		Layouts.clear();
+		Buffer.clear();
+	}
+
 	VertexElementBuffer::VertexElementBuffer()
 	{
 		glGenBuffers(1, &ID);
-	}
-
-	VertexElementBuffer::VertexElementBuffer(const std::vector<uint32>& InIndices)
-		: VertexElementBuffer()
-	{
-		SetIndices(InIndices);
 	}
 
 	VertexElementBuffer::~VertexElementBuffer()
@@ -90,18 +96,23 @@ namespace Durna
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
 	}
 
-	void VertexElementBuffer::SetIndices(const std::vector<uint32>& InIndices)
+	void VertexElementBuffer::SetIndices(std::vector<uint32>* InIndices)
 	{
 		Indices = InIndices;
 	}
 
 	uint32 VertexElementBuffer::GetCount() const
 	{
-		return static_cast<uint32>(Indices.size());
+		return static_cast<uint32>(Indices->size());
 	}
 
 	void VertexElementBuffer::UpdateBuffer() const
 	{
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(float), &Indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices->size() * sizeof(float), &Indices->at(0), GL_STATIC_DRAW);
+	}
+
+	void VertexElementBuffer::Clear()
+	{
+		Indices = nullptr;
 	}
 }

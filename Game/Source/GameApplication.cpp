@@ -13,6 +13,7 @@
 #include "Runtime/Engine/StaticMesh.h"
 #include "Runtime/Misc/ModelLoader.h"
 #include "Runtime/Engine/World.h"
+#include "Runtime/Engine/GameFramwork/StaticMeshActor.h"
 
 
 void GameApplication::Init()
@@ -25,19 +26,35 @@ void GameApplication::Init()
 	CubeMesh = new Durna::StaticMesh;
 	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh);
 
-	SkyComponent = new PrimitiveComponent(SkyMesh, AssetLibrary::SkyMaterial);
+	SkyComponent = new PrimitiveComponent();
+	SkyComponent->SetStaticMesh(SkyMesh, true);
+	SkyComponent->SetMaterial(AssetLibrary::SkyMaterial);
+
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
 	SkySphere->SetActorScale(Vector3f(100000.0f));
 	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
 	World::AddActor(SkySphere);
 
-	pr = new PrimitiveComponent(CubeMesh, AssetLibrary::BaseMaterial);
-	pr1 = new PrimitiveComponent(CubeMesh, AssetLibrary::BaseMaterial);
+	WorldGizmo = new StaticMeshActor();
+	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1);
+	WorldGizmo->GetMeshComponent()->SetMaterial(AssetLibrary::TextureColorMaterial);
+	//WorldGizmo->GetMeshComponent()->SetRelativeLocation(Vector3f(, 0, 0));
+	WorldGizmo->GetMeshComponent()->SetRelativeScale(Vector3f(100));
+	World::AddActor(WorldGizmo);
+	
+	pr1 = new PrimitiveComponent();
+	pr1->SetStaticMesh(CubeMesh, true, true, true);
+	pr1->SetMaterial(AssetLibrary::BaseMaterial);
+
+	pr2 = new PrimitiveComponent();
+	pr2->SetStaticMesh(CubeMesh, true, true, true);
+	pr2->SetMaterial(AssetLibrary::BaseMaterial);
+
 
 	Actor1 = new Actor;
-	Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
-	Actor1->AttachSceneComponent(pr1, pr);
+	Actor1->AttachSceneComponent(pr1);
+	Actor1->AttachSceneComponent(pr2, pr1);
 
 	Actor1->SetActorScale(Vector3f(100.0f));
 	World::AddActor(Actor1);
@@ -45,26 +62,15 @@ void GameApplication::Init()
 	CameraManager::GetActiveCamera()->SetFOV(45.0);
 	CameraManager::GetActiveCamera()->SetPerspectiveMinZ(0.1f);
 	CameraManager::GetActiveCamera()->SetPerspectiveMaxZ(1000.0f);
+	CameraManager::GetActiveCamera()->SetCameraWorldLocation(Vector3f(-1, 0, .25));
 }
 
 void GameApplication::Tick(float DeltaTime)
 {
 	Application::Tick(DeltaTime);
-	
-	if (Renderer::GetTime() < 2 && !a)
-	{
-		Actor1->SetActorLocation(Vector3f(1.0, 0, 0));
 
-		pr1->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
-		pr1->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
-	}
-	else
-	{
-		a = true;
-		Actor1->MarkDestroy();
-	}
-	
+	pr1->SetRelativeLocation(Vector3f(1.0, 1, 1));
 
-	//Actor1->Tick(DeltaTime);
-	//SkySphere->Tick(DeltaTime);
+	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
+	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
 }

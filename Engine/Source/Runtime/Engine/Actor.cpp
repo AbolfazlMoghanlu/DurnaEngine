@@ -63,6 +63,11 @@ namespace Durna
 
 	void Actor::AttachSceneComponent(SceneComponent* InSceneComponent, SceneComponent* Target)
 	{
+		if (!Target)
+		{
+			Target = Root;
+		}
+
 		if (Target->GetOwningActor() == this)
 		{
 			Target->AttachSceneComponent(InSceneComponent);
