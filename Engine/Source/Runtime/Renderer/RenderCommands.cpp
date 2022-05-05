@@ -31,32 +31,32 @@ namespace Durna
 
 	}
 
-	void RenderCommands::DrawPrimitive(PrimitiveComponent& Comp)
+	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp)
 	{
-		Comp.VB->Bind();
-		Comp.VB->UpdateAttributes();
+		Comp->VB->Bind();
+		Comp->VB->UpdateAttributes();
 
- 		Comp.EB->Bind();
-		Comp.EB->UpdateBuffer();
+ 		Comp->EB->Bind();
+		Comp->EB->UpdateBuffer();
 		
-		Comp.SourceMaterial->Use();
+		Comp->SourceMaterial->Use();
 
 		//  ---------------- Matrices --------------------------
-		ScaleRotationTranslationMatrix<float> Transform(Comp.GetWorldScale(), Comp.GetWorldRotation(), Comp.GetWorldLocation());
-		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
+		ScaleRotationTranslationMatrix<float> Transform(Comp->GetWorldScale(), Comp->GetWorldRotation(), Comp->GetWorldLocation());
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
 
-		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("View", CameraManager::GetCameraViewMatrix());
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("View", CameraManager::GetCameraViewMatrix());
 
-		Comp.SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::GetProjectionMatrix());
-		Comp.SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::GetWFactor());
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::GetProjectionMatrix());
+		Comp->SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::GetWFactor());
 		// -----------------------------------------------------
 
-		if (Comp.PreDrawFunc != nullptr)
+		if (Comp->PreDrawFunc != nullptr)
 		{
-			Comp.PreDrawFunc(Comp.SourceMaterial->GetShader());
+			Comp->PreDrawFunc(Comp, Comp->SourceMaterial->GetShader());
 		}
 
-		glDrawElements(GL_TRIANGLES, Comp.EB->GetCount(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
 
 	

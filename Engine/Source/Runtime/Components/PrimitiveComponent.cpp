@@ -16,11 +16,11 @@ namespace Durna
 
 		if (Mesh)
 		{
-			RenderCommands::DrawPrimitive(*this);
+			RenderCommands::DrawPrimitive(this);
 		}
 	}
 
-	void PrimitiveComponent::BindPreDraw(void (*InFunc)(Shader* InShader))
+	void PrimitiveComponent::BindPreDraw(void (*InFunc)(PrimitiveComponent* InComponent, Shader* InShader))
 	{
 		PreDrawFunc = InFunc;
 	}

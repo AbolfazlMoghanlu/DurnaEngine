@@ -16,6 +16,7 @@
 #include "Runtime/Engine/GameFramwork/StaticMeshActor.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
 
+#include "Runtime/Renderer/Shader.h"
 
 void GameApplication::Init()
 {
@@ -33,19 +34,20 @@ void GameApplication::Init()
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
-	SkySphere->SetActorScale(Vector3f(100000.0f));
+	SkySphere->SetActorScale(Vector3f(100.0f));
 	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
 	World::AddActor(SkySphere);
 
 	WorldGizmo = new StaticMeshActor();
 	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1);
-	WorldGizmo->GetMeshComponent()->SetMaterial(AssetLibrary::TextureColorMaterial);
+	WorldGizmo->GetMeshComponent()->SetMaterial(AssetLibrary::GizmoMaterial);
 	WorldGizmo->GetMeshComponent()->BindPreDraw(
-		[](Shader* InShader) 
+		[](PrimitiveComponent* InComponent, Shader* InShader)
 		{
 			CommonRenderUniforms::UploadCameraLocation(InShader);
+			InShader->SetUniformVec3f("ActorLocation", InComponent->GetOwningActor()->GetActorLocation());
 		});
-	WorldGizmo->GetMeshComponent()->SetRelativeScale(Vector3f(100));
+	WorldGizmo->GetMeshComponent()->SetRelativeScale(Vector3f(0.1f));
 	World::AddActor(WorldGizmo);
 	
 	pr1 = new PrimitiveComponent();
@@ -61,7 +63,7 @@ void GameApplication::Init()
 	Actor1->AttachSceneComponent(pr1);
 	Actor1->AttachSceneComponent(pr2, pr1);
 
-	Actor1->SetActorScale(Vector3f(100.0f));
+	Actor1->SetActorScale(Vector3f(0.1f));
 	World::AddActor(Actor1);
 
 	CameraManager::GetActiveCamera()->SetFOV(45.0);

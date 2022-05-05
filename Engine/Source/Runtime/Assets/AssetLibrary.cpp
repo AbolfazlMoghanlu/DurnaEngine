@@ -25,11 +25,11 @@ namespace Durna
 
 	Shader* AssetLibrary::BaseShader;
 	Shader* AssetLibrary::SkyShader;
-	Shader* AssetLibrary::TextureColorShader;
+	Shader* AssetLibrary::GizmoShader;
 
 	Material* AssetLibrary::BaseMaterial;
 	Material* AssetLibrary::SkyMaterial;
-	Material* AssetLibrary::TextureColorMaterial;
+	Material* AssetLibrary::GizmoMaterial;
 
 	void AssetLibrary::Init()
 	{
@@ -48,7 +48,7 @@ namespace Durna
 
 		BaseShader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		SkyShader = new Shader(Path::ShaderRelativePath("SkySphere.glsl"));
-		TextureColorShader = new Shader(Path::ShaderRelativePath("TextureColor.glsl"));
+		GizmoShader = new Shader(Path::ShaderRelativePath("Gizmo.glsl"));
 
 		BaseMaterial = new Material(BaseShader, 2);
 		BaseMaterial->AddTextureElement(TextureElement("texture1", TileTexture));
@@ -57,7 +57,7 @@ namespace Durna
 		SkyMaterial = new Material(SkyShader, 1);
 		SkyMaterial->AddTextureElement(TextureElement("SkyTexture", SkyTexture));
 
-		TextureColorMaterial = new Material(TextureColorShader, 1);
-		TextureColorMaterial->AddTextureElement(TextureElement("BaseColor", RgbTexture));
+		GizmoMaterial = new Material(GizmoShader, 1);
+		GizmoMaterial->AddTextureElement(TextureElement("BaseColor", RgbTexture));
 	}
 }

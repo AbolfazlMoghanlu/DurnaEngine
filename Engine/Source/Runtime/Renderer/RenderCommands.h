@@ -12,7 +12,7 @@ namespace Durna
 		RenderCommands();
 		~RenderCommands();
 
-		static void DrawPrimitive(PrimitiveComponent& Comp);
+		static void DrawPrimitive(PrimitiveComponent* Comp);
 
 		
 

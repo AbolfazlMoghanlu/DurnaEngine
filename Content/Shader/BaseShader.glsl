@@ -23,7 +23,7 @@ out vec3 WorldNormal;
 
 void main()
 {
-	gl_Position =  Projection * View * Transform * vec4(aPos, WFactor);
+	gl_Position =  Projection * View * Transform * vec4(aPos, 1);
 
 	V_Color = VColor;
 	TexCoord = aTexCoord;

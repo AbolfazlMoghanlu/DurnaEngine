@@ -19,7 +19,7 @@ out vec2 TexCoord;
 void main()
 {
 	TexCoord = aTexCoord;
-	gl_Position =  Projection * View * Transform * vec4(aPos, WFactor);
+	gl_Position =  Projection * View * Transform * vec4(aPos, 1);
 }
 
 

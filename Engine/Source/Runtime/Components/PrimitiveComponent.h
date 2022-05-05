@@ -21,7 +21,7 @@ namespace Durna
 
 		void Tick(float DeltaTime) override;
 
-		void BindPreDraw(void (*InFunc)(Shader* InShader));
+		void BindPreDraw(void (*InFunc)(PrimitiveComponent* InComponent, Shader* InShader));
 		void UnbindPreDraw();
 
 		void SetStaticMesh(StaticMesh* InMesh, bool bUV = false, bool bNormal = false, bool bColor = false);
@@ -37,7 +37,7 @@ namespace Durna
 		VertexBuffer* VB;
 		VertexElementBuffer* EB;
 
-		void (*PreDrawFunc)(Shader* InShader) = nullptr;
+		void (*PreDrawFunc)(PrimitiveComponent* InComponent, Shader* InShader) = nullptr;
 
 		friend class RenderCommands;
 	};
