@@ -29,5 +29,7 @@ private:
 	Durna::StaticMesh* SkyMesh;
 
 	Durna::StaticMesh* CubeMesh;
+
+	bool a = false; 
 };
 

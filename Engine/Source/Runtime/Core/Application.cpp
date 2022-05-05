@@ -3,6 +3,7 @@
 
 #include "Runtime/Renderer/Renderer.h"
 #include "Runtime/Window/Window.h"
+#include "Runtime/Engine/World.h"
 
 LOG_DEFINE_CATEGORY(LogApp, "Application");
 
@@ -26,6 +27,7 @@ namespace Durna
 
 	void Application::Tick(float DeltaTime)
 	{
+		World::Tick(DeltaTime);
 		Renderer::Tick(DeltaTime);
 	}
 

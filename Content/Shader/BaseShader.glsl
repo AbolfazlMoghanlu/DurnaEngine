@@ -50,6 +50,9 @@ uniform float time;
 void main()
 {
 	//FragColor = V_Color;
-	//FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
-	FragColor = vec4(WorldNormal, 1);
+	vec4 Color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
+
+	float DirectionalLight = dot(WorldNormal, vec3(1, 0, 0));
+
+	FragColor = Color * ((DirectionalLight * .4) + .8) * vec4(0.7, 0.4, 0.15, 1.0);
 }

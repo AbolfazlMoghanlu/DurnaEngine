@@ -31,12 +31,17 @@ namespace Durna
 
 		SceneComponent* GetRoot() const;
 
+		void MarkDestroy();
+		bool IsMarkDestroy() const;
+
 	private:
 
 		SceneComponent* Root;
 
 		/** this only contains non scene components */
 		std::vector<Component*> Components;
+
+		bool bDestroy = false;
 	};
 
 }

@@ -36,7 +36,6 @@ namespace Durna
 
 	void Actor::SetActorLocation(const Vector3f& InLocation)
 	{
-		Root->WorldLocation = InLocation;
 		Root->MarkDirtyLocationRecursive();
 	}
 
@@ -80,6 +79,16 @@ namespace Durna
 	SceneComponent* Actor::GetRoot() const
 	{
 		return Root;
+	}
+
+	void Actor::MarkDestroy()
+	{
+		bDestroy = true;
+	}
+
+	bool Actor::IsMarkDestroy() const
+	{
+		return bDestroy;
 	}
 
 }

@@ -12,6 +12,7 @@
 #include "Runtime/Math/Math.h"
 #include "Runtime/Engine/StaticMesh.h"
 #include "Runtime/Misc/ModelLoader.h"
+#include "Runtime/Engine/World.h"
 
 
 void GameApplication::Init()
@@ -29,15 +30,17 @@ void GameApplication::Init()
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
 	SkySphere->SetActorScale(Vector3f(100000.0f));
 	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
+	World::AddActor(SkySphere);
 
 	pr = new PrimitiveComponent(CubeMesh, AssetLibrary::BaseMaterial);
 	pr1 = new PrimitiveComponent(CubeMesh, AssetLibrary::BaseMaterial);
 
-	Actor1 = new Actor();
+	Actor1 = new Actor;
 	Actor1->AttachSceneComponent(pr, Actor1->GetRoot());
 	Actor1->AttachSceneComponent(pr1, pr);
 
 	Actor1->SetActorScale(Vector3f(100.0f));
+	World::AddActor(Actor1);
 
 	CameraManager::GetActiveCamera()->SetFOV(45.0);
 	CameraManager::GetActiveCamera()->SetPerspectiveMinZ(0.1f);
@@ -47,13 +50,21 @@ void GameApplication::Init()
 void GameApplication::Tick(float DeltaTime)
 {
 	Application::Tick(DeltaTime);
-
 	
-	Actor1->SetActorLocation(Vector3f(1.0, 0, 0));
+	if (Renderer::GetTime() < 2 && !a)
+	{
+		Actor1->SetActorLocation(Vector3f(1.0, 0, 0));
 
-	pr1->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
-	pr1->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
+		pr1->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
+		pr1->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
+	}
+	else
+	{
+		a = true;
+		Actor1->MarkDestroy();
+	}
+	
 
-	Actor1->Tick(DeltaTime);
-	SkySphere->Tick(DeltaTime);
+	//Actor1->Tick(DeltaTime);
+	//SkySphere->Tick(DeltaTime);
 }
