@@ -9,6 +9,7 @@ namespace Durna
 	class Shader;
 	class VertexBuffer;
 	class VertexElementBuffer;
+	class VertexArray;
 
 	/*
 	 * A component that can have visual representation or physics collision. 
@@ -36,6 +37,7 @@ namespace Durna
 
 		VertexBuffer* VB;
 		VertexElementBuffer* EB;
+		VertexArray* VA;
 
 		void (*PreDrawFunc)(PrimitiveComponent* InComponent, Shader* InShader) = nullptr;
 

@@ -12,7 +12,7 @@ namespace Durna
 	Engineloop engineLoop;
 
 	Engineloop::Engineloop() :
-		MaxTimeDilation(1 / 60.0f)
+		MaxTimeDilation(1 / 9999.0f)
 		, LastTickTime(-1.0f)
 	{
 

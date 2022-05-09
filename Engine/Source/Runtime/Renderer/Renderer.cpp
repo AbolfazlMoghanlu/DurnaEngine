@@ -38,13 +38,19 @@ namespace Durna
 			return;
 		}
 
-		///////////////////////////////////////////////////////////////
-
-		unsigned int vertexarrayobject;
-		glGenVertexArrays(1, &vertexarrayobject);
-		glBindVertexArray(vertexarrayobject);
-
 		AssetLibrary::Init();
+
+
+		glEnable(GL_DEPTH_TEST);
+
+		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+		glDepthFunc(GL_LESS);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CW);
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -52,19 +58,9 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		CameraManager::Tick(DeltaTime);
 
-		glEnable(GL_DEPTH_TEST);
-
-		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDepthFunc(GL_LESS);
-		glDepthRange(0, 100);
 
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);
 
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
 		Time += DeltaTime;
 
 		glfwPollEvents();

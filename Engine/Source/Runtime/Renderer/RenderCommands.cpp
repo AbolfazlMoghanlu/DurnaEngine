@@ -33,12 +33,7 @@ namespace Durna
 
 	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp)
 	{
-		Comp->VB->Bind();
-		Comp->VB->UpdateAttributes();
-
- 		Comp->EB->Bind();
-		Comp->EB->UpdateBuffer();
-		
+		Comp->VA->Bind();
 		Comp->SourceMaterial->Use();
 
 		//  ---------------- Matrices --------------------------

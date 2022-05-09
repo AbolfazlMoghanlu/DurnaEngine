@@ -57,5 +57,17 @@ namespace Durna
 		std::vector<uint32>* Indices = nullptr;
 		uint32 ID;
 	};
+
+	class VertexArray
+	{
+	public:
+		VertexArray();
+		~VertexArray();
+
+		void Bind();
+
+	private:
+		uint32 ID;
+	};
 }
 

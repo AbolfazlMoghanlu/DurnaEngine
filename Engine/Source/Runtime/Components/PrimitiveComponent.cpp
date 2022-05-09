@@ -8,8 +8,27 @@
 
 #include "Runtime/Renderer/RenderCommands.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace Durna
 {
+	PrimitiveComponent::PrimitiveComponent()
+	{
+		Mesh = nullptr;
+		SourceMaterial = nullptr;
+		VB = new VertexBuffer;
+		EB = new VertexElementBuffer;
+		VA = new VertexArray;
+	}
+
+	PrimitiveComponent::~PrimitiveComponent()
+	{
+		delete VB;
+		delete EB;
+		delete VA;
+	}
+	
 	void PrimitiveComponent::Tick(float DeltaTime)
 	{
 		SceneComponent::Tick(DeltaTime);
@@ -33,6 +52,8 @@ namespace Durna
 	void PrimitiveComponent::SetStaticMesh(StaticMesh* InMesh, bool bUV /*= false*/, bool bNormal /*= false*/, bool bColor /*= false*/)
 	{
 		Mesh = InMesh;
+
+		VA->Bind();
 		VB->Clear();
 		EB->Clear();
 
@@ -66,19 +87,6 @@ namespace Durna
 		}
 	}
 
-	PrimitiveComponent::PrimitiveComponent()
-	{
-		Mesh = nullptr;
-		SourceMaterial = nullptr;
-		VB = new VertexBuffer;
-		EB = new VertexElementBuffer;
-	}
-
-	PrimitiveComponent::~PrimitiveComponent()
-	{
-		delete VB;
-		delete EB;
-	}
 
 
 	StaticMesh* PrimitiveComponent::GetStaticMesh() const
