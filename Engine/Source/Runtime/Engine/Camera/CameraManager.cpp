@@ -1,89 +1,88 @@
 #include "DurnaPCH.h"
 #include "CameraManager.h"
+#include "Runtime/Engine/Camera/CameraComponent.h"
 
 #include "Runtime/Math/PrespectiveMatrix.h"
 #include "Runtime/Math/OrthoMatrix.h"
 
 namespace Durna
 {
-	Camera* CameraManager::ActiveCamera = nullptr;
+	CameraManager* CameraManager::SingltonInstance;
 
-	Vector3f CameraManager::ForwardVector(1.0f, 0.0f, 0.0f);
-	Vector3f CameraManager::RightVector(0.0f, 1.0f, 0.0f);
-	Vector3f CameraManager::UpVector(0.0f, 0.0f, 1.0f);
+	CameraManager* CameraManager::Get()
+	{
+		if (!SingltonInstance)
+		{
+			SingltonInstance = new CameraManager;
+		}
 
-	Matrix<float> CameraManager::ProjectionMatrix;
-	bool CameraManager::bDirtyProjection = true;
-
-	Matrix<float> CameraManager::ViewMatrix;
-	bool CameraManager::bDirtyView = true;
-
-	float CameraManager::CameraMoveSpeed = 2.0f;
-	float CameraManager::CameraRotationSpeed = 0.1f;
-
+		return SingltonInstance;
+	}
 
 	void CameraManager::Tick(float DeltaTime)
 	{
+		GetView(CachedLocation, CachedRotation);
 		UpdateCameraVectors();
 	}
 
 	void CameraManager::UpdateCameraVectors()
 	{
-		ForwardVector = GetActiveCameraRotation().GetForwardVector();
+		ForwardVector = CachedRotation.GetForwardVector();
 		RightVector = Vector3f::CrossProduct(Vector3f::UpVector, ForwardVector).Normalize();
 		UpVector = Vector3f::CrossProduct(ForwardVector, RightVector).Normalize();
 	}
 
+	void CameraManager::GetView(Vector3f& ViewLocation, Rotatorf& ViewRotation)
+	{
+		if (ActiveCamera)
+		{
+			LimitViewPitch();
 
+			ViewLocation = ActiveCamera->GetWorldLocation();
+			ViewRotation = ActiveCamera->GetWorldRotation();
+		}
+	}
 
-	Camera* CameraManager::GetActiveCamera()
+	CameraComponent* CameraManager::GetActiveCamera()
 	{
 		return ActiveCamera;
 	}
 
-	void CameraManager::SetActiveCamera(Camera* InCamera)
+	void CameraManager::SetActiveCamera(CameraComponent* InCamera)
 	{
 		ActiveCamera = InCamera;
 		MarkDirtyProjection();
-		MarkDirtyView();
 	}
 
-	Vector3f CameraManager::GetActiveCameraLocation()
+	Vector3f CameraManager::GetViewLocation() const
 	{
-		return ActiveCamera ? ActiveCamera->GetCameraLocation() : Vector3f(0);
+		return CachedLocation;
 	}
 
-	void CameraManager::AddActiveCameraWorldOffset(const Vector3f& Offset)
+	Rotatorf CameraManager::GetViewRotation() const
 	{
-		ActiveCamera->AddCameraWorldOffset(Offset * CameraMoveSpeed);
+		return CachedRotation;
 	}
 
-	void CameraManager::SetActiveCameraLocation(const Vector3f& InLocation)
+	float CameraManager::GetMinPitch()
 	{
-		ActiveCamera->SetCameraWorldLocation(InLocation);
+		return MinPitch;
 	}
 
-	void CameraManager::MoveForward(float Delta)
+	void CameraManager::SetMinPitch(float InMinPitch)
 	{
-		SetActiveCameraLocation(GetActiveCameraLocation() + ForwardVector * Delta * CameraMoveSpeed);
+		MinPitch = InMinPitch;
 	}
 
-	void CameraManager::MoveRight(float Delta)
+	float CameraManager::GetMaxPitch()
 	{
-		SetActiveCameraLocation(GetActiveCameraLocation() + RightVector * Delta * CameraMoveSpeed);
+		return MaxPitch;
 	}
 
-	Rotatorf CameraManager::GetActiveCameraRotation()
+	void CameraManager::SetMaxPitch(float InMaxPitch)
 	{
-		return ActiveCamera ? ActiveCamera->GetCameraRotation() : Rotatorf::ZeroRotator;
+		MaxPitch = MinPitch;
 	}
-
-	void CameraManager::AddActiveCameraWorldRotation(const Rotatorf& InRotator)
-	{
-		ActiveCamera->AddCameraWorldRotation(InRotator * CameraRotationSpeed);
-	}
-
-
 
 	float* CameraManager::GetProjectionMatrix()
 	{
@@ -135,29 +134,22 @@ namespace Durna
 		bDirtyProjection = true;
 	}
 
-	bool CameraManager::IsDirtyView()
+	void CameraManager::LimitViewPitch()
 	{
-		return bDirtyView;
-	}
-
-	void CameraManager::MarkDirtyView()
-	{
-		bDirtyView = true;
+		Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
+		float ClampedPitch = Math::Clamp<float>(CameraRotation.Pitch, MinPitch, MaxPitch);
+		ActiveCamera->SetRelativeRotation(Rotatorf(ClampedPitch, CameraRotation.Yaw, CameraRotation.Roll));
 	}
 
 	float* CameraManager::GetCameraViewMatrix()
 	{
-		if (IsDirtyView())
-		{
-			UpdateViewMatrix();
-			bDirtyView = false;
-		}
+		UpdateViewMatrix();
 		return ViewMatrix.M[0];
 	}
 
 	void CameraManager::UpdateViewMatrix()
 	{
-		Vector3f CameraPostition = GetActiveCameraLocation();
+		Vector3f CameraPostition = CachedLocation;
 
 		const Vector3f& ZAxis = ForwardVector;
 		const Vector3f& XAxis = RightVector;
@@ -176,5 +168,4 @@ namespace Durna
 		ViewMatrix.M[3][2] = Vector3f::DotProduct(CameraPostition * -1, ZAxis);
 		ViewMatrix.M[3][3] = 1.0f;
 	}
-
 }

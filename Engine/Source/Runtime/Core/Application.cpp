@@ -5,6 +5,8 @@
 #include "Runtime/Window/Window.h"
 #include "Runtime/Engine/World.h"
 
+#include "Runtime/Engine/Camera/CameraManager.h"
+
 LOG_DEFINE_CATEGORY(LogApp, "Application");
 
 namespace Durna
@@ -23,11 +25,13 @@ namespace Durna
 	{
 		LOG(LogApp, Info, "initializing.");
 		Renderer::Init();
+		
 	}
 
 	void Application::Tick(float DeltaTime)
 	{
 		World::Tick(DeltaTime);
+		CameraManager::Get()->Tick(DeltaTime);
 		Renderer::Tick(DeltaTime);
 	}
 
@@ -41,5 +45,4 @@ namespace Durna
 	{
 		return Running && !Renderer::GetWindow()->IsClosing();
 	}
-
 }

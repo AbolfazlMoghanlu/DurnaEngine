@@ -1,3 +1,5 @@
-make world context
+add #include support in .glsl files
+add ability to copy compiled shaders
+check material class ownership
 
 handle garbage collection

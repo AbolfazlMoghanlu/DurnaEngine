@@ -4,6 +4,8 @@ namespace Durna
 {
 	class Window;
 
+	class CameraManager;
+
 	class Application
 	{
 	public:
@@ -22,6 +24,5 @@ namespace Durna
 	private:
 		bool Running = true;
 	};
-
 }
 

@@ -16,6 +16,9 @@
 #include "Runtime/Engine/GameFramwork/StaticMeshActor.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
 
+#include "Runtime/Engine/Camera/CameraActor.h"
+#include "Runtime/Engine/Camera/CameraComponent.h"
+
 #include "Runtime/Renderer/Shader.h"
 
 void GameApplication::Init()
@@ -66,10 +69,16 @@ void GameApplication::Init()
 	Actor1->SetActorScale(Vector3f(0.1f));
 	World::AddActor(Actor1);
 
-	CameraManager::GetActiveCamera()->SetFOV(45.0);
-	CameraManager::GetActiveCamera()->SetPerspectiveMinZ(0.1f);
-	CameraManager::GetActiveCamera()->SetPerspectiveMaxZ(1000.0f);
-	CameraManager::GetActiveCamera()->SetCameraWorldLocation(Vector3f(-1, 0, .25));
+	CameraActor* CameraAct = new CameraActor;
+
+	CameraAct->GetCameraComponent()->SetFOV(45.0);
+	CameraAct->GetCameraComponent()->SetPerspectiveMinZ(0.1f);
+	CameraAct->GetCameraComponent()->SetPerspectiveMaxZ(1000.0f);
+	CameraAct->GetCameraComponent()->SetWorldLocation(Vector3f(-1, 0, .25));
+
+	World::AddActor(CameraAct);
+
+	CameraAct->GetCameraComponent()->Activate();
 }
 
 void GameApplication::Tick(float DeltaTime)

@@ -56,10 +56,8 @@ namespace Durna
 	void Renderer::Tick(float DeltaTime)
 	{
 		MainWindow->Tick(DeltaTime);
-		CameraManager::Tick(DeltaTime);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 		Time += DeltaTime;
 

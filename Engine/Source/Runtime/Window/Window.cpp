@@ -1,6 +1,7 @@
 #include "DurnaPCH.h"
 #include "Window.h"
 #include "Runtime/Engine/Camera/CameraManager.h"
+#include "Runtime/Engine/Camera/CameraComponent.h"
 
 #include "Runtime/Math/Math.h"
 
@@ -49,9 +50,6 @@ namespace Durna
 		glfwSetScrollCallback(window, OnScroll);
 		glfwSetCursorPosCallback(window, OnMouseMove);
 
-		// TODO: Move somewhere more suitable
-		CameraManager::SetActiveCamera(new Camera);
-		
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
@@ -72,29 +70,61 @@ namespace Durna
 
 		if (glfwGetKey(window, GLFW_KEY_D) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::MoveRight(DeltaTime);
+			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
+			if (ActiveCamera)
+			{
+				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
+				Vector3f MoveOffset = CameraRotation.GetRightVector() * 1.0f * DeltaTime;
+
+				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
+			}
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::MoveRight(-DeltaTime);
+			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
+			if (ActiveCamera)
+			{
+				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
+				Vector3f MoveOffset = CameraRotation.GetRightVector() * -1.0f * DeltaTime;
+
+				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
+			}
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_W) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::MoveForward(DeltaTime);
+			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
+			if (ActiveCamera)
+			{
+				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
+				Vector3f MoveOffset = CameraRotation.GetForwardVector() * 1.0f * DeltaTime;
+
+				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
+			}
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_S) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
 		{
-			CameraManager::MoveForward(-DeltaTime);
+			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
+			if (ActiveCamera)
+			{
+				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
+				Vector3f MoveOffset = CameraRotation.GetForwardVector() * -1.0f * DeltaTime;
+
+				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
+			}
 		}
 	}
 
 	void Window::OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset)
 	{
-		float ClampedFOV = Math::Clamp<float>(CameraManager::GetActiveCamera()->GetFOV() + (float)YOffset * 5.0f, 1.0f, 90.0f);
-		CameraManager::GetActiveCamera()->SetFOV(ClampedFOV);
+		float ClampedFOV = Math::Clamp<float>(CameraManager::Get()->GetActiveCamera()->GetFOV() + (float)YOffset * 5.0f, 1.0f, 90.0f);
+		CameraManager::Get()->GetActiveCamera()->SetFOV(ClampedFOV);
 	}
 
 	void Window::OnMouseMove(GLFWwindow* InWindow, double XPos, double YPos)
@@ -108,7 +138,13 @@ namespace Durna
 		if (glfwGetMouseButton(InWindow, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			glfwSetInputMode(InWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			CameraManager::AddActiveCameraWorldRotation(Rotatorf(-YOffset, XOffset, 0.0f));
+
+			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
+			if (ActiveCamera)
+			{
+				ActiveCamera->SetRelativeRotation(
+				Rotatorf(-YOffset * 0.2f, XOffset * 0.2f, 0.0f) + ActiveCamera->GetWorldRotation());
+			}
 		}
 		else
 		{

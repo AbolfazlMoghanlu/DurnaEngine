@@ -61,7 +61,6 @@ namespace Durna
 		void MarkDirtyScale();
 		void MarkDirtyScaleRecursive();
 
-
 	private:
 		
 		SceneComponent* Parent = nullptr;

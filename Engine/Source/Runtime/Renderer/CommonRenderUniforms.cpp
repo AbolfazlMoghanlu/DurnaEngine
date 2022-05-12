@@ -14,6 +14,6 @@ namespace Durna
 
 	void CommonRenderUniforms::UploadCameraLocation(Shader* InShader)
 	{
-		InShader->SetUniformVec3f("CameraLocation", CameraManager::GetActiveCameraLocation());
+		InShader->SetUniformVec3f("CameraLocation", CameraManager::Get()->GetViewLocation());
 	}
 }

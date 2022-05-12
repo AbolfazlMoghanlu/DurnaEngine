@@ -1,62 +1,68 @@
 #pragma once
 
-#include "Runtime\Engine\Camera\Camera.h"
 #include "Runtime/Math/Vector3.h"
 #include "Runtime/Math/Rotator.h"
 #include "Runtime/Math/Matrix.h"
 
 namespace Durna
 {
+	class CameraComponent;
+
 	class CameraManager
 	{
 	public:
-		static void Tick(float DeltaTime);
-		static void UpdateCameraVectors();
+		static CameraManager* Get();
 
+		void Tick(float DeltaTime);
+		void UpdateCameraVectors();
 
-		static Camera* GetActiveCamera();
-		static void SetActiveCamera(Camera* InCamera);
+		CameraComponent* GetActiveCamera();
+		void SetActiveCamera(CameraComponent* InCamera);
 
-		static Vector3f GetActiveCameraLocation();
-		static void AddActiveCameraWorldOffset(const Vector3f& Offset);
-		static void SetActiveCameraLocation(const Vector3f& InLocation);
+		Vector3f GetViewLocation() const;
+		Rotatorf GetViewRotation() const;
 
-		static void MoveForward(float Delta);
-		static void MoveRight(float Delta);
+		// -------------------------- rotation limits ---------------------
+		void LimitViewPitch();
 
-		static Rotatorf GetActiveCameraRotation();
-		static void AddActiveCameraWorldRotation(const Rotatorf& InRotator);
+		float GetMinPitch();
+		void SetMinPitch(float InMinPitch);
 
+		float GetMaxPitch();
+		void SetMaxPitch(float InMinPitch);
 
+		// --------------------------- view matrix ------------------------
+		float* GetCameraViewMatrix();
+		void UpdateViewMatrix();
 
-		static float* GetCameraViewMatrix();
-		static void UpdateViewMatrix();
+		// --------------------------- projection matrix ------------------------
+		float* GetProjectionMatrix();
+		void UpdateProjectionMatrix();
+		float GetWFactor();
 
-		static bool IsDirtyView();
-		static void MarkDirtyView();
+		bool IsDirtyProjection();
+		void MarkDirtyProjection();
 
-
-		static float CameraMoveSpeed;
-		static float CameraRotationSpeed;
-
-		static float* GetProjectionMatrix();
-		static void UpdateProjectionMatrix();
-		static float GetWFactor();
-
-		static bool IsDirtyProjection();
-		static void MarkDirtyProjection();
+	protected:
+		virtual void GetView(Vector3f& ViewLocation, Rotatorf& ViewRotation);
 
 	private:
-		static Camera* ActiveCamera;
-		static bool bDirtyProjection;
-		static bool bDirtyView;
+		static CameraManager* SingltonInstance;
 
-		static Vector3f ForwardVector;
-		static Vector3f RightVector;
-		static Vector3f UpVector;
+		CameraComponent* ActiveCamera;
+		bool bDirtyProjection;
 
-		static Matrix<float> ProjectionMatrix;
-		static Matrix<float> ViewMatrix;
+		Vector3f ForwardVector;
+		Vector3f RightVector;
+		Vector3f UpVector;
+
+		Matrix<float> ProjectionMatrix;
+		Matrix<float> ViewMatrix;
+
+		Vector3f CachedLocation;
+		Rotatorf CachedRotation;
+
+		float MinPitch = -85.0f;
+		float MaxPitch = 85.0f;
 	};
 }
-

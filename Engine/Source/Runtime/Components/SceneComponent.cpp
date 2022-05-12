@@ -61,6 +61,7 @@ namespace Durna
 
 	void SceneComponent::SetWorldLocation(const Vector3f& Inlocation, bool bMarkDirty /*= true*/)
 	{
+		
 	}
 
 	void SceneComponent::UpdateLocation()
