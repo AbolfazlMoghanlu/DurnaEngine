@@ -22,15 +22,15 @@ public:
 
 private:
 	Actor* SkySphere = nullptr;
-	PrimitiveComponent* SkyComponent;
+	PrimitiveComponent* SkyComponent = nullptr;
 
-	StaticMeshActor* WorldGizmo;
+	StaticMeshActor* WorldGizmo = nullptr;
 
-	Actor* Actor1;
+	Actor* Actor1 = nullptr;
  	PrimitiveComponent* pr1 = nullptr;
  	PrimitiveComponent* pr2 = nullptr;
 
-	Durna::StaticMesh* SkyMesh;
-	Durna::StaticMesh* CubeMesh;
+	Durna::StaticMesh* SkyMesh = nullptr;
+	Durna::StaticMesh* CubeMesh = nullptr;
 };
 

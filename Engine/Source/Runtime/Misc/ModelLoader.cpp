@@ -32,22 +32,22 @@ namespace Durna
 
 				for (int32 v = 0; v < fv; v++)
 				{
-					tinyobj::index_t idx = Shape.mesh.indices[IndexOffset + v];
+					tinyobj::index_t idx = Shape.mesh.indices[(size_t)IndexOffset + v];
 
-					tinyobj::real_t VX = attrib.vertices[3 * idx.vertex_index + 0];
-					tinyobj::real_t VY = attrib.vertices[3 * idx.vertex_index + 1];
-					tinyobj::real_t VZ = attrib.vertices[3 * idx.vertex_index + 2];
+					tinyobj::real_t VX = attrib.vertices[(size_t)3 * idx.vertex_index + 0];
+					tinyobj::real_t VY = attrib.vertices[(size_t)3 * idx.vertex_index + 1];
+					tinyobj::real_t VZ = attrib.vertices[(size_t)3 * idx.vertex_index + 2];
 
-					tinyobj::real_t TX = attrib.texcoords[2 * idx.texcoord_index + 0];
-					tinyobj::real_t TY = attrib.texcoords[2 * idx.texcoord_index + 1];
+					tinyobj::real_t TX = attrib.texcoords[(size_t)2 * idx.texcoord_index + 0];
+					tinyobj::real_t TY = attrib.texcoords[(size_t)2 * idx.texcoord_index + 1];
 
-					tinyobj::real_t NX = attrib.normals[3 * idx.normal_index + 0];
-					tinyobj::real_t NY = attrib.normals[3 * idx.normal_index + 1];
-					tinyobj::real_t NZ = attrib.normals[3 * idx.normal_index + 2];
+					tinyobj::real_t NX = attrib.normals[(size_t)3 * idx.normal_index + 0];
+					tinyobj::real_t NY = attrib.normals[(size_t)3 * idx.normal_index + 1];
+					tinyobj::real_t NZ = attrib.normals[(size_t)3 * idx.normal_index + 2];
 
-					tinyobj::real_t CX = attrib.colors[3 * idx.vertex_index + 0];
-					tinyobj::real_t CY = attrib.colors[3 * idx.vertex_index + 1];
-					tinyobj::real_t CZ = attrib.colors[3 * idx.vertex_index + 2];
+					tinyobj::real_t CX = attrib.colors[(size_t)3 * idx.vertex_index + 0];
+					tinyobj::real_t CY = attrib.colors[(size_t)3 * idx.vertex_index + 1];
+					tinyobj::real_t CZ = attrib.colors[(size_t)3 * idx.vertex_index + 2];
 
 					Target->VertexPositions.push_back(VX);
 					Target->VertexPositions.push_back(VY);
@@ -72,7 +72,7 @@ namespace Durna
 			}
 
 
-			Target->VertexCount = Target->VertexPositions.size() / 3;
+			Target->VertexCount = int32(Target->VertexPositions.size() / 3);
 		}
 		
 	}

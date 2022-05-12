@@ -49,8 +49,8 @@ namespace Durna
 	private:
 		static std::unique_ptr<CameraManager> SingltonInstance;
 
-		CameraComponent* ActiveCamera;
-		bool bDirtyProjection;
+		CameraComponent* ActiveCamera = nullptr;
+		bool bDirtyProjection = true;
 
 		Vector3f ForwardVector;
 		Vector3f RightVector;

@@ -41,6 +41,6 @@ namespace Durna
 		 */
 		std::vector<float> VertexColors;
 
-		int VertexCount;
+		int32 VertexCount = 0;
 	};
 }
