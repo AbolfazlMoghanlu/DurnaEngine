@@ -15,9 +15,11 @@
 #include "Runtime/Engine/World.h"
 #include "Runtime/Engine/GameFramwork/StaticMeshActor.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
+#include "Runtime/Renderer/Material.h"
 
 #include "Runtime/Engine/Camera/CameraActor.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
+
 
 #include "Runtime/Renderer/Shader.h"
 
@@ -33,7 +35,8 @@ void GameApplication::Init()
 
 	SkyComponent = new PrimitiveComponent();
 	SkyComponent->SetStaticMesh(SkyMesh, true);
-	SkyComponent->SetMaterial(AssetLibrary::SkyMaterial);
+	SkyComponent->GetMaterial()->SetShader(AssetLibrary::SkyShader);
+	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyTexture", AssetLibrary::SkyTexture));
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
@@ -43,7 +46,8 @@ void GameApplication::Init()
 
 	WorldGizmo = new StaticMeshActor();
 	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1);
-	WorldGizmo->GetMeshComponent()->SetMaterial(AssetLibrary::GizmoMaterial);
+	WorldGizmo->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::GizmoShader);
+	WorldGizmo->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("BaseColor", AssetLibrary::RgbTexture));
 	WorldGizmo->GetMeshComponent()->BindPreDraw(
 		[](PrimitiveComponent* InComponent, Shader* InShader)
 		{
@@ -55,11 +59,15 @@ void GameApplication::Init()
 	
 	pr1 = new PrimitiveComponent();
 	pr1->SetStaticMesh(CubeMesh, true, true, true);
-	pr1->SetMaterial(AssetLibrary::BaseMaterial);
+	pr1->GetMaterial()->SetShader(AssetLibrary::BaseShader);
+	pr1->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
+	pr1->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
 
 	pr2 = new PrimitiveComponent();
 	pr2->SetStaticMesh(CubeMesh, true, true, true);
-	pr2->SetMaterial(AssetLibrary::BaseMaterial);
+	pr2->GetMaterial()->SetShader(AssetLibrary::BaseShader);
+	pr2->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
+	pr2->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
 
 
 	Actor1 = new Actor;

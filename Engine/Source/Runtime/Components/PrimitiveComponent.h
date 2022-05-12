@@ -18,7 +18,7 @@ namespace Durna
 	{
 	public:
 		PrimitiveComponent();
-		~PrimitiveComponent();
+		virtual ~PrimitiveComponent();
 
 		void Tick(float DeltaTime) override;
 
@@ -28,16 +28,15 @@ namespace Durna
 		void SetStaticMesh(StaticMesh* InMesh, bool bUV = false, bool bNormal = false, bool bColor = false);
 		StaticMesh* GetStaticMesh() const;
 
-		void SetMaterial(Material* InMaterial);
 		Material* GetMaterial() const;
 
 	private:
 		StaticMesh* Mesh;
-		Material* SourceMaterial;
-
-		VertexBuffer* VB;
-		VertexElementBuffer* EB;
-		VertexArray* VA;
+		std::unique_ptr<Material> SourceMaterial;
+		
+		std::unique_ptr<VertexBuffer> VB;
+		std::unique_ptr<VertexElementBuffer> EB;
+		std::unique_ptr<VertexArray> VA;
 
 		void (*PreDrawFunc)(PrimitiveComponent* InComponent, Shader* InShader) = nullptr;
 

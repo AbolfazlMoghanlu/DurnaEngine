@@ -38,5 +38,3 @@ namespace Durna
 		std::vector<TextureElement> TextureElements;
 	};
 }
-
-

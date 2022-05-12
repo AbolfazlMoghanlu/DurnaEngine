@@ -11,21 +11,18 @@ LOG_DEFINE_CATEGORY(LogApp, "Application");
 
 namespace Durna
 {
+	std::unique_ptr<Application> Application::SingletonInstance = nullptr;
+
 	Application::Application()
-	{
-		
-	}
+	{ }
 
 	Application::~Application()
-	{
-		
-	}
+	{ }
 
 	void Application::Init()
 	{
 		LOG(LogApp, Info, "initializing.");
 		Renderer::Init();
-		
 	}
 
 	void Application::Tick(float DeltaTime)
@@ -41,8 +38,18 @@ namespace Durna
 		LOG(LogApp, Info, "shutingdown.");
 	}
 
+	Application* Application::Get()
+	{
+		return SingletonInstance.get();
+	}
+
+	void Application::RequestExit()
+	{
+		bRunning = false;
+	}
+
 	bool Application::IsRunning() const
 	{
-		return Running && !Renderer::GetWindow()->IsClosing();
+		return bRunning;
 	}
 }

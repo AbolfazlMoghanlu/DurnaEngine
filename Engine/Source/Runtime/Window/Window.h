@@ -9,7 +9,7 @@ namespace Durna
 	public:
 		Window(std::string InTitle, int InWidth, int InHeight);
 
-		~Window();
+		virtual ~Window();
 
 		void Init();
 

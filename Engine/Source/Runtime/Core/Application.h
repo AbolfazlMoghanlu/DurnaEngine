@@ -1,28 +1,31 @@
 #pragma once
 
+// TODO: not working with pch
+#include <memory>
+
 namespace Durna
 {
-	class Window;
-
-	class CameraManager;
-
 	class Application
 	{
 	public:
 		Application();
-
-		~Application();
+		virtual ~Application();
 
 		virtual void Init();
+		void Shutdown();
 
 		virtual void Tick(float DeltaTime);
 
-		void Shutdown();
+		static Application* Get();
 
+		void RequestExit();
 		bool IsRunning() const;
 
 	private:
-		bool Running = true;
+		bool bRunning = true;
+		static std::unique_ptr<Application> SingletonInstance;
+
+		friend class Engineloop;
 	};
 }
 

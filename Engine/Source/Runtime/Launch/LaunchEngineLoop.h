@@ -20,9 +20,6 @@ namespace Durna
 		void Tick(float DeltaTime);
 
 		private:
-
-		Application* App = nullptr;
-
 		float MaxTimeDilation;
 		double LastTickTime;
 	};

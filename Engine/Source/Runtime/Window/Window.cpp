@@ -3,6 +3,8 @@
 #include "Runtime/Engine/Camera/CameraManager.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
+#include "Runtime/Core/Application.h"
+
 #include "Runtime/Math/Math.h"
 
 #include "glad/glad.h"
@@ -27,7 +29,8 @@ namespace Durna
 
 	Window::~Window()
 	{
-		LOG(LogWindow, Info, "Destroying \"%s\" window.", Title.c_str());
+		// @bug: there is a crash with log
+		//LOG(LogWindow, Info, "Destroying \"%s\" window.", Title.c_str());
 		glfwDestroyWindow(window);
 	}
 
@@ -59,6 +62,11 @@ namespace Durna
 	{
 		glfwSwapBuffers(window);
 		ProcessInput(DeltaTime);
+
+		if (IsClosing())
+		{
+			Application::Get()->RequestExit();
+		}
 	}
 
 	void Window::ProcessInput(float DeltaTime)

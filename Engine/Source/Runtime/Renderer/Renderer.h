@@ -6,15 +6,11 @@ namespace Durna
 {
 	class Window;
 
-	// TODO: Remove
-	class PrimitiveComponent;
-
-	class Actor;
-
 	class Renderer
 	{
 	public:
 		Renderer();
+		virtual ~Renderer();
 
 		static void Init();
 
@@ -26,7 +22,7 @@ namespace Durna
 		static float GetTime();
 
 	private:
-		static Window* MainWindow;
+		static std::unique_ptr<Window> MainWindow;
 		static float Time;
 	};
 }

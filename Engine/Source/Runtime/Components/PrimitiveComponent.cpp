@@ -16,18 +16,16 @@ namespace Durna
 	PrimitiveComponent::PrimitiveComponent()
 	{
 		Mesh = nullptr;
-		SourceMaterial = nullptr;
-		VB = new VertexBuffer;
-		EB = new VertexElementBuffer;
-		VA = new VertexArray;
+
+		SourceMaterial = std::make_unique<Material>();
+
+		VB = std::make_unique<VertexBuffer>();
+		EB = std::make_unique<VertexElementBuffer>();
+		VA = std::make_unique<VertexArray>();
 	}
 
 	PrimitiveComponent::~PrimitiveComponent()
-	{
-		delete VB;
-		delete EB;
-		delete VA;
-	}
+	{ }
 	
 	void PrimitiveComponent::Tick(float DeltaTime)
 	{
@@ -94,14 +92,8 @@ namespace Durna
 		return Mesh;
 	}
 
-	void PrimitiveComponent::SetMaterial(Material* InMaterial)
-	{
-		SourceMaterial = InMaterial;
-	}
-
 	Material* PrimitiveComponent::GetMaterial() const
 	{
-		return SourceMaterial;
+		return SourceMaterial.get();
 	}
-
 }

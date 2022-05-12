@@ -27,22 +27,22 @@ namespace Durna
 	{
 		LOG(LogEngine, Info, "Initalizing.");
 
-		App = CreateApplication();
-		if (App)
+		Application::SingletonInstance = std::unique_ptr<Application>(CreateApplication());
+
+		if (Application::Get())
 		{
-			App->Init();
+			Application::Get()->Init();
 			return true;
 		}
 
-		return App != nullptr;
+		return false;
 	}
 
 	void Engineloop::Shutdown()
 	{
 		LOG(LogEngine, Info, "End play. Shuting down.");
 
-		App->Shutdown();
-		delete App;
+		Application::Get()->Shutdown();
 
 		LOG(LogEngine, Info, "Shut down successfully.");
 	}
@@ -52,7 +52,7 @@ namespace Durna
 		std::chrono::duration<double, std::milli> TimeDuration = std::chrono::high_resolution_clock::now().time_since_epoch();
 		engineLoop.LastTickTime = TimeDuration.count() / 1000;
 
-		while (App->IsRunning())
+		while (Application::Get()->IsRunning())
 		{
 			// Calculating time dilation
 			std::chrono::duration<double, std::milli> TimeDuration = std::chrono::high_resolution_clock::now().time_since_epoch();
@@ -76,7 +76,7 @@ namespace Durna
 		// prints framerate
 		//std::cout << 1 / DeltaTime << std::endl;
 
-		App->Tick(DeltaTime);
+		Application::Get()->Tick(DeltaTime);
 	}
 }
 

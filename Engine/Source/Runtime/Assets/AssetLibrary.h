@@ -28,10 +28,6 @@ namespace Durna
 		static Shader* BaseShader;
 		static Shader* SkyShader;
 		static Shader* GizmoShader;
-		
-		static Material* BaseMaterial;
-		static Material* SkyMaterial;
-		static Material* GizmoMaterial;
 	};
 }
 

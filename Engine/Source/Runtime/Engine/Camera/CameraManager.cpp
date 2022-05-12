@@ -7,16 +7,16 @@
 
 namespace Durna
 {
-	CameraManager* CameraManager::SingltonInstance;
+	std::unique_ptr<CameraManager> CameraManager::SingltonInstance;
 
 	CameraManager* CameraManager::Get()
 	{
-		if (!SingltonInstance)
+		if (!SingltonInstance.get())
 		{
-			SingltonInstance = new CameraManager;
+			SingltonInstance = std::make_unique<CameraManager>();
 		}
 
-		return SingltonInstance;
+		return SingltonInstance.get();
 	}
 
 	void CameraManager::Tick(float DeltaTime)

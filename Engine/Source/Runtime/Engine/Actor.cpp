@@ -7,13 +7,12 @@ namespace Durna
 {
 	Actor::Actor()
 	{
-		Root = new SceneComponent();
+		Root = std::make_unique<SceneComponent>();
 		Root->SetOwningActor(this);
 	}
 
 	Actor::~Actor()
 	{
-		delete Root;
 	}
 
 	void Actor::Tick(float DeltaTime)
@@ -65,7 +64,7 @@ namespace Durna
 	{
 		if (!Target)
 		{
-			Target = Root;
+			Target = Root.get();
 		}
 
 		if (Target->GetOwningActor() == this)
@@ -83,7 +82,7 @@ namespace Durna
 
 	SceneComponent* Actor::GetRoot() const
 	{
-		return Root;
+		return Root.get();
 	}
 
 	void Actor::MarkDestroy()

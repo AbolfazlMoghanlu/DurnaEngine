@@ -47,7 +47,7 @@ namespace Durna
 		virtual void GetView(Vector3f& ViewLocation, Rotatorf& ViewRotation);
 
 	private:
-		static CameraManager* SingltonInstance;
+		static std::unique_ptr<CameraManager> SingltonInstance;
 
 		CameraComponent* ActiveCamera;
 		bool bDirtyProjection;

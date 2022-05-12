@@ -8,14 +8,12 @@ namespace Durna
 {
 	StaticMeshActor::StaticMeshActor() : Actor()
 	{
-		MeshComponent = new PrimitiveComponent;
-		this->AttachSceneComponent(MeshComponent, GetRoot());
+		MeshComponent = std::make_unique<PrimitiveComponent>();
+		this->AttachSceneComponent(MeshComponent.get());
 	}
 
 	StaticMeshActor::~StaticMeshActor()
-	{
-		delete MeshComponent;
-	}
+	{ }
 
 	void StaticMeshActor::Tick(float DeltaTime)
 	{
@@ -26,6 +24,6 @@ namespace Durna
 
 	PrimitiveComponent* StaticMeshActor::GetMeshComponent() const
 	{
-		return MeshComponent;
+		return MeshComponent.get();
 	}
 }

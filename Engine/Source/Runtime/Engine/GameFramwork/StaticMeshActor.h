@@ -18,7 +18,7 @@ namespace Durna
 		PrimitiveComponent* GetMeshComponent() const;
 
 	protected:
-		PrimitiveComponent* MeshComponent;
+		std::unique_ptr<PrimitiveComponent> MeshComponent;
 	};
 }
 

@@ -36,7 +36,7 @@ namespace Durna
 
 	private:
 
-		SceneComponent* Root;
+		std::unique_ptr<SceneComponent> Root;
 
 		/** this only contains non scene components */
 		std::vector<Component*> Components;
