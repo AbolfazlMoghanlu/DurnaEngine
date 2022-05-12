@@ -33,8 +33,6 @@ namespace Durna
 		bool ReadShaderSourceFromFile(const char* FilePath, std::string& VertexShaderSource, std::string& FragmentShaderSource);
 
 	private:
-		// TODO: private
-	public:
 		unsigned int ID;
 	};
 }

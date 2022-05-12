@@ -1,6 +1,5 @@
 #include "DurnaPCH.h"
 #include "Texture.h"
-#include "Runtime/Engine/Image/Image.h"
 
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
@@ -37,8 +36,8 @@ namespace Durna
 	{
 		if (IsDirty() && SourceImage && SourceImage->Load())
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(SourceImage->Format)
-				, SourceImage->GetWidth(), SourceImage->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, SourceImage->Data);
+			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(InternalFormat)
+				, SourceImage->GetWidth(), SourceImage->GetHeight(), 0, SourceImage->GetFormat(), GL_UNSIGNED_BYTE, SourceImage->Data);
 
 			glGenerateMipmap(GL_TEXTURE_2D);
 

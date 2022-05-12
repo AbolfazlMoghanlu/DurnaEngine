@@ -41,6 +41,7 @@ namespace Durna
 		int32 GetWidth() const;
 		int32 GetHeight() const;
 		uint32 GetNumberOfChannels() const;
+		uint32 GetFormat() const;
 
 		bool IsLoaded() const;
 		void MarkLoaded();
@@ -49,7 +50,6 @@ namespace Durna
 
 
 		unsigned char* Data = nullptr;
-		EImageFormat Format		= EImageFormat::RGB8;
 		EImageWrap X_Wrap		= EImageWrap::Repeat;
 		EImageWrap Y_Wrap		= EImageWrap::Repeat;
 		EImageFilter X_Filter	= EImageFilter::Linear;

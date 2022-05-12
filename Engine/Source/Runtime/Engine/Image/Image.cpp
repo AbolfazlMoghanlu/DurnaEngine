@@ -80,6 +80,24 @@ namespace Durna
 		return NumberOfChannels;
 	}
 
+	uint32 Image::GetFormat() const
+	{
+		switch (NumberOfChannels)
+		{
+		case 1:
+			return static_cast<uint32>(EImageFormat::R8);
+		case 2:
+			return static_cast<uint32>(EImageFormat::RG8);
+		case 3:
+			return static_cast<uint32>(EImageFormat::RGB8);
+		case 4:
+			return static_cast<uint32>(EImageFormat::RGBA8);
+
+		default:
+			return 0;
+		}
+	}
+
 	bool Image::IsLoaded() const
 	{
 		return bLoaded;

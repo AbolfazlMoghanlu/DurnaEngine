@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Runtime/Engine/Image/Image.h"
+
 namespace Durna
 {
-	class Image;
-	
 	enum class ETextureSlot : uint32
 	{
 		Texture0 = 0x84C0,
@@ -45,6 +45,8 @@ namespace Durna
 		void MarkDirty();
 
 		static uint32 GetGLTextureSlot(uint8 Index);
+
+		EImageFormat InternalFormat = EImageFormat::RGB8;
 
 	private:
 		unsigned int ID;
