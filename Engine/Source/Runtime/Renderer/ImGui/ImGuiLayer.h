@@ -8,17 +8,10 @@ namespace Durna
 		ImGuiLayer();
 		virtual ~ImGuiLayer();
 
-		virtual void Init();
-		virtual void Tick(float DeltaTime);
+		virtual void Draw() = 0;
 
-		static ImGuiLayer* Get();
-
-		float SkyLightIntensity = 0.5;
-
-	protected:
-
-	private:
-		static std::unique_ptr<ImGuiLayer> SingletonInstance;
+		void Attach();
+		void DeAttach();
 	};
 }
 

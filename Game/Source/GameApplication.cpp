@@ -22,7 +22,7 @@
 
 
 #include "Runtime/Renderer/Shader.h"
-#include "Runtime/Renderer/ImGui/ImGuiLayer.h"
+#include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 
 void GameApplication::Init()
 {
@@ -41,7 +41,7 @@ void GameApplication::Init()
 	SkyComponent->BindPreDraw(
 		[](PrimitiveComponent* InComponent, Shader* InShader)
 		{
-			InShader->SetUniform1f("SkyLightIntensity", Durna::ImGuiLayer::Get()->SkyLightIntensity);
+			InShader->SetUniform1f("SkyLightIntensity", Durna::ImGuiRenderer::Get()->SkyLightIntensity);
 		});
 
 	SkySphere = new Actor();

@@ -3,6 +3,7 @@
 
 #include "Runtime/Window/Window.h"
 #include "Runtime/Engine/Camera/CameraManager.h"
+#include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 #include "Runtime/Renderer/ImGui/ImGuiLayer.h"
 
 //#include <imgui.h>
@@ -56,9 +57,8 @@ namespace Durna
 		glFrontFace(GL_CW);
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 		
-		ImGuiLayer::Get()->Init();
+		ImGuiRenderer::Get()->Init();
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -66,7 +66,7 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
 
-		ImGuiLayer::Get()->Tick(DeltaTime);
+		ImGuiRenderer::Get()->Tick(DeltaTime);
 
 		glfwPollEvents();
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
