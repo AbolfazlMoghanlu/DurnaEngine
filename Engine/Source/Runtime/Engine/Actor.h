@@ -34,6 +34,11 @@ namespace Durna
 		void MarkDestroy();
 		bool IsMarkDestroy() const;
 
+#if WITH_EDITOR
+		std::string GetActorLabel() const;
+		void SetActorLabel(const std::string& InLabel);
+#endif
+
 	private:
 
 		std::unique_ptr<SceneComponent> Root;
@@ -42,6 +47,10 @@ namespace Durna
 		std::vector<Component*> Components;
 
 		bool bDestroy = false;
+
+#if WITH_EDITOR
+		std::string ActorLabel = "Actor_00";
+#endif
 	};
 
 }

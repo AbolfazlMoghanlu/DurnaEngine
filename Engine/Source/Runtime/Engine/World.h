@@ -17,6 +17,8 @@ namespace Durna
 
 	private:
 		static LinkedList<Actor> Actors;
+
+		friend class WorldOutlinerGuiLayer;
 	};
 
 }

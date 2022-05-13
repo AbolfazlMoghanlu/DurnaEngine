@@ -48,6 +48,11 @@ void GameApplication::Init()
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
 	SkySphere->SetActorScale(Vector3f(100.0f));
 	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
+
+#if WITH_EDITOR
+	SkySphere->SetActorLabel("SkySphere");
+#endif
+
 	World::AddActor(SkySphere);
 
 	WorldGizmo = new StaticMeshActor();
@@ -61,6 +66,11 @@ void GameApplication::Init()
 			InShader->SetUniformVec3f("ActorLocation", InComponent->GetOwningActor()->GetActorLocation());
 		});
 	WorldGizmo->GetMeshComponent()->SetRelativeScale(Vector3f(0.1f));
+
+#if WITH_EDITOR
+	WorldGizmo->SetActorLabel("WorldGizmo");
+#endif
+
 	World::AddActor(WorldGizmo);
 	
 	pr1 = new PrimitiveComponent();
@@ -81,6 +91,11 @@ void GameApplication::Init()
 	Actor1->AttachSceneComponent(pr2, pr1);
 
 	Actor1->SetActorScale(Vector3f(0.1f));
+
+#if WITH_EDITOR
+	Actor1->SetActorLabel("TestSphereActor");
+#endif
+
 	World::AddActor(Actor1);
 
 	CameraActor* CameraAct = new CameraActor;
@@ -89,6 +104,10 @@ void GameApplication::Init()
 	CameraAct->GetCameraComponent()->SetPerspectiveMinZ(0.1f);
 	CameraAct->GetCameraComponent()->SetPerspectiveMaxZ(1000.0f);
 	CameraAct->GetCameraComponent()->SetWorldLocation(Vector3f(-1, 0, .25));
+
+#if WITH_EDITOR
+	CameraAct->SetActorLabel("Camera");
+#endif
 
 	World::AddActor(CameraAct);
 

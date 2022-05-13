@@ -95,4 +95,15 @@ namespace Durna
 		return bDestroy;
 	}
 
+#if WITH_EDITOR
+	std::string Actor::GetActorLabel() const
+	{
+		return ActorLabel;
+	}
+
+	void Actor::SetActorLabel(const std::string& InLabel)
+	{
+		ActorLabel = InLabel;
+	}
+#endif
 }

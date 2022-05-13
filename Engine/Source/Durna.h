@@ -2,6 +2,8 @@
 
 //LOG_DECLARE_CATEGORY(LogTemp);
 
+#define WITH_EDITOR 1
+
 typedef unsigned char 		uint8;
 typedef unsigned short int	uint16;
 typedef unsigned int		uint32;

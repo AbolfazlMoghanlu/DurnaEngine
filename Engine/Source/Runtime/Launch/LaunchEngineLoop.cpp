@@ -3,6 +3,8 @@
 
 #include "Runtime/Core/Application.h"
 
+#include "Editor/Editor.h"
+
 LOG_DEFINE_CATEGORY(LogEngine, "Engine");
 
 extern Durna::Application* CreateApplication();
@@ -32,6 +34,11 @@ namespace Durna
 		if (Application::Get())
 		{
 			Application::Get()->Init();
+
+			#if WITH_EDITOR
+				Editor::Get()->Init();
+			#endif
+
 			return true;
 		}
 
@@ -77,6 +84,10 @@ namespace Durna
 		//std::cout << 1 / DeltaTime << std::endl;
 
 		Application::Get()->Tick(DeltaTime);
+
+#if WITH_EDITOR
+		Editor::Get()->Tick(DeltaTime);
+#endif
 	}
 }
 
