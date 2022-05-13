@@ -1,6 +1,8 @@
 #include "DurnaPCH.h"
 #include "Math.h"
 
+LOG_DEFINE_CATEGORY(LogMath, "Math");
+
 namespace Durna
 {
 	float Math::Mod(float A, float B)
@@ -9,7 +11,7 @@ namespace Durna
 
 		if (B < SMALL_NUMBER)
 		{
-			// TODO: Log error
+			LOG(LogMath, Warning, "Can't mod on '0'.")
 			return 0.0;
 		}
 

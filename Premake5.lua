@@ -26,6 +26,8 @@ project "Engine"
 	targetdir ("Bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("Intermediate/" .. outputdir .. "/%{prj.name}")
 
+	links "ImGui"
+
 	pchheader "DurnaPCH.h"
 	pchsource "Engine/Source/DurnaPCH.cpp"
 
@@ -44,7 +46,8 @@ project "Engine"
 	includedirs
 	{
 		"%{prj.name}/Source",
-		"ThirdParty/Header"
+		"ThirdParty/Header",
+		"ImGui"
 	}
 	
 	links
@@ -110,6 +113,7 @@ project "Game"
 	}
 	
 	links "Engine"
+	links "ImGui"
 	
 	filter "configurations:Debug"
 		defines
@@ -134,3 +138,6 @@ project "Game"
 		}
 		runtime "Release"
 		optimize "on"
+		
+		
+include "ImGui/premake5.lua"

@@ -169,8 +169,10 @@ namespace Durna
 		return true;
 	}
 
-	
-
+	GLFWwindow* Window::GetGLFWWindow() const
+	{
+		return window;
+	}
 }
 
 

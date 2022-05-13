@@ -20,6 +20,8 @@ namespace Durna
 
 		bool IsClosing() const;
 
+		GLFWwindow* GetGLFWWindow() const;
+
 	private:
 
 		static void OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset);
