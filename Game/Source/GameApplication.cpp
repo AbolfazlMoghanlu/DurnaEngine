@@ -22,6 +22,7 @@
 
 
 #include "Runtime/Renderer/Shader.h"
+#include "Runtime/Renderer/ImGui/ImGuiLayer.h"
 
 void GameApplication::Init()
 {
@@ -37,6 +38,11 @@ void GameApplication::Init()
 	SkyComponent->SetStaticMesh(SkyMesh, true);
 	SkyComponent->GetMaterial()->SetShader(AssetLibrary::SkyShader);
 	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyTexture", AssetLibrary::SkyTexture));
+	SkyComponent->BindPreDraw(
+		[](PrimitiveComponent* InComponent, Shader* InShader)
+		{
+			InShader->SetUniform1f("SkyLightIntensity", Durna::ImGuiLayer::Get()->SkyLightIntensity);
+		});
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());

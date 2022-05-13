@@ -60,7 +60,6 @@ namespace Durna
 
 	void Window::Tick(float DeltaTime)
 	{
-		glfwSwapBuffers(window);
 		ProcessInput(DeltaTime);
 
 		if (IsClosing())

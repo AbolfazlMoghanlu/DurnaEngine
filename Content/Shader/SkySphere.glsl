@@ -32,9 +32,10 @@ in vec2 TexCoord;
 
 uniform sampler2D SkyTexture;
 uniform float time;
+uniform float SkyLightIntensity;
 
 void main()
 {
 	vec4 SkySampled = pow(texture(SkyTexture, TexCoord), vec4(2.2));
-	FragColor = SkySampled;
+	FragColor = SkySampled * SkyLightIntensity;
 }
