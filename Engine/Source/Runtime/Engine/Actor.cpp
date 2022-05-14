@@ -35,6 +35,7 @@ namespace Durna
 
 	void Actor::SetActorLocation(const Vector3f& InLocation)
 	{
+		return Root->SetWorldLocation(InLocation);
 		Root->MarkDirtyLocationRecursive();
 	}
 

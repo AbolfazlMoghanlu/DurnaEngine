@@ -61,7 +61,20 @@ namespace Durna
 
 	void SceneComponent::SetWorldLocation(const Vector3f& Inlocation, bool bMarkDirty /*= true*/)
 	{
-		
+		if (GetOwningActor()->GetRoot() == this)
+		{
+			WorldLocation = Inlocation;
+		}
+
+		else
+		{
+
+		}
+
+		if (bMarkDirty)
+		{
+			MarkDirtyRotationRecursive();
+		}
 	}
 
 	void SceneComponent::UpdateLocation()

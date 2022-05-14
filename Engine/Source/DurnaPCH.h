@@ -9,6 +9,7 @@
 #include <ctime>
 #include <iomanip>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <unordered_map>
 #include <fstream>

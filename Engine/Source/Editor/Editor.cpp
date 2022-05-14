@@ -2,7 +2,9 @@
 #include "Editor.h"
 
 #if WITH_EDITOR
-#include "Editor/WorldOutliner.h"
+#include "Editor/WorldOutliner/WorldOutliner.h"
+#include "Editor/DetailsPanel/DetailsPanel.h"
+#include "Runtime/Engine/Actor.h"
 
 namespace Durna
 {
@@ -17,11 +19,13 @@ namespace Durna
 	void Editor::Init()
 	{
 		WorldOutliner::Get()->Init();
+		DetailsPanel::Get()->Init();
 	}
 
 	void Editor::Tick(float DeltaTime)
 	{
 		WorldOutliner::Get()->Tick(DeltaTime);
+		DetailsPanel::Get()->Tick(DeltaTime);
 	}
 
 	Editor* Editor::Get()
@@ -34,6 +38,20 @@ namespace Durna
 		return SingletonInstance.get();
 	}
 
+	void Editor::SetSelectedActor(Actor* InActor)
+	{
+		SelectedActor = InActor;
+	}
+
+	void Editor::ClearSelectedActor()
+	{
+		SelectedActor = nullptr;
+	}
+
+	Actor* Editor::GetSelectedActor()
+	{
+		return SelectedActor;
+	}
 }
 
 #endif

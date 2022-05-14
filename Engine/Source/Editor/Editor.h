@@ -4,6 +4,8 @@ namespace Durna
 {
 #if WITH_EDITOR
 
+	class Actor;
+
 	class Editor
 	{
 	public:
@@ -15,12 +17,17 @@ namespace Durna
 
 		static Editor* Get();
 
+		void SetSelectedActor(Actor* InActor);
+		void ClearSelectedActor();
+		Actor* GetSelectedActor();
+
 	protected:
 
 	private:
 		static std::unique_ptr<Editor> SingletonInstance;
-	};
 
+		Actor* SelectedActor = nullptr;
+	};
 
 #endif
 }

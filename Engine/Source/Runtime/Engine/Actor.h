@@ -35,6 +35,8 @@ namespace Durna
 		bool IsMarkDestroy() const;
 
 #if WITH_EDITOR
+		virtual bool IsVisibleInWorldOutliner() { return true; };
+		
 		std::string GetActorLabel() const;
 		void SetActorLabel(const std::string& InLabel);
 #endif
