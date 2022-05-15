@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace Durna
 {
 	template<typename T>
@@ -91,9 +92,17 @@ namespace Durna
 			return Vector3<T>(X * Scale, Y * Scale, Z * Scale);
 		}
 
-		std::string ToString()
+		std::string ToString() const
 		{
-			return "(X : " + std::to_string(X) + ", Y : " + std::to_string(Y) + ", Z : " + std::to_string(Z) + ")";
+			std::stringstream ss;
+			ss << "X : ";
+			ss << X;
+			ss << ", Y : ";
+			ss << Y;
+			ss << ", Z : ";
+			ss << Z;
+
+			return ss.str();
 		}
 	};
 

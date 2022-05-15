@@ -102,9 +102,17 @@ namespace Durna
 			return Angle;
 		}
 
-		std::string ToString()
+		std::string ToString() const
 		{
-			return "(Pitch : " + std::to_string(Pitch) + ", Yaw : " + std::to_string(Yaw) + ", Roll : " + std::to_string(Roll) + ")";
+			std::stringstream ss;
+			ss << "Pitch : ";
+			ss << Pitch;
+			ss << ", Yaw : ";
+			ss << Yaw;
+			ss << ", Roll : ";
+			ss << Roll;
+
+			return ss.str();			
 		}
 	};
 

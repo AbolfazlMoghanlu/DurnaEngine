@@ -5,6 +5,13 @@
 
 namespace Durna
 {
+	Component::Component(const std::string& InLabel)
+	{
+#if WITH_EDITOR
+		ComponentLabel = InLabel;
+#endif
+	}
+
 	void Component::Tick(float DeltaTime)
 	{
 
@@ -29,5 +36,12 @@ namespace Durna
 	{
 		bActive = Active;
 	}
+
+#if WITH_EDITOR
+	std::string Component::GetComponentLabel() const
+	{
+		return ComponentLabel;
+	}
+#endif
 }
 

@@ -34,7 +34,7 @@ void GameApplication::Init()
 	CubeMesh = new Durna::StaticMesh;
 	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh);
 
-	SkyComponent = new PrimitiveComponent();
+	SkyComponent = new PrimitiveComponent("SkyMesh");
 	SkyComponent->SetStaticMesh(SkyMesh, true);
 	SkyComponent->GetMaterial()->SetShader(AssetLibrary::SkyShader);
 	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyTexture", AssetLibrary::SkyTexture));
@@ -73,13 +73,13 @@ void GameApplication::Init()
 
 	World::AddActor(WorldGizmo);
 	
-	pr1 = new PrimitiveComponent();
+	pr1 = new PrimitiveComponent("PrimitiveComponent_1");
 	pr1->SetStaticMesh(CubeMesh, true, true, true);
 	pr1->GetMaterial()->SetShader(AssetLibrary::BaseShader);
 	pr1->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
 	pr1->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
 
-	pr2 = new PrimitiveComponent();
+	pr2 = new PrimitiveComponent("PrimitiveComponent_2");
 	pr2->SetStaticMesh(CubeMesh, true, true, true);
 	pr2->GetMaterial()->SetShader(AssetLibrary::BaseShader);
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));

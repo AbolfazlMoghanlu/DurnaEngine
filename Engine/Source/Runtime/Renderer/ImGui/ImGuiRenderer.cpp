@@ -79,6 +79,9 @@ namespace Durna
 
 	void ImGuiRenderer::Draw()
 	{
+		bool bShowDemo = true;
+		ImGui::ShowDemoWindow(&bShowDemo);
+
 		for (LinkedListIterator It(Layers); It; ++It)
 		{
 			if (It)

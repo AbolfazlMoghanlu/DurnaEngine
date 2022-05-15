@@ -13,7 +13,7 @@
 
 namespace Durna
 {
-	PrimitiveComponent::PrimitiveComponent()
+	PrimitiveComponent::PrimitiveComponent(const std::string& InLabel) : SceneComponent(InLabel)
 	{
 		Mesh = nullptr;
 

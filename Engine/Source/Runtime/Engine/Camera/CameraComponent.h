@@ -8,6 +8,8 @@ namespace Durna
 	class CameraComponent : public SceneComponent
 	{
 	public:
+		CameraComponent(const std::string& InLabel);
+
 		virtual void Tick(float DeltaTime) override;
 
 		void Activate();

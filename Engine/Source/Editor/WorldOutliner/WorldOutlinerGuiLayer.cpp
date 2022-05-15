@@ -17,12 +17,32 @@ namespace Durna
 
 		for (LinkedListIterator It(World::Actors); It; ++It)
 		{
-			if (It)
-			{
+			if (It && It->IsVisibleInWorldOutliner())
+			{	
+				bool bSelected = Editor::Get()->GetSelectedActor() == *It;
+				if (bSelected)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0.65, 0, 1));
+					bSelected = true;
+				}
+			
 				ImGui::Button(It->GetActorLabel().c_str());
+
 				if (ImGui::IsItemClicked())
 				{
-					Editor::Get()->SetSelectedActor(*It);
+					if (bSelected)
+					{
+						Editor::Get()->ClearSelectedActor();
+					}
+					else
+					{
+						Editor::Get()->SetSelectedActor(*It);		
+					}
+				}
+
+				if (bSelected)
+				{
+					ImGui::PopStyleColor(1);
 				}
 			}
 		}

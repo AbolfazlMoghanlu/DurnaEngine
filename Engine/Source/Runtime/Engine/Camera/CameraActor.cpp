@@ -7,7 +7,7 @@ namespace Durna
 {
 	CameraActor::CameraActor() : Actor()
 	{
-		CameraComp = std::make_unique<CameraComponent>();
+		CameraComp = std::make_unique<CameraComponent>("Root");
 		AttachSceneComponent(CameraComp.get());	
 	}
 

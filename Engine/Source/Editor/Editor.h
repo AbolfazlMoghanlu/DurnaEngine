@@ -5,6 +5,7 @@ namespace Durna
 #if WITH_EDITOR
 
 	class Actor;
+	class SceneComponent;
 
 	class Editor
 	{
@@ -19,7 +20,11 @@ namespace Durna
 
 		void SetSelectedActor(Actor* InActor);
 		void ClearSelectedActor();
-		Actor* GetSelectedActor();
+		Actor* GetSelectedActor() const;
+
+		void SetSelectedComponent(SceneComponent* InComponent);
+		void ClearSelectedComponent();
+		SceneComponent* GetSelectedComponent() const;
 
 	protected:
 
@@ -27,6 +32,7 @@ namespace Durna
 		static std::unique_ptr<Editor> SingletonInstance;
 
 		Actor* SelectedActor = nullptr;
+		SceneComponent* SelectedComponent = nullptr;
 	};
 
 #endif

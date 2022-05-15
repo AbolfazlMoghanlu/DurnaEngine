@@ -6,6 +6,9 @@
 
 namespace Durna
 {
+	CameraComponent::CameraComponent(const std::string& InLabel) : SceneComponent(InLabel)
+	{ }
+
 	void CameraComponent::Tick(float DeltaTime)
 	{
 		SceneComponent::Tick(DeltaTime);

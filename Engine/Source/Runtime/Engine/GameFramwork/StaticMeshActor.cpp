@@ -8,7 +8,7 @@ namespace Durna
 {
 	StaticMeshActor::StaticMeshActor() : Actor()
 	{
-		MeshComponent = std::make_unique<PrimitiveComponent>();
+		MeshComponent = std::make_unique<PrimitiveComponent>("Mesh");
 		this->AttachSceneComponent(MeshComponent.get());
 	}
 

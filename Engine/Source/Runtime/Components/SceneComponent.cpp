@@ -5,6 +5,9 @@
 
 namespace Durna
 {
+	SceneComponent::SceneComponent(const std::string& InLabel) : Component(InLabel)
+	{ }
+
 	void SceneComponent::Tick(float DeltaTime)
 	{
 		Component::Tick(DeltaTime);
@@ -64,6 +67,7 @@ namespace Durna
 		if (GetOwningActor()->GetRoot() == this)
 		{
 			WorldLocation = Inlocation;
+			RelativeLocation = Inlocation;
 		}
 
 		else

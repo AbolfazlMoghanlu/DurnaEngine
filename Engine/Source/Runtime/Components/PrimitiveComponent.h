@@ -17,7 +17,7 @@ namespace Durna
 	class PrimitiveComponent : public SceneComponent
 	{
 	public:
-		PrimitiveComponent();
+		PrimitiveComponent(const std::string& InLabel);
 		virtual ~PrimitiveComponent();
 
 		void Tick(float DeltaTime) override;

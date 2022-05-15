@@ -7,7 +7,7 @@ namespace Durna
 {
 	Actor::Actor()
 	{
-		Root = std::make_unique<SceneComponent>();
+		Root = std::make_unique<SceneComponent>("Root");
 		Root->SetOwningActor(this);
 	}
 

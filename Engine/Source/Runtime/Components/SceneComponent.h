@@ -9,6 +9,7 @@ namespace Durna
 	class SceneComponent : public Component
 	{
 	public:
+		SceneComponent(const std::string& InLabel);
 		
 		void Tick(float DeltaTime) override;
 

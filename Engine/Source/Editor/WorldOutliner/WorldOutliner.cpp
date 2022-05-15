@@ -7,7 +7,6 @@
 
 namespace Durna
 {
-
 	std::unique_ptr<WorldOutliner> WorldOutliner::SingletonInstance = nullptr;
 
 	WorldOutliner::WorldOutliner()

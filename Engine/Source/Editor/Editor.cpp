@@ -5,6 +5,7 @@
 #include "Editor/WorldOutliner/WorldOutliner.h"
 #include "Editor/DetailsPanel/DetailsPanel.h"
 #include "Runtime/Engine/Actor.h"
+#include "Runtime/Components/Component.h"
 
 namespace Durna
 {
@@ -48,10 +49,26 @@ namespace Durna
 		SelectedActor = nullptr;
 	}
 
-	Actor* Editor::GetSelectedActor()
+	Actor* Editor::GetSelectedActor() const
 	{
 		return SelectedActor;
 	}
+
+	void Editor::SetSelectedComponent(SceneComponent* InComponent)
+	{
+		SelectedComponent = InComponent;
+	}
+
+	void Editor::ClearSelectedComponent()
+	{
+		SelectedComponent = nullptr;
+	}
+
+	SceneComponent* Editor::GetSelectedComponent() const
+	{
+		return SelectedComponent;
+	}
+
 }
 
 #endif
