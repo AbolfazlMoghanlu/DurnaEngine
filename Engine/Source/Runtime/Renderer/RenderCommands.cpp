@@ -51,6 +51,8 @@ namespace Durna
 			Comp->PreDrawFunc(Comp, Comp->SourceMaterial->GetShader());
 		}
 
+		//glStencilFunc(GL_GREATER, Comp->StencilMask, 0xFF);
+
 		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
 

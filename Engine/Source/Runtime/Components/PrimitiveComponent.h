@@ -30,6 +30,8 @@ namespace Durna
 
 		Material* GetMaterial() const;
 
+		int32 StencilMask = 0;
+
 	private:
 		StaticMesh* Mesh;
 		std::unique_ptr<Material> SourceMaterial;

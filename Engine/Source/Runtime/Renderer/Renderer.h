@@ -6,6 +6,8 @@ namespace Durna
 {
 	class Window;
 
+	class StaticMeshActor;
+
 	class Renderer
 	{
 	public:
@@ -24,6 +26,10 @@ namespace Durna
 	private:
 		static std::unique_ptr<Window> MainWindow;
 		static float Time;
+		static unsigned int framebuffer;
+		static unsigned int textureColorbuffer;
+		static unsigned int rbo;
+		static StaticMeshActor* PlaneActor;
 	};
 }
 

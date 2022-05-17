@@ -84,6 +84,7 @@ void GameApplication::Init()
 	pr2->GetMaterial()->SetShader(AssetLibrary::BaseShader);
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
+	pr2->StencilMask = 1;
 
 
 	Actor1 = new Actor;
