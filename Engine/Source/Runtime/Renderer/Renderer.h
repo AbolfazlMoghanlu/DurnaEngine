@@ -36,6 +36,3 @@ namespace Durna
 		static std::shared_ptr<FrameBuffer> FBO;
 	};
 }
-
-
-

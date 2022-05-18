@@ -4,6 +4,7 @@ workspace "DurnaEngine"
 
 	configurations
 	{
+	"DebugEditor",
 	"Debug",
 	"Release",
 	"Dist"
@@ -59,6 +60,16 @@ project "Engine"
 	filter "files:**.c"
 		flags {"NoPCH"}
 	
+	filter "configurations:DebugEditor"
+		defines
+		{
+			"DRN_DEBUG",
+			"WITH_EDITOR"
+		}
+			
+		runtime "Debug"
+		symbols "on"	
+
 	filter "configurations:Debug"
 		defines
 		{
@@ -114,6 +125,15 @@ project "Game"
 	
 	links "Engine"
 	links "ImGui"
+	
+	filter "configurations:DebugEditor"
+		defines
+		{
+			"DRN_DEBUG",
+			"WITH_EDITOR"
+		}
+		runtime "Debug"
+		symbols "on"	
 	
 	filter "configurations:Debug"
 		defines
