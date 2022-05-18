@@ -25,14 +25,13 @@ namespace Durna
 		static Window* GetWindow();
 		static float GetTime();
 
+		static void OnResizeWindow(int32 InWidth, int32 InHeight);
+
 	private:
 		static std::unique_ptr<Window> MainWindow;
 		static float Time;
-		static unsigned int framebuffer;
-		static unsigned int textureColorbuffer;
-		static unsigned int rbo;
 		static StaticMeshActor* PlaneActor;
 
-		static std::shared_ptr<FrameBuffer> FBO;
+		static std::shared_ptr<FrameBuffer> GBuffer;
 	};
 }

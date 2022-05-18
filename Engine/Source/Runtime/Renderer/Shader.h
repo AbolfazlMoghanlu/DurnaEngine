@@ -22,10 +22,6 @@ namespace Durna
 		void SetUniformVec3f(char* UniformName, Vector3f Vec3);
 		void SetUniformMatrix4f(const std::string& UniformName, float* Value);
 
-
-		// TODO: Make private
-		unsigned int ID;
-
 	private:
 
 		bool CompileVertexShader(const char* VertexShaderSource, unsigned int &ID);
@@ -35,5 +31,7 @@ namespace Durna
 
 		bool ReadShaderSourceFromFile(const char* FilePath, std::string& VertexShaderSource, std::string& FragmentShaderSource);
 		
+		unsigned int ID;
+		friend class RenderCommands;
 	};
 }

@@ -3,6 +3,7 @@
 namespace Durna
 {
 	class StaticMesh;
+	class PrimitiveComponent;
 	class Image;
 	class Texture;
 	class Shader;
@@ -14,6 +15,8 @@ namespace Durna
 		static void Init();
 
 		static StaticMesh* GizmoMesh;
+
+		static PrimitiveComponent* ScreenQuad;
 
 		static Image* TileImage;
 		static Image* WallImage;

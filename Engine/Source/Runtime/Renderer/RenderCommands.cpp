@@ -13,6 +13,8 @@
 #include "Runtime/Math/OrthoMatrix.h"
 #include "Runtime/Renderer/Renderer.h"
 #include "Runtime/Engine/Camera/CameraManager.h"
+#include "Runtime/Renderer/FrameBuffer.h"
+#include "Runtime/Assets/AssetLibrary.h"
 
 #include "Runtime/Engine/Actor.h"
 
@@ -57,6 +59,28 @@ namespace Durna
 	}
 
 	
+	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Shader* InShader)
+	{
+		if (InFrameBuffer && InShader)
+		{
+			InShader->Use();
+
+			for (int32 i = 0; i < InFrameBuffer->Attachments.size(); i++)
+			{
+				Texture::ActivateTexture(i);
+				glBindTexture(GL_TEXTURE_2D, InFrameBuffer->Attachments[i]->TextureID);
+
+				int UniformLocation = glGetUniformLocation(InShader->ID,
+					InFrameBuffer->Attachments[i]->TextureUniformName.c_str());
+				glUniform1i(UniformLocation, i);
+			}
+
+			AssetLibrary::ScreenQuad->VA->Bind();
+
+			glDrawElements(GL_TRIANGLES, AssetLibrary::ScreenQuad->EB->GetCount(), GL_UNSIGNED_INT, 0);
+		}
+	}
+
 	void RenderCommands::EnableDepthTest()
 	{
 		glEnable(GL_DEPTH_TEST);
@@ -83,6 +107,16 @@ namespace Durna
 	void RenderCommands::DisableBackFaceCulling()
 	{
 		glDisable(GL_CULL_FACE);
+	}
+
+	void RenderCommands::ClearColorBuffer()
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void RenderCommands::ClearDepthBuffer()
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
 	}
 
 }

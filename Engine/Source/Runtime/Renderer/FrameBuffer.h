@@ -59,6 +59,7 @@ namespace Durna
 		uint32 SizeY = 600;
 
 	private:
+		friend class RenderCommands;
 	};
 }
 

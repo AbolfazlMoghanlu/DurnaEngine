@@ -1,7 +1,9 @@
 #include "DurnaPCH.h"
 #include "AssetLibrary.h"
 
+#include "Runtime/Engine/BaseShapes.h"
 #include "Runtime/Engine/StaticMesh.h"
+#include "Runtime/Components/PrimitiveComponent.h"
 #include "Runtime/Misc/ModelLoader.h"
 #include "Runtime/Engine/Image/Image.h"
 #include "Runtime/Renderer/Texture.h"
@@ -11,6 +13,7 @@
 namespace Durna
 {
 	StaticMesh* AssetLibrary::GizmoMesh;
+	PrimitiveComponent* AssetLibrary::ScreenQuad;
 
 	Image* AssetLibrary::TileImage;
 	Image* AssetLibrary::WallImage;
@@ -32,6 +35,9 @@ namespace Durna
 	{
 		GizmoMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh);
+
+		ScreenQuad = new PrimitiveComponent("ScreenQuad");
+		ScreenQuad->SetStaticMesh(&BaseShapes::Plane, 1);
 
 		TileImage = new Image(Path::TextureRelativePath("T_TiledTexureCoordiante.png").c_str());
 		WallImage = new Image(Path::TextureRelativePath("T_Wall.jpg").c_str());

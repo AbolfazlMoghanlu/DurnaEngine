@@ -4,6 +4,7 @@
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
 #include "Runtime/Core/Application.h"
+#include "Runtime/Renderer/Renderer.h"
 
 #include "Runtime/Math/Math.h"
 
@@ -44,6 +45,7 @@ namespace Durna
 		glfwSetFramebufferSizeCallback(window, [](GLFWwindow* InWindow, int InWidth, int InHeight)
 			{
 				LOG(LogWindow, Info, "Changed window size to %i * %i.",  InWidth, InHeight);
+				Renderer::OnResizeWindow(InWidth, InHeight);
 				glViewport(0, 0, InWidth, InHeight);
 			});
 

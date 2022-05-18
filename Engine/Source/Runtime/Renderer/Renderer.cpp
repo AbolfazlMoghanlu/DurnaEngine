@@ -32,15 +32,9 @@ namespace Durna
 	std::unique_ptr<Window> Renderer::MainWindow = nullptr;
 	float Renderer::Time = 0.0f;
 
-	unsigned int Renderer::framebuffer;
-
-	unsigned int Renderer::textureColorbuffer;
-
-	unsigned int Renderer::rbo;
-
 	StaticMeshActor* Renderer::PlaneActor;
 
-	std::shared_ptr<Durna::FrameBuffer> Renderer::FBO = nullptr;
+	std::shared_ptr<Durna::FrameBuffer> Renderer::GBuffer = nullptr;
 
 	Renderer::Renderer()
 	{ }
@@ -79,11 +73,11 @@ namespace Durna
 		
 		ImGuiRenderer::Get()->Init();
 
-		FBO = FrameBuffer::Create();
-		FBO->Bind();
-		FBO->AddAttachment("Buffer_Depth", FrameBufferAttachmentType::Depth, FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth);
-		FBO->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0, FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA);
-		FBO->SetSize(800, 600);
+		GBuffer = FrameBuffer::Create();
+		GBuffer->Bind();
+		GBuffer->AddAttachment("Buffer_Depth", FrameBufferAttachmentType::Depth, FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth);
+		GBuffer->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0, FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA);
+		GBuffer->SetSize(800, 600);
 
 		PlaneActor = new StaticMeshActor;
 
@@ -96,30 +90,23 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
 
-		FBO->Unbind();
+		GBuffer->Unbind();
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		RenderCommands::ClearColorBuffer();
 		RenderCommands::DisableDepthTest();
 		
-		for (FrameBufferAttachment* f : FBO->Attachments)
-		{
-			glBindTexture(GL_TEXTURE_2D, f->TextureID);
-		}
-
-		PlaneActor->GetMeshComponent()->GetMaterial()->GetShader()->Use();
-		FBO->BindTextures(PlaneActor->GetMeshComponent()->GetMaterial()->GetShader()->ID);
-
-		RenderCommands::DrawPrimitive(PlaneActor->GetMeshComponent());
+		RenderCommands::DrawFrameBufferToScreen(GBuffer.get(), AssetLibrary::PP);
 
 		ImGuiRenderer::Get()->Tick(DeltaTime);	
 
 		glfwPollEvents();
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
 
-		FBO->Bind();
+		GBuffer->Bind();
 		RenderCommands::EnableDepthTest();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		RenderCommands::ClearColorBuffer();
+		RenderCommands::ClearDepthBuffer();
 	}
 
 	void Renderer::Shutdown()
@@ -137,4 +124,13 @@ namespace Durna
 	{
 		return Time;
 	}
+
+	void Renderer::OnResizeWindow(int32 InWidth, int32 InHeight)
+	{
+		if (GBuffer.get())
+		{
+			GBuffer->SetSize(InWidth, InHeight);
+		}
+	}
+
 }

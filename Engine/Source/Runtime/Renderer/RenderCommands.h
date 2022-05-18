@@ -6,6 +6,7 @@
 namespace Durna
 {
 	class Shader;
+	class FrameBuffer;
 
 	class RenderCommands
 	{
@@ -14,6 +15,7 @@ namespace Durna
 		~RenderCommands();
 
 		static void DrawPrimitive(PrimitiveComponent* Comp);
+		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Shader* InShader);
 
 		static void EnableDepthTest();
 		static void DisableDepthTest();
@@ -22,6 +24,9 @@ namespace Durna
 
 		static void EnableBackFaceCulling();
 		static void DisableBackFaceCulling();
+
+		static void ClearColorBuffer();
+		static void ClearDepthBuffer();
 
 	private:
 		
