@@ -79,37 +79,10 @@ namespace Durna
 		
 		ImGuiRenderer::Get()->Init();
 
-		/*
-		glGenFramebuffers(1, &framebuffer);
-		glGenTextures(1, &textureColorbuffer);
-		glGenRenderbuffers(1, &rbo);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-	
-
-		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0); 
-
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		*/
-
 		FBO = FrameBuffer::Create();
 		FBO->Bind();
-		FBO->AddAttachment(FrameBufferAttachmentType::Color_0);
-		//FBO->AddAttachment(FrameBufferAttachmentType::Depth24_Stencil8);
+		FBO->AddAttachment("Buffer_Depth", FrameBufferAttachmentType::Depth, FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth);
+		FBO->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0, FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA);
 		FBO->SetSize(800, 600);
 
 		PlaneActor = new StaticMeshActor;
@@ -126,38 +99,27 @@ namespace Durna
 		FBO->Unbind();
 
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glDisable(GL_DEPTH_TEST);
+		RenderCommands::DisableDepthTest();
+		
 		for (FrameBufferAttachment* f : FBO->Attachments)
 		{
 			glBindTexture(GL_TEXTURE_2D, f->TextureID);
 		}
 
-		/*
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glDisable(GL_DEPTH_TEST);
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-		*/
+		PlaneActor->GetMeshComponent()->GetMaterial()->GetShader()->Use();
+		FBO->BindTextures(PlaneActor->GetMeshComponent()->GetMaterial()->GetShader()->ID);
 
 		RenderCommands::DrawPrimitive(PlaneActor->GetMeshComponent());
-
 
 		ImGuiRenderer::Get()->Tick(DeltaTime);	
 
 		glfwPollEvents();
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
 
-		/*
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glEnable(GL_DEPTH_TEST);
-		*/
-
 		FBO->Bind();
-		glEnable(GL_DEPTH_TEST);
+		RenderCommands::EnableDepthTest();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void Renderer::Shutdown()

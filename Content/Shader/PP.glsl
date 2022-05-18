@@ -20,11 +20,17 @@ out vec4 FragColor;
   
 in vec2 TexCoords;
 
-uniform sampler2D screenTexture;
+uniform sampler2D Buffer_Color;
+uniform sampler2D Buffer_Depth;
 
 void main()
-{ 
-    //FragColor = texture(screenTexture, TexCoords);
-    FragColor = texture(screenTexture, TexCoords) * vec4(1.0, 0.65, 0.2, 1.0);
-    //FragColor = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
+{
+    vec4 SceneDepth = texture(Buffer_Depth, TexCoords);
+    vec4 SceneColor = texture(Buffer_Color, TexCoords);
+
+    vec4 FogColor = vec4(0.82, 0.84, 1.0, 1.0);
+    
+    float FogAlpha = clamp((SceneDepth.x - 0.6) * 2 , 0, 1);
+
+    FragColor = mix(SceneColor, FogColor, FogAlpha);
 }

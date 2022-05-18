@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Runtime/Renderer/Texture.h"
+
 namespace Durna
 {
 	FrameBufferAttachment::FrameBufferAttachment()
@@ -41,6 +43,18 @@ namespace Durna
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void FrameBuffer::BindTextures(uint32 ShaderID)
+	{
+		for (int32 i = 0; i < Attachments.size() ; i++)
+		{
+			Texture::ActivateTexture(i);
+			glBindTexture(GL_TEXTURE_2D, Attachments[i]->TextureID);
+
+			int UniformLocation = glGetUniformLocation(ShaderID, Attachments[i]->TextureUniformName.c_str());
+			glUniform1i(UniformLocation, i);
+		}
+	}
+
 	void FrameBuffer::ClearAttachments()
 	{
 		for (FrameBufferAttachment* Attachment : Attachments)
@@ -51,10 +65,14 @@ namespace Durna
 		Attachments.clear();
 	}
 
-	void FrameBuffer::AddAttachment(FrameBufferAttachmentType InType)
+	void FrameBuffer::AddAttachment(const std::string& TextureUniformName, FrameBufferAttachmentType InType,
+		FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat)
 	{
 		FrameBufferAttachment* Attachment = new FrameBufferAttachment();
+		Attachment->TextureUniformName = TextureUniformName;
 		Attachment->Type = InType;
+		Attachment->Format = InFormat;
+		Attachment->InternalFormat = InInternFormat;
 		Attachments.push_back(Attachment);
 	}
 
@@ -74,11 +92,12 @@ namespace Durna
 		for (FrameBufferAttachment* Attachment : Attachments)
 		{
 			glBindTexture(GL_TEXTURE_2D, Attachment->TextureID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SizeX, SizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(Attachment->InternalFormat),
+				SizeX, SizeY, 0, static_cast<uint32>(Attachment->Format), GL_UNSIGNED_BYTE, NULL);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glBindTexture(GL_TEXTURE_2D, 0);
-
+			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, static_cast<uint32>(Attachment->Type),
 				GL_TEXTURE_2D, Attachment->TextureID, 0);
 		}
