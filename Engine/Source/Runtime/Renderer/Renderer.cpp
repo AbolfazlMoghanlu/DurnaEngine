@@ -21,6 +21,10 @@
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/Material.h"
 
+#include "Runtime/Math/LinearColor.h"
+
+#include "Runtime/renderer/FrameBuffer.h"
+
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
@@ -35,6 +39,8 @@ namespace Durna
 	unsigned int Renderer::rbo;
 
 	StaticMeshActor* Renderer::PlaneActor;
+
+	std::shared_ptr<Durna::FrameBuffer> Renderer::FBO = nullptr;
 
 	Renderer::Renderer()
 	{ }
@@ -61,15 +67,10 @@ namespace Durna
 
 		AssetLibrary::Init();
 
+		RenderCommands::EnableDepthTest();
+		RenderCommands::SetClearColor(LinearColor(0.2f, 0.2f, 0.3f, 1.0f));
 
-		glEnable(GL_DEPTH_TEST);
-
-		glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
-		glDepthFunc(GL_LESS);
-
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);
+		RenderCommands::EnableBackFaceCulling();
 
 		//glEnable(GL_STENCIL_TEST);
 		//glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
@@ -78,6 +79,7 @@ namespace Durna
 		
 		ImGuiRenderer::Get()->Init();
 
+		/*
 		glGenFramebuffers(1, &framebuffer);
 		glGenTextures(1, &textureColorbuffer);
 		glGenRenderbuffers(1, &rbo);
@@ -90,11 +92,11 @@ namespace Durna
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-
+	
 
 		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0); 
 
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
@@ -102,6 +104,13 @@ namespace Durna
 			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+		*/
+
+		FBO = FrameBuffer::Create();
+		FBO->Bind();
+		FBO->AddAttachment(FrameBufferAttachmentType::Color_0);
+		//FBO->AddAttachment(FrameBufferAttachmentType::Depth24_Stencil8);
+		FBO->SetSize(800, 600);
 
 		PlaneActor = new StaticMeshActor;
 
@@ -114,23 +123,40 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
 
-		
+		FBO->Unbind();
+
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glDisable(GL_DEPTH_TEST);
+		for (FrameBufferAttachment* f : FBO->Attachments)
+		{
+			glBindTexture(GL_TEXTURE_2D, f->TextureID);
+		}
+
+		/*
 		glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glDisable(GL_DEPTH_TEST);
 		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+		*/
 
 		RenderCommands::DrawPrimitive(PlaneActor->GetMeshComponent());
 
 
-		ImGuiRenderer::Get()->Tick(DeltaTime);
+		ImGuiRenderer::Get()->Tick(DeltaTime);	
 
 		glfwPollEvents();
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
 
+		/*
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glEnable(GL_DEPTH_TEST);
+		*/
+
+		FBO->Bind();
+		glEnable(GL_DEPTH_TEST);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 

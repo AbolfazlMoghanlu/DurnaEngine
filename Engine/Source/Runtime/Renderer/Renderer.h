@@ -8,6 +8,8 @@ namespace Durna
 
 	class StaticMeshActor;
 
+	class FrameBuffer;
+
 	class Renderer
 	{
 	public:
@@ -30,6 +32,8 @@ namespace Durna
 		static unsigned int textureColorbuffer;
 		static unsigned int rbo;
 		static StaticMeshActor* PlaneActor;
+
+		static std::shared_ptr<FrameBuffer> FBO;
 	};
 }
 

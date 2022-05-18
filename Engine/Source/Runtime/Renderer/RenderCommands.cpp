@@ -57,4 +57,32 @@ namespace Durna
 	}
 
 	
+	void RenderCommands::EnableDepthTest()
+	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+	}
+
+	void RenderCommands::DisableDepthTest()
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+
+	void RenderCommands::SetClearColor(const LinearColor& ClearColor)
+	{
+		glClearColor(ClearColor.R, ClearColor.G, ClearColor.B, ClearColor.A);
+	}
+
+	void RenderCommands::EnableBackFaceCulling()
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CW);
+	}
+
+	void RenderCommands::DisableBackFaceCulling()
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
 }
