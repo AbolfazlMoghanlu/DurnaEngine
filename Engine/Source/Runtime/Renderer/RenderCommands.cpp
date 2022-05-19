@@ -119,4 +119,9 @@ namespace Durna
 		glClear(GL_DEPTH_BUFFER_BIT);
 	}
 
+	void RenderCommands::SetDrawWireframe()
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+
 }

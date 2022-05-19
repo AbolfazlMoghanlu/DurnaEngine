@@ -20,9 +20,11 @@ namespace Durna
 	public:
 		void Draw() override
 		{
+#if WITH_EDITOR
 			ImGui::Begin("Demo window");
 			ImGui::SliderFloat("Sky light Intensity ", &ImGuiRenderer::Get()->SkyLightIntensity, 0.0f, 1.0f, NULL, ImGuiSliderFlags_::ImGuiSliderFlags_AlwaysClamp);
 			ImGui::End();
+#endif
 		}
 	};
 
@@ -79,8 +81,10 @@ namespace Durna
 
 	void ImGuiRenderer::Draw()
 	{
+#if WITH_EDITOR
 		bool bShowDemo = true;
 		ImGui::ShowDemoWindow(&bShowDemo);
+#endif
 
 		for (LinkedListIterator It(Layers); It; ++It)
 		{

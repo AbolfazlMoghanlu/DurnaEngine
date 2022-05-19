@@ -24,6 +24,7 @@
 #include "Runtime/Math/LinearColor.h"
 
 #include "Runtime/renderer/FrameBuffer.h"
+#include "Runtime/Renderer/RenderQueue.h"
 
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
@@ -32,9 +33,9 @@ namespace Durna
 	std::unique_ptr<Window> Renderer::MainWindow = nullptr;
 	float Renderer::Time = 0.0f;
 
-	StaticMeshActor* Renderer::PlaneActor;
+	std::shared_ptr<FrameBuffer> Renderer::GBuffer = nullptr;
 
-	std::shared_ptr<Durna::FrameBuffer> Renderer::GBuffer = nullptr;
+	RenderQueue Renderer::RenderQue;
 
 	Renderer::Renderer()
 	{ }
@@ -59,19 +60,12 @@ namespace Durna
 			return;
 		}
 
+		ImGuiRenderer::Get()->Init();
+
 		AssetLibrary::Init();
 
-		RenderCommands::EnableDepthTest();
 		RenderCommands::SetClearColor(LinearColor(0.2f, 0.2f, 0.3f, 1.0f));
-
 		RenderCommands::EnableBackFaceCulling();
-
-		//glEnable(GL_STENCIL_TEST);
-		//glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
-
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
-		ImGuiRenderer::Get()->Init();
 
 		GBuffer = FrameBuffer::Create();
 		GBuffer->Bind();
@@ -79,34 +73,41 @@ namespace Durna
 		GBuffer->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0, FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA);
 		GBuffer->SetSize(800, 600);
 
-		PlaneActor = new StaticMeshActor;
+		//glEnable(GL_STENCIL_TEST);
+		//glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
+		
+		//RenderCommands::SetDrawWireframe();
 
-		PlaneActor->GetMeshComponent()->SetStaticMesh(&BaseShapes::Plane, 1);
-		PlaneActor->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::PP);
 	}
 
 	void Renderer::Tick(float DeltaTime)
 	{
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
+		
+		GBuffer->Bind();
+		RenderCommands::ClearColorBuffer();
+		RenderCommands::ClearDepthBuffer();
+		RenderCommands::EnableDepthTest();
+
+		for (PrimitiveComponent* Pr : RenderQue.Queue)
+		{
+			if (Pr)
+			{
+				RenderCommands::DrawPrimitive(Pr);
+			}
+		}
 
 		GBuffer->Unbind();
-
 		RenderCommands::ClearColorBuffer();
 		RenderCommands::DisableDepthTest();
-		
-		RenderCommands::DrawFrameBufferToScreen(GBuffer.get(), AssetLibrary::PP);
 
-		ImGuiRenderer::Get()->Tick(DeltaTime);	
+		RenderCommands::DrawFrameBufferToScreen(GBuffer.get(), AssetLibrary::PP);
 
 		glfwPollEvents();
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
 
-		GBuffer->Bind();
-		RenderCommands::EnableDepthTest();
-
-		RenderCommands::ClearColorBuffer();
-		RenderCommands::ClearDepthBuffer();
+		RenderQue.Clear();
 	}
 
 	void Renderer::Shutdown()
@@ -131,6 +132,11 @@ namespace Durna
 		{
 			GBuffer->SetSize(InWidth, InHeight);
 		}
+	}
+
+	void Renderer::RegisterToRenderQueue(PrimitiveComponent* Pr)
+	{
+		RenderQue.AddPrimitive(Pr);
 	}
 
 }

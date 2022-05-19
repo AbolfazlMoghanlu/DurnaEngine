@@ -7,6 +7,7 @@
 #include "Runtime/Renderer/Buffer.h"
 
 #include "Runtime/Renderer/RenderCommands.h"
+#include "Runtime/Renderer/Renderer.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -32,9 +33,9 @@ namespace Durna
 		SceneComponent::Tick(DeltaTime);
 
 		if (Mesh)
-		{
-			RenderCommands::DrawPrimitive(this);
-		}
+ 		{
+			Renderer::RegisterToRenderQueue(this);
+ 		}
 	}
 
 	void PrimitiveComponent::BindPreDraw(void (*InFunc)(PrimitiveComponent* InComponent, Shader* InShader))

@@ -7,8 +7,9 @@ namespace Durna
 	class Window;
 
 	class StaticMeshActor;
-
+	class PrimitiveComponent;
 	class FrameBuffer;
+	class RenderQueue;
 
 	class Renderer
 	{
@@ -27,11 +28,16 @@ namespace Durna
 
 		static void OnResizeWindow(int32 InWidth, int32 InHeight);
 
+		static void RegisterToRenderQueue(PrimitiveComponent* Pr);
+
+	protected:
+		
+
 	private:
 		static std::unique_ptr<Window> MainWindow;
 		static float Time;
-		static StaticMeshActor* PlaneActor;
 
 		static std::shared_ptr<FrameBuffer> GBuffer;
+		static RenderQueue RenderQue;
 	};
 }

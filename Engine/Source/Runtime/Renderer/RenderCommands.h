@@ -28,6 +28,8 @@ namespace Durna
 		static void ClearColorBuffer();
 		static void ClearDepthBuffer();
 
+		static void SetDrawWireframe();
+
 	private:
 		
 	};
