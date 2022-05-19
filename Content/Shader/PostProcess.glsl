@@ -21,7 +21,7 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D Buffer_Color;
-uniform sampler2D Buffer_Depth;
+uniform sampler2D Buffer_Depth_Stencil;
 
 // -------------------- Fog ---------------------
 uniform vec3 FogColor;
@@ -35,7 +35,7 @@ uniform int BlurStepNumber;
 
 void main()
 {
-    float SceneDepth = texture(Buffer_Depth, TexCoords).x;
+    float SceneDepth = texture(Buffer_Depth_Stencil, TexCoords).x;
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
 
     vec4 Color = SceneColor;

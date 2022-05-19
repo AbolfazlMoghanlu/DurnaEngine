@@ -66,13 +66,14 @@ namespace Durna
 	}
 
 	void FrameBuffer::AddAttachment(const std::string& TextureUniformName, FrameBufferAttachmentType InType,
-		FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat)
+		FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat, FrameBufferAttachmentDataType InDataType)
 	{
 		FrameBufferAttachment* Attachment = new FrameBufferAttachment();
 		Attachment->TextureUniformName = TextureUniformName;
 		Attachment->Type = InType;
 		Attachment->Format = InFormat;
 		Attachment->InternalFormat = InInternFormat;
+		Attachment->DataType = InDataType;
 		Attachments.push_back(Attachment);
 	}
 
@@ -92,8 +93,10 @@ namespace Durna
 		for (FrameBufferAttachment* Attachment : Attachments)
 		{
 			glBindTexture(GL_TEXTURE_2D, Attachment->TextureID);
-			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(Attachment->InternalFormat),
-				SizeX, SizeY, 0, static_cast<uint32>(Attachment->Format), GL_UNSIGNED_BYTE, NULL);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(Attachment->InternalFormat),SizeX, SizeY,
+				0, static_cast<uint32>(Attachment->Format), static_cast<uint32>(Attachment->DataType), NULL);
+
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glBindTexture(GL_TEXTURE_2D, 0);

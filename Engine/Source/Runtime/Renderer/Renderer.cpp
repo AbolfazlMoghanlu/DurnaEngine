@@ -26,6 +26,8 @@
 #include "Runtime/renderer/FrameBuffer.h"
 #include "Runtime/Renderer/RenderQueue.h"
 
+#include "Runtime/Engine/Camera/CameraComponent.h"
+
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
@@ -91,8 +93,15 @@ namespace Durna
 
 		GBuffer = FrameBuffer::Create();
 		GBuffer->Bind();
-		GBuffer->AddAttachment("Buffer_Depth", FrameBufferAttachmentType::Depth, FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth);
-		GBuffer->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0, FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA);
+		
+		GBuffer->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0,
+			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
+			FrameBufferAttachmentDataType::uByte);
+
+		GBuffer->AddAttachment("Buffer_Depth_Stencil", FrameBufferAttachmentType::Depth_Stencil,
+			FrameBufferAttachmentFormat::Depth_Stencil, FrameBufferAttachmentFormat::Depth24_Stencil8,
+			FrameBufferAttachmentDataType::uInt_24_8);
+		
 		GBuffer->SetSize(800, 600);
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
@@ -162,6 +171,13 @@ namespace Durna
 		if (GBuffer.get())
 		{
 			GBuffer->SetSize(InWidth, InHeight);
+		}
+
+		if (CameraComponent* CameraComp = CameraManager::Get()->GetActiveCamera())
+		{
+			CameraComp->SetPerspectiveWidth(InWidth);
+			CameraComp->SetPerspectiveHeight(InHeight);
+			CameraManager::Get()->MarkDirtyProjection();
 		}
 	}
 

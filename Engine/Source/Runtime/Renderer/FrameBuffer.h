@@ -4,17 +4,27 @@ namespace Durna
 {
 	enum class FrameBufferAttachmentType : uint32
 	{
-		Color_0 = 0x8CE0, //GL_COLOR_ATTACHMENT0
-		Depth = 0x8D00, //GL_DEPTH_ATTACHMENT
-		Depth24_Stencil8 = 0x88F0 //GL_DEPTH24_STENCIL8
+		Color_0				= 0x8CE0, //GL_COLOR_ATTACHMENT0
+		Depth				= 0x8D00, //GL_DEPTH_ATTACHMENT
+		Stencil				= 0x8D20, //GL_STENCIL_ATTACHMENT
+		Depth_Stencil		= 0x821A  //GL_DEPTH_STENCIL_ATTACHMENT
 	};
 
 	enum class FrameBufferAttachmentFormat : uint32
 	{
-		RGBA = 0x1908, //GL_RGBA
-		Depth = 0x1902, //GL_DEPTH_COMPONENT
+		RGBA				= 0x1908, //GL_RGBA
+		Depth				= 0x1902, //GL_DEPTH_COMPONENT
+		Stencil				= 0x1901, //GL_STENCIL_INDEX
+		Depth24_Stencil8	= 0x88F0, //GL_DEPTH24_STENCIL8
+		Depth_Stencil		= 0x84F9, //GL_DEPTH_STENCIL
 	};
-	
+
+	enum class FrameBufferAttachmentDataType : uint32
+	{
+		uByte				= 0x1401, //GL_UNSIGNED_BYTE
+		uInt_24_8			= 0x84FA  //GL_UNSIGNED_INT_24_8
+	};
+
 	class FrameBufferAttachment
 	{
 	public:
@@ -25,6 +35,7 @@ namespace Durna
 		FrameBufferAttachmentType Type = FrameBufferAttachmentType::Color_0;
 		FrameBufferAttachmentFormat Format = FrameBufferAttachmentFormat::RGBA;
 		FrameBufferAttachmentFormat InternalFormat = FrameBufferAttachmentFormat::RGBA;
+		FrameBufferAttachmentDataType DataType = FrameBufferAttachmentDataType::uByte;
 
 		uint32 TextureID;
 	};
@@ -44,7 +55,7 @@ namespace Durna
 
 		void ClearAttachments();
 		void AddAttachment(const std::string& TextureUniformName, FrameBufferAttachmentType InType,
-			FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat);
+			FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat, FrameBufferAttachmentDataType InDataType);
 
 		void SetSize(uint32 InSizeX, uint32 InSizeY, bool bRebuild = true);
 		void RebuildBuffer();
