@@ -5,6 +5,7 @@
 
 namespace Durna
 {
+	class Material;
 	class Shader;
 	class FrameBuffer;
 
@@ -15,7 +16,7 @@ namespace Durna
 		~RenderCommands();
 
 		static void DrawPrimitive(PrimitiveComponent* Comp);
-		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Shader* InShader);
+		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial);
 
 		static void EnableDepthTest();
 		static void DisableDepthTest();

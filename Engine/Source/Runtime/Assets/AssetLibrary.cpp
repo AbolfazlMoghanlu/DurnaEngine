@@ -29,7 +29,7 @@ namespace Durna
 	Shader* AssetLibrary::BaseShader;
 	Shader* AssetLibrary::SkyShader;
 	Shader* AssetLibrary::GizmoShader;
-	Shader* AssetLibrary::PP;
+	Shader* AssetLibrary::PostProcessShader;
 
 	void AssetLibrary::Init()
 	{
@@ -52,6 +52,6 @@ namespace Durna
 		BaseShader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		SkyShader = new Shader(Path::ShaderRelativePath("SkySphere.glsl"));
 		GizmoShader = new Shader(Path::ShaderRelativePath("Gizmo.glsl"));
-		PP = new Shader(Path::ShaderRelativePath("PP.glsl"));
+		PostProcessShader = new Shader(Path::ShaderRelativePath("PostProcess.glsl"));
 	}
 }

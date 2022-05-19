@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Runtime/Math/Vector3.h"
+#include "Runtime/Renderer/Material.h"
+#include "Runtime/Renderer/PostProcessSetting.h"
 
 namespace Durna
 {
@@ -30,6 +32,10 @@ namespace Durna
 
 		static void RegisterToRenderQueue(PrimitiveComponent* Pr);
 
+		static Material PostProccessMaterial;
+
+		static PostProcessSetting PPSetting;
+
 	protected:
 		
 
@@ -39,5 +45,7 @@ namespace Durna
 
 		static std::shared_ptr<FrameBuffer> GBuffer;
 		static RenderQueue RenderQue;
+
+		static void UpdatePostProcessUniforms();
 	};
 }

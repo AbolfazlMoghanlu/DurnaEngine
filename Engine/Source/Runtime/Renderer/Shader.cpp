@@ -69,10 +69,22 @@ namespace Durna
 		glUseProgram(ID);
 	}
 
-	void Shader::SetUniformVec3f(char* UniformName, Vector3f Vec3)
+	void Shader::SetUniformVec3f(char* UniformName, const Vector3f& Vec3)
 	{
 		int UniformLocation = glGetUniformLocation(ID, UniformName);
 		glUniform3f(UniformLocation, Vec3.X, Vec3.Y, Vec3.Z);
+	}
+
+	void Shader::SetUniformVec3f(char* UniformName, const Color& InColor)
+	{
+		int UniformLocation = glGetUniformLocation(ID, UniformName);
+		glUniform3f(UniformLocation, InColor.R, InColor.G, InColor.B);
+	}
+
+	void Shader::SetUniformVec3f(char* UniformName, const LinearColor& InColor)
+	{
+		int UniformLocation = glGetUniformLocation(ID, UniformName);
+		glUniform3f(UniformLocation, InColor.R, InColor.G, InColor.B);
 	}
 
 	void Shader::SetUniform1i(const std::string& UniformName, int32 Value)

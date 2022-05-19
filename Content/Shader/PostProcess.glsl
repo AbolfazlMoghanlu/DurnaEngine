@@ -23,14 +23,19 @@ in vec2 TexCoords;
 uniform sampler2D Buffer_Color;
 uniform sampler2D Buffer_Depth;
 
+// -------------------- Fog ---------------------
+uniform vec3 FogColor;
+uniform float FogAmount;
+uniform float FogOffset;
+uniform float FogLength;
+
+
 void main()
 {
     vec4 SceneDepth = texture(Buffer_Depth, TexCoords);
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
-
-    vec4 FogColor = vec4(0.82, 0.84, 1.0, 1.0);
     
-    float FogAlpha = clamp((SceneDepth.x - 0.6) * 2 , 0, 1);
+    float FogAlpha = clamp((SceneDepth.x - FogOffset) / FogLength , 0, 1);
 
-    FragColor = mix(SceneColor, FogColor, FogAlpha);
+    FragColor = mix(SceneColor, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
 }

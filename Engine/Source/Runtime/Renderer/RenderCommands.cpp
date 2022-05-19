@@ -59,18 +59,18 @@ namespace Durna
 	}
 
 	
-	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Shader* InShader)
+	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial)
 	{
-		if (InFrameBuffer && InShader)
+		if (InFrameBuffer && InMaterial && InMaterial->GetShader())
 		{
-			InShader->Use();
+			InMaterial->GetShader()->Use();
 
 			for (int32 i = 0; i < InFrameBuffer->Attachments.size(); i++)
 			{
 				Texture::ActivateTexture(i);
 				glBindTexture(GL_TEXTURE_2D, InFrameBuffer->Attachments[i]->TextureID);
 
-				int UniformLocation = glGetUniformLocation(InShader->ID,
+				int UniformLocation = glGetUniformLocation(InMaterial->GetShader()->ID,
 					InFrameBuffer->Attachments[i]->TextureUniformName.c_str());
 				glUniform1i(UniformLocation, i);
 			}

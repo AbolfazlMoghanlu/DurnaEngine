@@ -37,6 +37,22 @@ namespace Durna
 
 	RenderQueue Renderer::RenderQue;
 
+	Material Renderer::PostProccessMaterial;
+	PostProcessSetting Renderer::PPSetting;
+
+
+	void Renderer::UpdatePostProcessUniforms()
+	{
+		if (PostProccessMaterial.GetShader())
+		{
+			PostProccessMaterial.Use();
+			PostProccessMaterial.GetShader()->SetUniformVec3f("FogColor", PPSetting.FogColor);
+			PostProccessMaterial.GetShader()->SetUniform1f("FogAmount", PPSetting.FogAmount);
+			PostProccessMaterial.GetShader()->SetUniform1f("FogOffset", PPSetting.FogOffset);
+			PostProccessMaterial.GetShader()->SetUniform1f("FogLength", PPSetting.FogLength);
+		}
+	}
+	
 	Renderer::Renderer()
 	{ }
 
@@ -73,11 +89,12 @@ namespace Durna
 		GBuffer->AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0, FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA);
 		GBuffer->SetSize(800, 600);
 
+		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
+
 		//glEnable(GL_STENCIL_TEST);
 		//glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
 		
 		//RenderCommands::SetDrawWireframe();
-
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -102,7 +119,15 @@ namespace Durna
 		RenderCommands::ClearColorBuffer();
 		RenderCommands::DisableDepthTest();
 
-		RenderCommands::DrawFrameBufferToScreen(GBuffer.get(), AssetLibrary::PP);
+#if WITH_EDITOR
+		UpdatePostProcessUniforms();
+#endif
+
+		RenderCommands::DrawFrameBufferToScreen(GBuffer.get(), &PostProccessMaterial);
+
+#if WITH_EDITOR
+		ImGuiRenderer::Get()->Tick(DeltaTime);
+#endif
 
 		glfwPollEvents();
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
