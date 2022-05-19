@@ -29,13 +29,35 @@ uniform float FogAmount;
 uniform float FogOffset;
 uniform float FogLength;
 
+// -------------------- Blur --------------------
+uniform float BlurStepSize;
+uniform int BlurStepNumber;
 
 void main()
 {
-    vec4 SceneDepth = texture(Buffer_Depth, TexCoords);
+    float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
-    
-    float FogAlpha = clamp((SceneDepth.x - FogOffset) / FogLength , 0, 1);
 
-    FragColor = mix(SceneColor, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
+    vec4 Color = SceneColor;
+    
+    // blur
+    for(int k = 1; k <= BlurStepNumber; k++)
+    {
+        for(int i = -1; i <= 1; i++)
+        {
+            for(int j = -1; j <= 1; j++)
+            {
+                Color += texture(Buffer_Color, TexCoords + (vec2(i, j) * BlurStepSize) * k);
+            }
+        }
+    }
+    Color /= BlurStepNumber * 8 + 1;
+
+
+    // fog
+    float FogAlpha = clamp((SceneDepth - FogOffset) / FogLength , 0, 1);
+    Color = mix(Color, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
+
+
+    FragColor = Color;
 }

@@ -46,10 +46,16 @@ namespace Durna
 		if (PostProccessMaterial.GetShader())
 		{
 			PostProccessMaterial.Use();
+			
+			// Fog
 			PostProccessMaterial.GetShader()->SetUniformVec3f("FogColor", PPSetting.FogColor);
 			PostProccessMaterial.GetShader()->SetUniform1f("FogAmount", PPSetting.FogAmount);
 			PostProccessMaterial.GetShader()->SetUniform1f("FogOffset", PPSetting.FogOffset);
 			PostProccessMaterial.GetShader()->SetUniform1f("FogLength", PPSetting.FogLength);
+
+			//Blur
+			PostProccessMaterial.GetShader()->SetUniform1f("BlurStepSize", PPSetting.BlurStepSize);
+			PostProccessMaterial.GetShader()->SetUniform1i("BlurStepNumber", PPSetting.BlurStepNumber);
 		}
 	}
 	
