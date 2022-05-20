@@ -21,6 +21,7 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D Buffer_Color;
+uniform sampler2D Buffer_Normal;
 uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
 
@@ -38,6 +39,7 @@ uniform int BlurStepNumber;
 void main()
 {
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
+    vec3 Normal = texture(Buffer_Normal, TexCoords).xyz;
 
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
@@ -84,6 +86,7 @@ void main()
             Color = vec4(1.0f, 0.75f, 0.4f, 1.0f);
     }
 
+    //FragColor = vec4(Normal, 1);
     FragColor = Color;
     //FragColor = vec4(StencilMask / 255.0);
     //FragColor = vec4(SceneDepth);

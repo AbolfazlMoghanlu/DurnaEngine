@@ -27,15 +27,19 @@ void main()
 
 	V_Color = VColor;
 	TexCoord = aTexCoord;
-	TanNormal = VNormal;
-	WorldNormal = normalize((Transform * vec4(TanNormal, 1)).xyz);
+	TanNormal = VNormal * 2 - 1;
+	WorldNormal = normalize((Transform * vec4(TanNormal, 0)).xyz);
 }
 
 
 #type fragment
 #version 460 core
 
-out vec4 FragColor;
+//out vec4 FragColor;
+
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out vec4 Normal;
+
 
 in vec4 V_Color;
 in vec2 TexCoord;
@@ -45,14 +49,18 @@ in vec3 WorldNormal;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
 
+
+uniform mat4 Transform;
 uniform float time;
 
 void main()
 {
-	//FragColor = V_Color;
 	vec4 Color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
 
 	float DirectionalLight = dot(WorldNormal, vec3(1, 0, 0));
 
 	FragColor = Color * ((DirectionalLight * .4) + .8) * vec4(0.7, 0.4, 0.15, 1.0);
+	FragColor = normalize(Transform * vec4(TanNormal, 0));
+	//Normal = vec4(WorldNormal, 1);
+	Normal = vec4(TanNormal, 1);
 }

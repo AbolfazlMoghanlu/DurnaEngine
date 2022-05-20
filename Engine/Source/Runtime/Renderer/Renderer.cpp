@@ -111,6 +111,7 @@ namespace Durna
 		Time += DeltaTime;
 
 		Gbuffer->Bind();
+		Gbuffer->BindDrawBuffers();
 
 		RenderCommands::ClearColorBuffer();
 
@@ -130,6 +131,7 @@ namespace Durna
 		}
 
 		Gbuffer->Unbind();
+		Gbuffer->UnbindDrawBuffers();
 
 		RenderCommands::ClearColorBuffer();
 		RenderCommands::DisableDepthTest();
@@ -178,8 +180,8 @@ namespace Durna
 
 		if (CameraComponent* CameraComp = CameraManager::Get()->GetActiveCamera())
 		{
-			CameraComp->SetPerspectiveWidth(InWidth);
-			CameraComp->SetPerspectiveHeight(InHeight);
+			CameraComp->SetPerspectiveWidth((float)InWidth);
+			CameraComp->SetPerspectiveHeight((float)InHeight);
 			CameraManager::Get()->MarkDirtyProjection();
 		}
 	}

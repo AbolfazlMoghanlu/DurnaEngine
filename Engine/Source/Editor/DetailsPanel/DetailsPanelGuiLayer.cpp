@@ -57,7 +57,7 @@ namespace Durna
 		bool bSelected = Editor::Get()->GetSelectedComponent() == InComponent;
 		if (bSelected)
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0.65, 0, 1));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.65f, 0.0f, 1.0f));
 		}
 
 		ImGui::Button(InComponent->GetComponentLabel().c_str());

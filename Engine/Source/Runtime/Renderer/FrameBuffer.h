@@ -5,6 +5,7 @@ namespace Durna
 	enum class FrameBufferAttachmentType : uint32
 	{
 		Color_0				= 0x8CE0, //GL_COLOR_ATTACHMENT0
+		Color_1				= 0x8CE1, //GL_COLOR_ATTACHMENT1
 		Depth				= 0x8D00, //GL_DEPTH_ATTACHMENT
 		Stencil				= 0x8D20, //GL_STENCIL_ATTACHMENT
 		Depth_Stencil		= 0x821A  //GL_DEPTH_STENCIL_ATTACHMENT
@@ -18,12 +19,15 @@ namespace Durna
 		Stencil_8			= 0x8D48, //GL_STENCIL_INDEX8
 		Depth24_Stencil8	= 0x88F0, //GL_DEPTH24_STENCIL8
 		Depth_Stencil		= 0x84F9, //GL_DEPTH_STENCIL
+		RGB32f				= 0x8815, //GL_RGB32F
+		RGB					= 0x1907  //GL_RGB 
 	};
 
 	enum class FrameBufferAttachmentDataType : uint32
 	{
 		uByte				= 0x1401, //GL_UNSIGNED_BYTE
-		uInt_24_8			= 0x84FA  //GL_UNSIGNED_INT_24_8
+		uInt_24_8			= 0x84FA, //GL_UNSIGNED_INT_24_8
+		Float				= 0x1406  //GL_FLOAT
 	};
 
 	class FrameBufferAttachment
@@ -51,6 +55,9 @@ namespace Durna
 
 		void Bind();
 		void Unbind();
+
+		void BindDrawBuffers();
+		void UnbindDrawBuffers();
 
 		virtual void BindTextures(uint32 ShaderID);
 

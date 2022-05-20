@@ -44,6 +44,24 @@ namespace Durna
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void FrameBuffer::BindDrawBuffers()
+	{
+		std::vector<uint32> BufferAttachments;
+		BufferAttachments.reserve(Attachments.size());
+
+		for (FrameBufferAttachment* Attachment : Attachments)
+		{
+			BufferAttachments.push_back(static_cast<uint32>(Attachment->Type));
+		}
+
+		glDrawBuffers(BufferAttachments.size(), &BufferAttachments.at(0));
+	}
+
+	void FrameBuffer::UnbindDrawBuffers()
+	{
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	}
+
 	void FrameBuffer::BindTextures(uint32 ShaderID)
 	{
 		for (int32 i = 0; i < Attachments.size() ; i++)

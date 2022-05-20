@@ -17,6 +17,10 @@ namespace Durna
  			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
  			FrameBufferAttachmentDataType::uByte);
 
+		AddAttachment("Buffer_Normal", FrameBufferAttachmentType::Color_1,
+			FrameBufferAttachmentFormat::RGB, FrameBufferAttachmentFormat::RGB32f,
+			FrameBufferAttachmentDataType::Float);
+		
 		RebuildBuffer();
 	}
 
@@ -38,7 +42,7 @@ namespace Durna
 	{
 		FrameBuffer::BindTextures(ShaderID);
 		
-		uint32 i = Attachments.size();
+		uint32 i = (uint32)Attachments.size();
 		uint32 UniformLocation = 0;
 
 		Texture::ActivateTexture(i);

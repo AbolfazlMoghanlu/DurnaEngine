@@ -124,7 +124,7 @@ void GameApplication::Tick(float DeltaTime)
 {
 	Application::Tick(DeltaTime);
 
-	Actor1->SetActorLocation(Vector3f(Math::Cos(Renderer::GetTime()), 0, 0));
+	Actor1->SetActorLocation(Vector3f(/*Math::Cos(Renderer::GetTime())*/ 1, 0, 0));
 
 	pr1->SetRelativeLocation(Vector3f(1.0, 0, 0));
 
