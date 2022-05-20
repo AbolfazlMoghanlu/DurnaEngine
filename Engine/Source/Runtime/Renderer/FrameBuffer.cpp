@@ -18,20 +18,6 @@ namespace Durna
 		glDeleteTextures(1, &TextureID);
 	}
 
-	FrameBufferDepthStencilAttachment::FrameBufferDepthStencilAttachment()
-	{
-		glGenTextures(1, &DepthStencilTextureID);
-		glGenTextures(1, &DepthTextureID);
-		glGenTextures(1, &StencilTextureID);
-	}
-
-	FrameBufferDepthStencilAttachment::~FrameBufferDepthStencilAttachment()
-	{
-		glDeleteTextures(1, &DepthStencilTextureID);
-		glDeleteTextures(1, &DepthTextureID);
-		glDeleteTextures(1, &StencilTextureID);
-	}
-
 	FrameBuffer::FrameBuffer()
 	{
 		glGenFramebuffers(1, &ID);
@@ -39,6 +25,7 @@ namespace Durna
 
 	FrameBuffer::~FrameBuffer()
 	{
+		ClearAttachments();
 		glDeleteFramebuffers(1, &ID);
 	}
 
@@ -59,33 +46,12 @@ namespace Durna
 
 	void FrameBuffer::BindTextures(uint32 ShaderID)
 	{
-		int32 i = 0;
-		//for (int32 i = 0; i < Attachments.size() ; i++)
-		for (FrameBufferAttachment* Attachment : Attachments)
+		for (int32 i = 0; i < Attachments.size() ; i++)
 		{
 			Texture::ActivateTexture(i);
 			glBindTexture(GL_TEXTURE_2D, Attachments[i]->TextureID);
 
 			int UniformLocation = glGetUniformLocation(ShaderID, Attachments[i]->TextureUniformName.c_str());
-			glUniform1i(UniformLocation, i);
-
-			i++;
-		}
-
-		if (DepthStencilAttachment.get())
-		{
-			Texture::ActivateTexture(i);
-			glBindTexture(GL_TEXTURE_2D, DepthStencilAttachment->DepthTextureID);
-
-			int UniformLocation = glGetUniformLocation(ShaderID, DepthStencilAttachment->DepthTextureUniformName.c_str());
-			glUniform1i(UniformLocation, i);
-
-			i++;
-
-			Texture::ActivateTexture(i);
-			glBindTexture(GL_TEXTURE_2D, DepthStencilAttachment->StencilTextureID);
-		
-			UniformLocation = glGetUniformLocation(ShaderID, DepthStencilAttachment->StencilTextureUniformName.c_str());
 			glUniform1i(UniformLocation, i);
 		}
 	}
@@ -112,18 +78,6 @@ namespace Durna
 		Attachments.push_back(Attachment);
 	}
 
-	void FrameBuffer::SetDepthStencilAttachment(const std::string& DepthTextureName, const std::string& StencilTextureName, FrameBufferAttachmentType InType, FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat, FrameBufferAttachmentDataType InDataType)
-	{
-		DepthStencilAttachment = std::make_unique<FrameBufferDepthStencilAttachment>();
-
-		DepthStencilAttachment->DepthTextureUniformName = DepthTextureName;
-		DepthStencilAttachment->StencilTextureUniformName = StencilTextureName;
-		DepthStencilAttachment->Type = InType;
-		DepthStencilAttachment->DataType = InDataType;
-		DepthStencilAttachment->InternalFormat = InInternFormat;
-		DepthStencilAttachment->Format = InFormat;
-	}
-
 	void FrameBuffer::SetSize(uint32 InSizeX, uint32 InSizeY, bool bRebuild /*= true*/)
 	{
 		SizeX = InSizeX;
@@ -137,6 +91,8 @@ namespace Durna
 
 	void FrameBuffer::RebuildBuffer()
 	{
+		Bind();
+
 		for (FrameBufferAttachment* Attachment : Attachments)
 		{
 			glBindTexture(GL_TEXTURE_2D, Attachment->TextureID);
@@ -150,34 +106,6 @@ namespace Durna
 			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, static_cast<uint32>(Attachment->Type),
 				GL_TEXTURE_2D, Attachment->TextureID, 0);
-		}
-
-		if (DepthStencilAttachment.get())
-		{
-			glBindTexture(GL_TEXTURE_2D, DepthStencilAttachment->DepthStencilTextureID);
-			
- 			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(DepthStencilAttachment->InternalFormat), SizeX, SizeY,
- 				0, static_cast<uint32>(DepthStencilAttachment->Format), static_cast<uint32>(DepthStencilAttachment->DataType), NULL);
-
-//			glTexStorage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(DepthStencilAttachment->InternalFormat), SizeX, SizeY);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			glFramebufferTexture2D(GL_FRAMEBUFFER, static_cast<uint32>(DepthStencilAttachment->Type),
-				GL_TEXTURE_2D, DepthStencilAttachment->DepthStencilTextureID, 0);
-
-// 			glBindTexture(GL_TEXTURE_2D, DepthStencilAttachment->StencilTextureID);
-// 			glTextureView(DepthStencilAttachment->StencilTextureID, GL_TEXTURE_2D, DepthStencilAttachment->DepthStencilTextureID,
-// 				GL_DEPTH24_STENCIL8, 0, 1, 0, 1);
-// 			glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_STENCIL_TEXTURE_MODE, GL_STENCIL_INDEX);
-
-			glBindTexture(GL_TEXTURE_2D, DepthStencilAttachment->DepthTextureID);
-			glTextureView(DepthStencilAttachment->DepthTextureID, GL_TEXTURE_2D, DepthStencilAttachment->DepthStencilTextureID,
-				GL_DEPTH24_STENCIL8, 0, 1, 0, 1);
-			glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_STENCIL_TEXTURE_MODE, GL_DEPTH_COMPONENT);
-
 		}
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

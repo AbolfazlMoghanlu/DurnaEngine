@@ -40,26 +40,6 @@ namespace Durna
 
 		uint32 TextureID;
 	};
-
-	class FrameBufferDepthStencilAttachment
-	{
-	public:
-		FrameBufferDepthStencilAttachment();
-
-		virtual ~FrameBufferDepthStencilAttachment();
-
-		std::string DepthTextureUniformName = "InvalidTexture";
-		std::string StencilTextureUniformName = "InvalidTexture";
-
-		FrameBufferAttachmentType Type = FrameBufferAttachmentType::Depth_Stencil;
-		FrameBufferAttachmentFormat Format = FrameBufferAttachmentFormat::RGBA;
-		FrameBufferAttachmentFormat InternalFormat = FrameBufferAttachmentFormat::RGBA;
-		FrameBufferAttachmentDataType DataType = FrameBufferAttachmentDataType::uByte;
-
-		uint32 DepthStencilTextureID;
-		uint32 DepthTextureID;
-		uint32 StencilTextureID;
-	};
 	
 	class FrameBuffer
 	{
@@ -72,20 +52,16 @@ namespace Durna
 		void Bind();
 		void Unbind();
 
-		void BindTextures(uint32 ShaderID);
+		virtual void BindTextures(uint32 ShaderID);
 
 		void ClearAttachments();
 		void AddAttachment(const std::string& TextureUniformName, FrameBufferAttachmentType InType,
 			FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat, FrameBufferAttachmentDataType InDataType);
-
-		void SetDepthStencilAttachment(const std::string& DepthTextureName, const std::string& StencilTextureName, FrameBufferAttachmentType InType,
-			FrameBufferAttachmentFormat InFormat, FrameBufferAttachmentFormat InInternFormat, FrameBufferAttachmentDataType InDataType);
-		
+	
 		void SetSize(uint32 InSizeX, uint32 InSizeY, bool bRebuild = true);
-		void RebuildBuffer();
+		virtual void RebuildBuffer();
 
 		std::vector<FrameBufferAttachment*> Attachments;
-		std::unique_ptr<FrameBufferDepthStencilAttachment> DepthStencilAttachment;
 
 	protected:
 		uint32 ID;
@@ -97,4 +73,3 @@ namespace Durna
 		friend class RenderCommands;
 	};
 }
-

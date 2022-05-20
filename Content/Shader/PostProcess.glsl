@@ -64,6 +64,7 @@ void main()
     */
 
     //FragColor = Color;
-    FragColor = vec4(StencilMask);
+    //FragColor = vec4(StencilMask);
     //FragColor = vec4(SceneDepth);
+    FragColor = vec4(SceneDepth * StencilMask / 255.0f);
 }

@@ -12,6 +12,7 @@ namespace Durna
 	class PrimitiveComponent;
 	class FrameBuffer;
 	class RenderQueue;
+	class GBuffer;
 
 	class Renderer
 	{
@@ -43,7 +44,7 @@ namespace Durna
 		static std::unique_ptr<Window> MainWindow;
 		static float Time;
 
-		static std::shared_ptr<FrameBuffer> GBuffer;
+		static std::shared_ptr<GBuffer> Gbuffer;
 		static RenderQueue RenderQue;
 
 		static void UpdatePostProcessUniforms();
