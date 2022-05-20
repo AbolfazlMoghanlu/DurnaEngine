@@ -23,7 +23,7 @@ namespace Durna
 		// Blur
 		if (ImGui::CollapsingHeader("Blur", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ImGui::SliderFloat("Step Size", &Renderer::PPSetting.BlurStepSize, 0.0f, 0.02f);
+			ImGui::SliderFloat("Step Size", &Renderer::PPSetting.BlurStepSize, 0.0f, 0.01f);
 			ImGui::SliderInt("Step Number", &Renderer::PPSetting.BlurStepNumber, 0, 5);
 		}
 

@@ -47,5 +47,11 @@ namespace Durna
 		static RenderQueue RenderQue;
 
 		static void UpdatePostProcessUniforms();
+
+		static uint32 framebuffer;
+		static uint32 textureColorbuffer;
+		static uint32 textureDepth;
+		static uint32 textured;
+		static uint32 textures;
 	};
 }

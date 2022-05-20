@@ -21,7 +21,9 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D Buffer_Color;
-uniform sampler2D Buffer_Depth_Stencil;
+uniform usampler2D Buffer_Stencil;
+uniform sampler2D Buffer_Depth;
+
 
 // -------------------- Fog ---------------------
 uniform vec3 FogColor;
@@ -35,11 +37,13 @@ uniform int BlurStepNumber;
 
 void main()
 {
-    float SceneDepth = texture(Buffer_Depth_Stencil, TexCoords).x;
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
 
+    float SceneDepth = texture(Buffer_Depth, TexCoords).x;
+    uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
+
     vec4 Color = SceneColor;
-    
+    /*
     // blur
     for(int k = 1; k <= BlurStepNumber; k++)
     {
@@ -57,7 +61,9 @@ void main()
     // fog
     float FogAlpha = clamp((SceneDepth - FogOffset) / FogLength , 0, 1);
     Color = mix(Color, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
+    */
 
-
-    FragColor = Color;
+    //FragColor = Color;
+    FragColor = vec4(StencilMask);
+    //FragColor = vec4(SceneDepth);
 }

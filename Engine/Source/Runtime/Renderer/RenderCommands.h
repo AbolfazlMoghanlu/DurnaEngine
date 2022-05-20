@@ -26,8 +26,12 @@ namespace Durna
 		static void EnableBackFaceCulling();
 		static void DisableBackFaceCulling();
 
+		static void EnableStencilTest();
+		static void DisableStencilTest();
+
 		static void ClearColorBuffer();
 		static void ClearDepthBuffer();
+		static void ClearStencilBuffer();
 
 		static void SetDrawWireframe();
 

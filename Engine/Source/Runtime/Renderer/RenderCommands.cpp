@@ -53,7 +53,8 @@ namespace Durna
 			Comp->PreDrawFunc(Comp, Comp->SourceMaterial->GetShader());
 		}
 
-		//glStencilFunc(GL_GREATER, Comp->StencilMask, 0xFF);
+		glStencilFunc(GL_GREATER, Comp->StencilMask, 0xFF);
+		glStencilMask(0xFF);
 
 		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
@@ -109,6 +110,16 @@ namespace Durna
 		glDisable(GL_CULL_FACE);
 	}
 
+	void RenderCommands::EnableStencilTest()
+	{
+		glEnable(GL_STENCIL_TEST);
+	}
+
+	void RenderCommands::DisableStencilTest()
+	{
+		glDisable(GL_STENCIL_TEST);
+	}
+
 	void RenderCommands::ClearColorBuffer()
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -117,6 +128,11 @@ namespace Durna
 	void RenderCommands::ClearDepthBuffer()
 	{
 		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
+	void RenderCommands::ClearStencilBuffer()
+	{
+		glClear(GL_STENCIL_BUFFER_BIT);
 	}
 
 	void RenderCommands::SetDrawWireframe()
