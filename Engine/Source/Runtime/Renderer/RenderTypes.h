@@ -15,4 +15,13 @@ namespace Durna
 		Bit_8		= 128,
 		Bit_All		= 255
 	};
+
+	enum class DisplayBuffer : int32
+	{
+		FinalColor		= 0,
+		BaseColor		= 1,
+		WorldNormal		= 2,
+		SceneDepth		= 3,
+		Stencil			= 4
+	};
 }

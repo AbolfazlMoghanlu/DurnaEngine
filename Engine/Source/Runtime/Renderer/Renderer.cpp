@@ -30,6 +30,11 @@
 #include "Runtime/Renderer/GBuffer.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
+#if WITH_EDITOR
+	#include "Editor/Settings/Settings.h"
+#endif
+
+
 LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
@@ -44,11 +49,6 @@ namespace Durna
 	Material Renderer::PostProccessMaterial;
 	PostProcessSetting Renderer::PPSetting;
 
-	uint32 Renderer::framebuffer;
-	uint32 Renderer::textureColorbuffer;
-	uint32 Renderer::textureDepth;
-	uint32 Renderer::textured;
-	uint32 Renderer::textures;
 
 	void Renderer::UpdatePostProcessUniforms()
 	{
@@ -56,6 +56,12 @@ namespace Durna
 		{
 			PostProccessMaterial.Use();
 			
+#if WITH_EDITOR
+			// Display buffer
+			PostProccessMaterial.GetShader()->SetUniform1i("DisplayBufer",
+				static_cast<int32>(Settings::Get()->GetDisplayBuffer()));
+#endif
+
 			// Fog
 			PostProccessMaterial.GetShader()->SetUniformVec3f("FogColor", PPSetting.FogColor);
 			PostProccessMaterial.GetShader()->SetUniform1f("FogAmount", PPSetting.FogAmount);

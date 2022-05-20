@@ -4,12 +4,28 @@
 #if WITH_EDITOR
 #include "imgui.h"
 #include "Runtime/Renderer/Renderer.h"
+#include "Editor/Settings/Settings.h"
+#include "Runtime/Renderer/RenderTypes.h"
 
 namespace Durna
 {
 	void PostProcessSettingGuiLayer::Draw()
 	{
 		ImGui::Begin("Post Process Setting");
+
+		int32 a = 0;
+
+		ImGui::Text("Display Buffer");
+
+		int32* DisplayMode = (int32*)(&Settings::Get()->DisplayBufferMode);
+
+		ImGui::RadioButton("FinalColor",	 DisplayMode, 0);
+		ImGui::RadioButton("BaseColor",		 DisplayMode, 1);
+		ImGui::RadioButton("WorldNormal",	 DisplayMode, 2);
+		ImGui::RadioButton("SceneDepth",	 DisplayMode, 3);
+		ImGui::RadioButton("Stencil",		 DisplayMode, 4);
+
+		ImGui::Separator();
 
 		// Fog
 		if (ImGui::CollapsingHeader("Fog", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))

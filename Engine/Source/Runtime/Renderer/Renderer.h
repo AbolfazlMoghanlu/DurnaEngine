@@ -3,6 +3,7 @@
 #include "Runtime/Math/Vector3.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/PostProcessSetting.h"
+#include "Runtime/Renderer/RenderTypes.h"
 
 namespace Durna
 {
@@ -48,11 +49,5 @@ namespace Durna
 		static RenderQueue RenderQue;
 
 		static void UpdatePostProcessUniforms();
-
-		static uint32 framebuffer;
-		static uint32 textureColorbuffer;
-		static uint32 textureDepth;
-		static uint32 textured;
-		static uint32 textures;
 	};
 }

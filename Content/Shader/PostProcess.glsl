@@ -26,6 +26,8 @@ uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
 
 
+uniform int DisplayBufer;
+
 // -------------------- Fog ---------------------
 uniform vec3 FogColor;
 uniform float FogAmount;
@@ -86,9 +88,35 @@ void main()
             Color = vec4(1.0f, 0.75f, 0.4f, 1.0f);
     }
 
-    FragColor = vec4(Normal, 1);
-    //FragColor = Color;
-    //FragColor = vec4(StencilMask / 255.0);
-    //FragColor = vec4(SceneDepth);
-    //FragColor = vec4(SceneDepth * StencilMask / 255.0f) * Color;
+    switch(DisplayBufer)
+    {
+        // final color
+        case 0:
+           FragColor = Color; 
+        break;
+
+        // base color
+        case 1:
+           FragColor = SceneColor; 
+        break;
+
+        // world normal
+        case 2:
+           FragColor = vec4(Normal, 1); 
+        break;
+
+        // scene depth
+        case 3:
+           FragColor = vec4(SceneDepth);
+        break;
+
+        // stencil
+        case 4:
+           FragColor = vec4(StencilMask / 255.0f);
+        break;
+
+        default:
+           FragColor = Color; 
+        break;
+    }
 }

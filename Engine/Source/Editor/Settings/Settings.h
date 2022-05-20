@@ -2,6 +2,8 @@
 
 #if WITH_EDITOR
 
+#include "Runtime/Renderer/RenderTypes.h"
+
 namespace Durna
 {
 	class PostProcessSettingGuiLayer;
@@ -17,11 +19,17 @@ namespace Durna
 
 		static Settings* Get();
 
+		DisplayBuffer GetDisplayBuffer() const;
+
 	protected:
 		std::unique_ptr<PostProcessSettingGuiLayer> OutlinerGui;
 
 	private:
 		static std::unique_ptr<Settings> SingletonInstance;
+
+		DisplayBuffer DisplayBufferMode = DisplayBuffer::FinalColor;
+
+		friend class PostProcessSettingGuiLayer;
 	};
 }
 
