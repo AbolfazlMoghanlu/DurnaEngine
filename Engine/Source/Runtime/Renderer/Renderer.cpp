@@ -49,6 +49,13 @@ namespace Durna
 	Material Renderer::PostProccessMaterial;
 	PostProcessSetting Renderer::PPSetting;
 
+	
+	LinearColor Renderer::AmbientLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	float Renderer::AmbientLightIntensity = 1.0f;
+
+	LinearColor Renderer::DiffuseLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	float Renderer::DiffuseLightIntensity = 1.0f;
+	Rotatorf Renderer::DiffuseLightRation = Rotatorf(50.0f, 180.0f, 0.0f);
 
 	void Renderer::UpdatePostProcessUniforms()
 	{
@@ -57,6 +64,7 @@ namespace Durna
 			PostProccessMaterial.Use();
 			
 #if WITH_EDITOR
+
 			// Display buffer
 			PostProccessMaterial.GetShader()->SetUniform1i("DisplayBufer",
 				static_cast<int32>(Settings::Get()->GetDisplayBuffer()));
@@ -71,6 +79,14 @@ namespace Durna
 			//Blur
 			PostProccessMaterial.GetShader()->SetUniform1f("BlurStepSize", PPSetting.BlurStepSize);
 			PostProccessMaterial.GetShader()->SetUniform1i("BlurStepNumber", PPSetting.BlurStepNumber);
+
+			// Light
+			PostProccessMaterial.GetShader()->SetUniformVec3f("AmbientLightColor", AmbientLightColor);
+			PostProccessMaterial.GetShader()->SetUniform1f("AmbientLightIntensity", AmbientLightIntensity);
+
+			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightColor", DiffuseLightColor);
+			PostProccessMaterial.GetShader()->SetUniform1f("DiffuseLightIntensity", DiffuseLightIntensity);
+			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightDirection", DiffuseLightRation.GetForwardVector());
 		}
 	}
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Runtime/Math/Vector3.h"
+#include "Runtime/Math/Rotator.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/PostProcessSetting.h"
 #include "Runtime/Renderer/RenderTypes.h"
@@ -37,6 +38,13 @@ namespace Durna
 		static Material PostProccessMaterial;
 
 		static PostProcessSetting PPSetting;
+
+		static LinearColor AmbientLightColor;
+		static float AmbientLightIntensity;
+
+		static LinearColor DiffuseLightColor;
+		static float DiffuseLightIntensity;
+		static Rotatorf DiffuseLightRation;
 
 	protected:
 		

@@ -43,6 +43,16 @@ namespace Durna
 			ImGui::SliderInt("Step Number", &Renderer::PPSetting.BlurStepNumber, 0, 5);
 		}
 
+		if (ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::ColorEdit3("Ambient Light Color", &Renderer::AmbientLightColor.R);
+			ImGui::SliderFloat("Ambient Light Intensity", &Renderer::AmbientLightIntensity, 0, 5);
+
+			ImGui::ColorEdit3("Diffuse Light Color", &Renderer::DiffuseLightColor.R);
+			ImGui::SliderFloat("Diffuse Light Intensity", &Renderer::DiffuseLightIntensity, 0, 5);
+			ImGui::SliderFloat3("Diffuse Light Rotation", &Renderer::DiffuseLightRation.Pitch, 0.0f, 360.0f);
+		}
+
 		ImGui::End();
 	}
 }

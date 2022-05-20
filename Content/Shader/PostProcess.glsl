@@ -28,6 +28,14 @@ uniform sampler2D Buffer_Depth;
 
 uniform int DisplayBufer;
 
+// -------------------- Light -------------------
+uniform vec3 AmbientLightColor;
+uniform float AmbientLightIntensity;
+
+uniform vec3 DiffuseLightColor;
+uniform float DiffuseLightIntensity;
+uniform vec3 DiffuseLightDirection;
+
 // -------------------- Fog ---------------------
 uniform vec3 FogColor;
 uniform float FogAmount;
@@ -48,6 +56,20 @@ void main()
 
     vec4 Color = SceneColor;
     
+
+    // light
+
+    if(StencilMask != 64)
+    {
+        vec4 AmbientLight = vec4(AmbientLightColor, 1) * AmbientLightIntensity;
+        vec4 DiffuseLight = vec4(DiffuseLightColor, 1) * max(dot(Normal, DiffuseLightDirection), 0) * DiffuseLightIntensity;
+   
+        Color = Color * (AmbientLight + DiffuseLight);
+    }
+
+
+    //Color *= AmbientLight;
+
     // blur
     for(int k = 1; k <= BlurStepNumber; k++)
     {
