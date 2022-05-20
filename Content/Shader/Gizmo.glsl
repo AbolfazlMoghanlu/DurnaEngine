@@ -10,8 +10,10 @@ uniform vec3 CameraLocation;
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 TexCoord;
+layout (location = 2) in vec3 VNormal;
 
 out vec2 UVs;
+out vec3 WorldNormal;
 
 void main()
 {
@@ -20,18 +22,24 @@ void main()
 	gl_Position =  Projection * View * Transform * vec4(aPos * len, 1);
 
 	UVs = TexCoord;
+	WorldNormal = normalize((Transform * vec4(VNormal, 0)).xyz);
 }
 
 
 #type fragment
 #version 460 core
 
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out vec3 Normal;
+
+in vec3 WorldNormal;
 in vec2 UVs;
-out vec4 FragColor;
 
 uniform sampler2D BaseColor;
 
 void main()
 {
 	FragColor = texture(BaseColor, vec2(UVs.x, UVs.y * -1));
+
+	Normal = WorldNormal;
 }

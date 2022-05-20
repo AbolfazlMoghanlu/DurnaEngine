@@ -14,36 +14,28 @@ uniform float time;
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 2) in vec3 VNormal;
-layout (location = 3) in vec4 VColor;
 
 out vec4 V_Color;
 out vec2 TexCoord;
-out vec3 TanNormal;
 out vec3 WorldNormal;
 
 void main()
 {
 	gl_Position =  Projection * View * Transform * vec4(aPos, 1);
 
-	V_Color = VColor;
 	TexCoord = aTexCoord;
-	TanNormal = VNormal * 2 - 1;
-	WorldNormal = normalize((Transform * vec4(TanNormal, 0)).xyz);
+	WorldNormal = normalize((Transform * vec4(VNormal, 0)).xyz);
 }
 
 
 #type fragment
 #version 460 core
 
-//out vec4 FragColor;
-
 layout(location = 0) out vec4 FragColor;
-layout(location = 1) out vec4 Normal;
+layout(location = 1) out vec3 Normal;
 
 
-in vec4 V_Color;
 in vec2 TexCoord;
-in vec3 TanNormal;
 in vec3 WorldNormal;
 
 uniform sampler2D texture1;
@@ -58,9 +50,7 @@ void main()
 	vec4 Color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
 
 	float DirectionalLight = dot(WorldNormal, vec3(1, 0, 0));
-
 	FragColor = Color * ((DirectionalLight * .4) + .8) * vec4(0.7, 0.4, 0.15, 1.0);
-	FragColor = normalize(Transform * vec4(TanNormal, 0));
-	//Normal = vec4(WorldNormal, 1);
-	Normal = vec4(TanNormal, 1);
+
+	Normal = WorldNormal;
 }

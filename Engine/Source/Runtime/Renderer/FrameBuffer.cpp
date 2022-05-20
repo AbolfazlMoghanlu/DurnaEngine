@@ -54,7 +54,7 @@ namespace Durna
 			BufferAttachments.push_back(static_cast<uint32>(Attachment->Type));
 		}
 
-		glDrawBuffers(BufferAttachments.size(), &BufferAttachments.at(0));
+		glDrawBuffers((uint32)BufferAttachments.size(), &BufferAttachments.at(0));
 	}
 
 	void FrameBuffer::UnbindDrawBuffers()

@@ -35,7 +35,7 @@ void GameApplication::Init()
 	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh);
 
 	SkyComponent = new PrimitiveComponent("SkyMesh");
-	SkyComponent->SetStaticMesh(SkyMesh, true);
+	SkyComponent->SetStaticMesh(SkyMesh, 1, 1);
 	SkyComponent->GetMaterial()->SetShader(AssetLibrary::SkyShader);
 	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyTexture", AssetLibrary::SkyTexture));
 	SkyComponent->BindPreDraw(
@@ -59,7 +59,7 @@ void GameApplication::Init()
 	World::AddActor(SkySphere);
 
 	WorldGizmo = new StaticMeshActor();
-	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1);
+	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1, 1);
 	WorldGizmo->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::GizmoShader);
 	WorldGizmo->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("BaseColor", AssetLibrary::RgbTexture));
 	WorldGizmo->GetMeshComponent()->BindPreDraw(
@@ -77,7 +77,7 @@ void GameApplication::Init()
 	World::AddActor(WorldGizmo);
 	
 	pr1 = new PrimitiveComponent("PrimitiveComponent_1");
-	pr1->SetStaticMesh(CubeMesh, true, true, true);
+	pr1->SetStaticMesh(CubeMesh, 1, 1);
 	pr1->GetMaterial()->SetShader(AssetLibrary::BaseShader);
 	pr1->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
 	pr1->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
@@ -85,7 +85,7 @@ void GameApplication::Init()
 	pr1->StencilMask = StencilMaskBitfield::Bit_6;
 
 	pr2 = new PrimitiveComponent("PrimitiveComponent_2");
-	pr2->SetStaticMesh(CubeMesh, true, true, true);
+	pr2->SetStaticMesh(CubeMesh, 1, 1);
 	pr2->GetMaterial()->SetShader(AssetLibrary::BaseShader);
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
