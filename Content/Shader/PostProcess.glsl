@@ -43,7 +43,7 @@ void main()
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
 
     vec4 Color = SceneColor;
-    /*
+    
     // blur
     for(int k = 1; k <= BlurStepNumber; k++)
     {
@@ -61,10 +61,10 @@ void main()
     // fog
     float FogAlpha = clamp((SceneDepth - FogOffset) / FogLength , 0, 1);
     Color = mix(Color, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
-    */
+    
 
     //FragColor = Color;
-    //FragColor = vec4(StencilMask);
+    //FragColor = vec4(StencilMask / 255.0);
     //FragColor = vec4(SceneDepth);
-    FragColor = vec4(SceneDepth * StencilMask / 255.0f);
+    FragColor = vec4(SceneDepth * StencilMask / 255.0f) * Color;
 }

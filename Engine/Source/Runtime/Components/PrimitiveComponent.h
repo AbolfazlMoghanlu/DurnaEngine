@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Runtime/Components/SceneComponent.h"
+#include "Runtime/Renderer/RenderTypes.h"
 
 namespace Durna
 {
@@ -30,7 +31,8 @@ namespace Durna
 
 		Material* GetMaterial() const;
 
-		int32 StencilMask = 0;
+		int32 StencilValue = 0;
+		StencilMaskBitfield StencilMask = StencilMaskBitfield::Bit_None;
 
 	private:
 		StaticMesh* Mesh;

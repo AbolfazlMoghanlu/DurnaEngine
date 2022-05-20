@@ -29,6 +29,8 @@ namespace Durna
 		static void EnableStencilTest();
 		static void DisableStencilTest();
 
+		static void SetStencilOperationReplace();
+
 		static void ClearColorBuffer();
 		static void ClearDepthBuffer();
 		static void ClearStencilBuffer();

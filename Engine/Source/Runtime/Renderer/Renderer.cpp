@@ -98,11 +98,11 @@ namespace Durna
 		RenderCommands::SetClearColor(LinearColor(0.2f, 0.2f, 0.3f, 1.0f));
 		RenderCommands::EnableBackFaceCulling();
 
+		RenderCommands::SetStencilOperationReplace();
+
 		Gbuffer = GBuffer::Create();
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
-
-		//RenderCommands::SetDrawWireframe();
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -113,14 +113,13 @@ namespace Durna
 		Gbuffer->Bind();
 
 		RenderCommands::ClearColorBuffer();
-		RenderCommands::ClearDepthBuffer();
-		RenderCommands::EnableDepthTest();
-		
-		glEnable(GL_STENCIL_TEST);
-		glStencilMask(0xFF);
-		glClear(GL_STENCIL_BUFFER_BIT);
 
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		RenderCommands::EnableDepthTest();
+		RenderCommands::ClearDepthBuffer();
+
+		RenderCommands::EnableStencilTest();
+		RenderCommands::ClearStencilBuffer();
+
 
 		for (PrimitiveComponent* Pr : RenderQue.Queue)
 		{
@@ -137,21 +136,12 @@ namespace Durna
 		RenderCommands::DisableStencilTest();
 
 
-		PostProccessMaterial.GetShader()->Use();
-
-
-		Gbuffer->BindTextures(PostProccessMaterial.GetShader()->ID);
-		AssetLibrary::ScreenQuad->VA->Bind();
-
-		glDrawElements(GL_TRIANGLES, AssetLibrary::ScreenQuad->EB->GetCount(), GL_UNSIGNED_INT, 0);
-
-
+		PostProccessMaterial.GetShader()->Use();		
 #if WITH_EDITOR
 		UpdatePostProcessUniforms();
 #endif
+ 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
 
- 		//GBuffer->BindTextures(PostProccessMaterial.GetShader()->ID);
- 		//RenderCommands::DrawFrameBufferToScreen(GBuffer.get(), &PostProccessMaterial);
 
 #if WITH_EDITOR
 		ImGuiRenderer::Get()->Tick(DeltaTime);

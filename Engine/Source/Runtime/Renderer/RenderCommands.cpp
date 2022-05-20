@@ -53,31 +53,21 @@ namespace Durna
 			Comp->PreDrawFunc(Comp, Comp->SourceMaterial->GetShader());
 		}
 
-		glStencilFunc(GL_GREATER, Comp->StencilMask, 0xFF);
-		glStencilMask(0xFF);
-
+		glStencilFunc(GL_ALWAYS, Comp->StencilValue, 0xFF);
+		glStencilMask(static_cast<uint32>(Comp->StencilMask));
+		
 		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
 
-	
+
 	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial)
 	{
 		if (InFrameBuffer && InMaterial && InMaterial->GetShader())
 		{
 			InMaterial->GetShader()->Use();
-
-			for (int32 i = 0; i < InFrameBuffer->Attachments.size(); i++)
-			{
-				Texture::ActivateTexture(i);
-				glBindTexture(GL_TEXTURE_2D, InFrameBuffer->Attachments[i]->TextureID);
-
-				int UniformLocation = glGetUniformLocation(InMaterial->GetShader()->ID,
-					InFrameBuffer->Attachments[i]->TextureUniformName.c_str());
-				glUniform1i(UniformLocation, i);
-			}
+			InFrameBuffer->BindTextures(InMaterial->GetShader()->ID);
 
 			AssetLibrary::ScreenQuad->VA->Bind();
-
 			glDrawElements(GL_TRIANGLES, AssetLibrary::ScreenQuad->EB->GetCount(), GL_UNSIGNED_INT, 0);
 		}
 	}
@@ -120,6 +110,11 @@ namespace Durna
 		glDisable(GL_STENCIL_TEST);
 	}
 
+	void RenderCommands::SetStencilOperationReplace()
+	{
+		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+	}
+
 	void RenderCommands::ClearColorBuffer()
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -132,6 +127,7 @@ namespace Durna
 
 	void RenderCommands::ClearStencilBuffer()
 	{
+		glStencilMask(0xFF);
 		glClear(GL_STENCIL_BUFFER_BIT);
 	}
 
