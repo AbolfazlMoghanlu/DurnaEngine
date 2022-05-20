@@ -13,7 +13,7 @@ namespace Durna
 		float FogLength = 2.0f;
 
 		// Blur
-		float BlurStepSize = 0.003f;
-		int32 BlurStepNumber = 3;
+		float BlurStepSize = 0.0f;
+		int32 BlurStepNumber = 0;
 	};
 }

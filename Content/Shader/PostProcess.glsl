@@ -63,8 +63,29 @@ void main()
     Color = mix(Color, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
     
 
-    //FragColor = Color;
+    // is selected in editor
+    if(StencilMask >= 128)
+    {
+        float StepSize = 0.01f;
+        StepSize *= SceneDepth * 0.2f;
+
+        uint SelectedNeighborFragmentNumber = 0;
+
+        for(int i = -1; i <= 1; i++)
+        {
+            for(int j = -1; j <= 1; j++)
+            {
+                if(texture(Buffer_Stencil, TexCoords + (vec2(i, j) * StepSize)).x >= 128)
+                    SelectedNeighborFragmentNumber++;
+            }
+        }
+
+        if(SelectedNeighborFragmentNumber < 7)
+            Color = vec4(1.0f, 0.75f, 0.4f, 1.0f);
+    }
+
+    FragColor = Color;
     //FragColor = vec4(StencilMask / 255.0);
     //FragColor = vec4(SceneDepth);
-    FragColor = vec4(SceneDepth * StencilMask / 255.0f) * Color;
+    //FragColor = vec4(SceneDepth * StencilMask / 255.0f) * Color;
 }

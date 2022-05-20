@@ -44,8 +44,8 @@ void GameApplication::Init()
 			InShader->SetUniform1f("SkyLightIntensity", Durna::ImGuiRenderer::Get()->SkyLightIntensity);
 		});
 
-	SkyComponent->StencilValue = 128;
-	SkyComponent->StencilMask = StencilMaskBitfield::Bit_8;
+	SkyComponent->StencilValue = 64;
+	SkyComponent->StencilMask = StencilMaskBitfield::Bit_7;
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
@@ -89,8 +89,8 @@ void GameApplication::Init()
 	pr2->GetMaterial()->SetShader(AssetLibrary::BaseShader);
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture1", AssetLibrary::TileTexture));
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
-	pr2->StencilValue = 64;
-	pr2->StencilMask = StencilMaskBitfield::Bit_7;
+	pr2->StencilValue = 16;
+	pr2->StencilMask = StencilMaskBitfield::Bit_5;
 
 	Actor1 = new Actor;
 	Actor1->AttachSceneComponent(pr1);

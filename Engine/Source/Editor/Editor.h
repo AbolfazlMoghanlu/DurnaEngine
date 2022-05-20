@@ -26,6 +26,12 @@ namespace Durna
 		void ClearSelectedComponent();
 		SceneComponent* GetSelectedComponent() const;
 
+		bool IsComponentSelected(SceneComponent* InComponent) const;
+		bool IsActorSelected(Actor* InActor) const;
+		bool IsOwningActorSelected(SceneComponent* InComponent);
+		bool bIsAnyActorSelected() const;
+		bool bIsAnyComponentSelected() const;
+
 	protected:
 
 	private:

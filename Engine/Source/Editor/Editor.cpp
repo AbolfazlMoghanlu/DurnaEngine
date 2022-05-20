@@ -72,6 +72,32 @@ namespace Durna
 		return SelectedComponent;
 	}
 
+
+
+	bool Editor::IsComponentSelected(SceneComponent* InComponent) const
+	{
+		return InComponent ? SelectedComponent == InComponent : false;
+	}
+
+	bool Editor::IsActorSelected(Actor* InActor) const
+	{
+		return InActor ? SelectedActor == InActor : false;
+	}
+
+	bool Editor::IsOwningActorSelected(SceneComponent* InComponent)
+	{
+		return InComponent ? IsActorSelected(InComponent->GetOwningActor()) : false;
+	}
+
+	bool Editor::bIsAnyActorSelected() const
+	{
+		return SelectedActor != nullptr;
+	}
+
+	bool Editor::bIsAnyComponentSelected() const
+	{
+		return SelectedComponent != nullptr;
+	}
 }
 
 #endif

@@ -18,6 +18,8 @@
 
 #include "Runtime/Engine/Actor.h"
 
+#include "Editor/Editor.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
@@ -53,8 +55,20 @@ namespace Durna
 			Comp->PreDrawFunc(Comp, Comp->SourceMaterial->GetShader());
 		}
 
-		glStencilFunc(GL_ALWAYS, Comp->StencilValue, 0xFF);
-		glStencilMask(static_cast<uint32>(Comp->StencilMask));
+		uint32 StencilValue = Comp->StencilValue;
+		uint32 StencilMask = static_cast<uint32>(Comp->StencilValue);
+
+#if WITH_EDITOR
+		if (Editor::Get()->IsOwningActorSelected(Comp) & 
+			(!Editor::Get()->bIsAnyComponentSelected() || Editor::Get()->IsComponentSelected(Comp)))
+		{
+			StencilValue |= 128;
+			StencilMask |= 128;
+		}
+#endif
+
+		glStencilFunc(GL_ALWAYS, StencilValue, 0xFF);
+		glStencilMask(StencilMask);
 		
 		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}
