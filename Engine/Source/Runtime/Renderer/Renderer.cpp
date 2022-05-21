@@ -160,10 +160,11 @@ namespace Durna
 		RenderCommands::DisableStencilTest();
 
 
-		PostProccessMaterial.GetShader()->Use();		
+		PostProccessMaterial.GetShader()->Use();
 #if WITH_EDITOR
 		UpdatePostProcessUniforms();
 #endif
+		
  		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
 
 

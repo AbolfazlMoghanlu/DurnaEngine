@@ -24,6 +24,10 @@ namespace Durna
 		ImGui::RadioButton("WorldNormal",	 DisplayMode, 2);
 		ImGui::RadioButton("SceneDepth",	 DisplayMode, 3);
 		ImGui::RadioButton("Stencil",		 DisplayMode, 4);
+		ImGui::RadioButton("Specular",		 DisplayMode, 5);
+		ImGui::RadioButton("Roughness",		 DisplayMode, 6);
+		ImGui::RadioButton("Metallic",		 DisplayMode, 7);
+		ImGui::RadioButton("AO",			 DisplayMode, 8);
 
 		ImGui::Separator();
 

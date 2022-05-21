@@ -15,6 +15,7 @@
 #include "Runtime/Engine/Camera/CameraManager.h"
 #include "Runtime/Renderer/FrameBuffer.h"
 #include "Runtime/Assets/AssetLibrary.h"
+#include "Runtime/Renderer/CommonRenderUniforms.h"
 
 #include "Runtime/Engine/Actor.h"
 
@@ -80,6 +81,8 @@ namespace Durna
 		{
 			InMaterial->GetShader()->Use();
 			InFrameBuffer->BindTextures(InMaterial->GetShader()->ID);
+
+			CommonRenderUniforms::UploadCameraLocation(InMaterial->GetShader());
 
 			AssetLibrary::ScreenQuad->VA->Bind();
 			glDrawElements(GL_TRIANGLES, AssetLibrary::ScreenQuad->EB->GetCount(), GL_UNSIGNED_INT, 0);

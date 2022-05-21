@@ -22,6 +22,10 @@ namespace Durna
 		BaseColor		= 1,
 		WorldNormal		= 2,
 		SceneDepth		= 3,
-		Stencil			= 4
+		Stencil			= 4,
+		Specular		= 5,
+		Roughness		= 6,
+		Metallic		= 7,
+		AO				= 8
 	};
 }

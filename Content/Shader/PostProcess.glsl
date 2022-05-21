@@ -20,10 +20,15 @@ out vec4 FragColor;
   
 in vec2 TexCoords;
 
+uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
 uniform sampler2D Buffer_Normal;
+uniform sampler2D Buffer_Specular_Roughness_Metalic_AO;
 uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
+
+
+uniform vec3 CameraLocation;
 
 
 uniform int DisplayBufer;
@@ -50,6 +55,15 @@ void main()
 {
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
     vec3 Normal = texture(Buffer_Normal, TexCoords).xyz;
+    vec3 WorldPosition = texture(Buffer_Position, TexCoords).xyz;
+
+    vec4 S_R_M_AO = texture(Buffer_Specular_Roughness_Metalic_AO, TexCoords);
+
+    float Specular   = S_R_M_AO.x;
+    float Roughness  = S_R_M_AO.y;
+    float Metallic    = S_R_M_AO.z;
+    float AO         = S_R_M_AO.w;
+
 
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
@@ -61,10 +75,16 @@ void main()
 
     if(StencilMask != 64)
     {
-        vec4 AmbientLight = vec4(AmbientLightColor, 1) * AmbientLightIntensity;
-        vec4 DiffuseLight = vec4(DiffuseLightColor, 1) * max(dot(Normal, DiffuseLightDirection), 0) * DiffuseLightIntensity;
+        vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
+        vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, DiffuseLightDirection), 0) * DiffuseLightIntensity;
+
+       vec3 ViewDirection = normalize(CameraLocation - WorldPosition);
+       vec3 ReflectionVector = reflect(-DiffuseLightDirection, Normal);
+       float SpecularLightFactor = pow(max(dot(ViewDirection, ReflectionVector), 0), Specular * 32);
    
-        Color = Color * (AmbientLight + DiffuseLight);
+       DiffuseLight *= (1 + SpecularLightFactor);
+
+       Color = Color * vec4((AmbientLight + DiffuseLight), 1);
     }
 
 
@@ -136,6 +156,28 @@ void main()
         case 4:
            FragColor = vec4(StencilMask / 255.0f);
         break;
+        
+        // specular
+        case 5:
+           FragColor = vec4(Specular);
+        break;
+
+        // roughness
+        case 6:
+           FragColor = vec4(Roughness);
+        break;
+
+        // metallic
+        case 7:
+           FragColor = vec4(Metallic);
+        break;
+
+        // ao
+        case 8:
+           FragColor = vec4(AO);
+        break;
+
+
 
         default:
            FragColor = Color; 

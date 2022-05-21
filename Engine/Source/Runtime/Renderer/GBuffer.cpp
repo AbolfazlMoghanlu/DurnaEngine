@@ -13,12 +13,20 @@ namespace Durna
 		glGenTextures(1, &DepthTextureID);
 		glGenTextures(1, &StencilTextureID);
 
- 		AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0,
+		AddAttachment("Buffer_Position", FrameBufferAttachmentType::Color_0,
+			FrameBufferAttachmentFormat::RGB, FrameBufferAttachmentFormat::RGB32f,
+			FrameBufferAttachmentDataType::Float);
+
+ 		AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_1,
  			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
  			FrameBufferAttachmentDataType::uByte);
 
-		AddAttachment("Buffer_Normal", FrameBufferAttachmentType::Color_1,
+		AddAttachment("Buffer_Normal", FrameBufferAttachmentType::Color_2,
 			FrameBufferAttachmentFormat::RGB, FrameBufferAttachmentFormat::RGB32f,
+			FrameBufferAttachmentDataType::Float);
+
+		AddAttachment("Buffer_Specular_Roughness_Metalic_AO", FrameBufferAttachmentType::Color_3,
+			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA32f,
 			FrameBufferAttachmentDataType::Float);
 		
 		RebuildBuffer();

@@ -83,6 +83,11 @@ void GameApplication::Init()
 	pr1->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
 	pr1->StencilValue = 32;
 	pr1->StencilMask = StencilMaskBitfield::Bit_6;
+	pr1->BindPreDraw(
+		[](PrimitiveComponent* InComponent, Shader* InShader)
+		{
+			InShader->SetUniform1f("Specular", 0.5f);
+		});
 
 	pr2 = new PrimitiveComponent("PrimitiveComponent_2");
 	pr2->SetStaticMesh(CubeMesh, 1, 1);
@@ -91,6 +96,11 @@ void GameApplication::Init()
 	pr2->GetMaterial()->AddTextureElement(TextureElement("texture2", AssetLibrary::WallTexture));
 	pr2->StencilValue = 16;
 	pr2->StencilMask = StencilMaskBitfield::Bit_5;
+	pr2->BindPreDraw(
+		[](PrimitiveComponent* InComponent, Shader* InShader)
+		{
+			InShader->SetUniform1f("Specular", 0.8f);
+		});
 
 	Actor1 = new Actor;
 	Actor1->AttachSceneComponent(pr1);
