@@ -114,6 +114,28 @@ void GameApplication::Init()
 
 	World::AddActor(Actor1);
 
+	
+	RockActor = new StaticMeshActor();
+	RockActor->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMesh, 1, 1);
+	RockActor->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::RockShader);
+	RockActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureAlbedo", AssetLibrary::Rock_Al_Texture));
+	RockActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureNormal", AssetLibrary::Rock_N_Texture));
+	RockActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureMasks", AssetLibrary::Rock_S_R_M_AO_Texture));
+	RockActor->GetMeshComponent()->StencilValue = 16;
+	RockActor->GetMeshComponent()->StencilMask = StencilMaskBitfield::Bit_5;
+
+	RockActor->SetActorLocation(Vector3f(0.5f, 0.0f, -0.2f));
+	RockActor->SetActorRotation(Rotatorf(0.0f, 00.0f, 270.0f));
+	RockActor->SetActorScale(Vector3f(0.1f));
+
+#if WITH_EDITOR
+	RockActor->SetActorLabel("Rock");
+#endif
+
+	World::AddActor(RockActor);
+	
+
+
 	CameraActor* CameraAct = new CameraActor;
 
 	CameraAct->GetCameraComponent()->SetFOV(45.0);

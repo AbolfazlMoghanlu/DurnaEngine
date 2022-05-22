@@ -13,12 +13,22 @@
 namespace Durna
 {
 	StaticMesh* AssetLibrary::GizmoMesh;
+	StaticMesh* AssetLibrary::RockMesh;
+
 	PrimitiveComponent* AssetLibrary::ScreenQuad;
 
 	Image* AssetLibrary::TileImage;
 	Image* AssetLibrary::WallImage;
 	Image* AssetLibrary::SkyImage;
 	Image* AssetLibrary::RgbImage;
+
+	Image* AssetLibrary::Rock_Al_Image;
+	Image* AssetLibrary::Rock_N_Image;
+	Image* AssetLibrary::Rock_S_R_M_AO_Image;
+
+	Texture* AssetLibrary::Rock_Al_Texture;
+	Texture* AssetLibrary::Rock_N_Texture;
+	Texture* AssetLibrary::Rock_S_R_M_AO_Texture;
 
 	Texture* AssetLibrary::TileTexture;
 	Texture* AssetLibrary::WallTexture;
@@ -30,11 +40,15 @@ namespace Durna
 	Shader* AssetLibrary::SkyShader;
 	Shader* AssetLibrary::GizmoShader;
 	Shader* AssetLibrary::PostProcessShader;
+	Shader* AssetLibrary::RockShader;
 
 	void AssetLibrary::Init()
 	{
 		GizmoMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh);
+
+		RockMesh = new StaticMesh;
+		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.obj"), RockMesh);
 
 		ScreenQuad = new PrimitiveComponent("ScreenQuad");
 		ScreenQuad->SetStaticMesh(&BaseShapes::Plane, 1);
@@ -44,14 +58,23 @@ namespace Durna
 		SkyImage = new Image(Path::TextureRelativePath("T_Sky.jpg").c_str());
 		RgbImage = new Image(Path::TextureRelativePath("T_Rgb.png").c_str());
 
+		Rock_Al_Image = new Image(Path::TextureRelativePath("T_Rock_Al.jpg").c_str());
+		Rock_N_Image = new Image(Path::TextureRelativePath("T_Rock_N.jpg").c_str());
+		Rock_S_R_M_AO_Image = new Image(Path::TextureRelativePath("T_Rock_S_R_M_AO.png").c_str());
+
 		TileTexture = new Texture(TileImage);
 		WallTexture = new Texture(WallImage);
 		SkyTexture = new Texture(SkyImage);
 		RgbTexture = new Texture(RgbImage);
 
+		Rock_Al_Texture = new Texture(Rock_Al_Image);
+		Rock_N_Texture = new Texture(Rock_N_Image);
+		Rock_S_R_M_AO_Texture = new Texture(Rock_S_R_M_AO_Image);
+
 		BaseShader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		SkyShader = new Shader(Path::ShaderRelativePath("SkySphere.glsl"));
 		GizmoShader = new Shader(Path::ShaderRelativePath("Gizmo.glsl"));
 		PostProcessShader = new Shader(Path::ShaderRelativePath("PostProcess.glsl"));
+		RockShader = new Shader(Path::ShaderRelativePath("RockShader.glsl"));
 	}
 }

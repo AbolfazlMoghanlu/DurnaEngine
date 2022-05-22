@@ -32,5 +32,7 @@ private:
 
 	Durna::StaticMesh* SkyMesh = nullptr;
 	Durna::StaticMesh* CubeMesh = nullptr;
+
+	StaticMeshActor* RockActor = nullptr;
 };
 

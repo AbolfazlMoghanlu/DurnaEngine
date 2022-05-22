@@ -1,4 +1,14 @@
-add #include support in .glsl files
-add ability to copy compiled shaders
 
-handle garbage collection
+# features
+	make asset managment system
+	render viewport to a seprate widget
+
+# todo
+	add #include support in .glsl files
+	add ability to copy compiled shaders
+	add tangent and bio tangent to static mesh data and use them for calculating tangent normal
+
+
+# known issues
+	green channel of texture inputs should be fliped
+	rotator(0,0,0) is'nt aligned with world zero rotation

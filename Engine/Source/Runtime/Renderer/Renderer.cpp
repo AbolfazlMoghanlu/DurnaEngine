@@ -51,7 +51,7 @@ namespace Durna
 
 	
 	LinearColor Renderer::AmbientLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	float Renderer::AmbientLightIntensity = 1.0f;
+	float Renderer::AmbientLightIntensity = 0.5f;
 
 	LinearColor Renderer::DiffuseLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	float Renderer::DiffuseLightIntensity = 1.0f;

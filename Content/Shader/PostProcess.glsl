@@ -75,8 +75,8 @@ void main()
 
     if(StencilMask != 64)
     {
-        vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
-        vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, DiffuseLightDirection), 0) * DiffuseLightIntensity;
+       vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
+       vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, DiffuseLightDirection), 0) * DiffuseLightIntensity;
 
        vec3 ViewDirection = normalize(CameraLocation - WorldPosition);
        vec3 ReflectionVector = reflect(-DiffuseLightDirection, Normal);
@@ -87,8 +87,6 @@ void main()
        Color = Color * vec4((AmbientLight + DiffuseLight), 1);
     }
 
-
-    //Color *= AmbientLight;
 
     // blur
     for(int k = 1; k <= BlurStepNumber; k++)
