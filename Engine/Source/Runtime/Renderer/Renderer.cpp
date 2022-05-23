@@ -23,11 +23,12 @@
 
 #include "Runtime/Math/LinearColor.h"
 
-#include "Runtime/renderer/FrameBuffer.h"
+#include "Runtime/renderer/FrameBuffer/FrameBuffer.h"
 #include "Runtime/Renderer/RenderQueue.h"
 
 #include "Runtime/Renderer/Buffer.h"
-#include "Runtime/Renderer/GBuffer.h"
+#include "Runtime/Renderer/FrameBuffer/GBuffer.h"
+#include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
 #if WITH_EDITOR
@@ -43,10 +44,13 @@ namespace Durna
 	float Renderer::Time = 0.0f;
 
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
+	std::shared_ptr<ResolveDefferedBuffer> Renderer::ResolvedBuffer = nullptr;
 
 	RenderQueue Renderer::RenderQue;
 
 	Material Renderer::PostProccessMaterial;
+	Material Renderer::ResolvedMaterial;
+
 	PostProcessSetting Renderer::PPSetting;
 
 	
@@ -123,8 +127,10 @@ namespace Durna
 		RenderCommands::SetStencilOperationReplace();
 
 		Gbuffer = GBuffer::Create();
+		ResolvedBuffer = ResolveDefferedBuffer::Create();
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
+		ResolvedMaterial.SetShader(AssetLibrary::ResolvedShader);
 	}
 
 	void Renderer::Tick(float DeltaTime)
@@ -155,9 +161,12 @@ namespace Durna
 		Gbuffer->Unbind();
 		Gbuffer->UnbindDrawBuffers();
 
-		RenderCommands::ClearColorBuffer();
 		RenderCommands::DisableDepthTest();
 		RenderCommands::DisableStencilTest();
+
+		ResolvedBuffer->Bind();
+		ResolvedBuffer->BindDrawBuffers();
+		RenderCommands::ClearColorBuffer();
 
 
 		PostProccessMaterial.GetShader()->Use();
@@ -167,6 +176,12 @@ namespace Durna
 		
  		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
 
+
+		ResolvedBuffer->Unbind();
+		ResolvedBuffer->Unbind();
+		RenderCommands::ClearColorBuffer();
+
+		RenderCommands::DrawFrameBufferToScreen(ResolvedBuffer.get(), &ResolvedMaterial);
 
 #if WITH_EDITOR
 		ImGuiRenderer::Get()->Tick(DeltaTime);

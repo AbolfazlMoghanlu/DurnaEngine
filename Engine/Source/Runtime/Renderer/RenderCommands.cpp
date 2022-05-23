@@ -13,7 +13,7 @@
 #include "Runtime/Math/OrthoMatrix.h"
 #include "Runtime/Renderer/Renderer.h"
 #include "Runtime/Engine/Camera/CameraManager.h"
-#include "Runtime/Renderer/FrameBuffer.h"
+#include "Runtime/Renderer/FrameBuffer/FrameBuffer.h"
 #include "Runtime/Assets/AssetLibrary.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
 

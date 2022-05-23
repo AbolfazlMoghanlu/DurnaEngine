@@ -15,6 +15,7 @@ namespace Durna
 	class FrameBuffer;
 	class RenderQueue;
 	class GBuffer;
+	class ResolveDefferedBuffer;
 
 	class Renderer
 	{
@@ -36,6 +37,7 @@ namespace Durna
 		static void RegisterToRenderQueue(PrimitiveComponent* Pr);
 
 		static Material PostProccessMaterial;
+		static Material ResolvedMaterial;
 
 		static PostProcessSetting PPSetting;
 
@@ -46,6 +48,9 @@ namespace Durna
 		static float DiffuseLightIntensity;
 		static Rotatorf DiffuseLightRation;
 
+		// TODO: make private
+		static std::shared_ptr<GBuffer> Gbuffer;
+		static std::shared_ptr<ResolveDefferedBuffer> ResolvedBuffer;
 	protected:
 		
 
@@ -53,7 +58,7 @@ namespace Durna
 		static std::unique_ptr<Window> MainWindow;
 		static float Time;
 
-		static std::shared_ptr<GBuffer> Gbuffer;
+
 		static RenderQueue RenderQue;
 
 		static void UpdatePostProcessUniforms();

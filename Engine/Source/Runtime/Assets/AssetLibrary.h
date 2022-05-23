@@ -42,6 +42,7 @@ namespace Durna
 		static Shader* GizmoShader;
 		static Shader* PostProcessShader;
 		static Shader* RockShader;
+		static Shader* ResolvedShader;
 	};
 }
 

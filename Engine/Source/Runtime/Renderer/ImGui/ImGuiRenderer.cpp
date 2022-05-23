@@ -13,6 +13,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+// TODO: remove
+#include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
+
 namespace Durna
 {
 	class TempLayer : public ImGuiLayer
@@ -83,6 +86,12 @@ namespace Durna
 	{
 // 		bool bShowDemo = true;
 // 		ImGui::ShowDemoWindow(&bShowDemo);
+
+		ImGui::Begin("Viewport");
+		
+		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), ImVec2(400, 600));
+		
+		ImGui::End();
 
 		for (LinkedListIterator It(Layers); It; ++It)
 		{

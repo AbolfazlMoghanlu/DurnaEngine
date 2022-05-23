@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Runtime/Renderer/FrameBuffer.h"
+#include "Runtime/Renderer/FrameBuffer/FrameBuffer.h"
 
 namespace Durna
 {

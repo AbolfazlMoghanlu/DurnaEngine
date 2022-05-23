@@ -41,6 +41,7 @@ namespace Durna
 	Shader* AssetLibrary::GizmoShader;
 	Shader* AssetLibrary::PostProcessShader;
 	Shader* AssetLibrary::RockShader;
+	Shader* AssetLibrary::ResolvedShader;
 
 	void AssetLibrary::Init()
 	{
@@ -76,5 +77,6 @@ namespace Durna
 		GizmoShader = new Shader(Path::ShaderRelativePath("Gizmo.glsl"));
 		PostProcessShader = new Shader(Path::ShaderRelativePath("PostProcess.glsl"));
 		RockShader = new Shader(Path::ShaderRelativePath("RockShader.glsl"));
+		ResolvedShader = new Shader(Path::ShaderRelativePath("ResolvedShader.glsl"));
 	}
 }
