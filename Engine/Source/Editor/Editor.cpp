@@ -6,6 +6,7 @@
 #include "Editor/WorldOutliner/WorldOutliner.h"
 #include "Editor/DetailsPanel/DetailsPanel.h"
 #include "Editor/Settings/Settings.h"
+#include "Editor/OutputLog/OutputLog.h"
 #include "Runtime/Engine/Actor.h"
 #include "Runtime/Components/Component.h"
 
@@ -25,6 +26,7 @@ namespace Durna
 		WorldOutliner::Get()->Init();
 		DetailsPanel::Get()->Init();
 		Settings::Get()->Init();
+		OutputLog::Get()->Init();
 	}
 
 	void Editor::Tick(float DeltaTime)
@@ -33,6 +35,7 @@ namespace Durna
 		WorldOutliner::Get()->Tick(DeltaTime);
 		DetailsPanel::Get()->Tick(DeltaTime);
 		Settings::Get()->Tick(DeltaTime);
+		OutputLog::Get()->Tick(DeltaTime);
 	}
 
 	Editor* Editor::Get()

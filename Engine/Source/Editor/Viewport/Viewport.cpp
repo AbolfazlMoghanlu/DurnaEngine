@@ -6,7 +6,7 @@
 
 namespace Durna
 {
-	std::unique_ptr<Durna::Viewport> Viewport::SingletonInstance;
+	std::unique_ptr<Viewport> Viewport::SingletonInstance;
 
 	Viewport::Viewport()
 	{ }
