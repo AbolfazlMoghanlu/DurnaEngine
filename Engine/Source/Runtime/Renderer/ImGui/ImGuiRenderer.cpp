@@ -87,11 +87,21 @@ namespace Durna
 // 		bool bShowDemo = true;
 // 		ImGui::ShowDemoWindow(&bShowDemo);
 
-		ImGui::Begin("Viewport");
+		//ImGui::Begin("Viewport");
 		
-		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), ImVec2(400, 600));
+		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("File")) {
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Edit")) {
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
 		
-		ImGui::End();
 
 		for (LinkedListIterator It(Layers); It; ++It)
 		{

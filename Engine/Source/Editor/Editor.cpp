@@ -2,6 +2,7 @@
 #include "Editor.h"
 
 #if WITH_EDITOR
+#include "Editor/Viewport/Viewport.h"
 #include "Editor/WorldOutliner/WorldOutliner.h"
 #include "Editor/DetailsPanel/DetailsPanel.h"
 #include "Editor/Settings/Settings.h"
@@ -20,6 +21,7 @@ namespace Durna
 
 	void Editor::Init()
 	{
+		Viewport::Get()->Init();
 		WorldOutliner::Get()->Init();
 		DetailsPanel::Get()->Init();
 		Settings::Get()->Init();
@@ -27,6 +29,7 @@ namespace Durna
 
 	void Editor::Tick(float DeltaTime)
 	{
+		Viewport::Get()->Tick(DeltaTime);
 		WorldOutliner::Get()->Tick(DeltaTime);
 		DetailsPanel::Get()->Tick(DeltaTime);
 		Settings::Get()->Tick(DeltaTime);
