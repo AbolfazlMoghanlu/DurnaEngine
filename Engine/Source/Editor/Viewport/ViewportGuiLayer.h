@@ -10,6 +10,7 @@ namespace Durna
 	public:
 		virtual void Draw() override;
 
+		void ShowDisplayBufferMenuItem();
 
 	};
 }

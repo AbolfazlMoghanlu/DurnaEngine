@@ -84,18 +84,19 @@ namespace Durna
 
 	void ImGuiRenderer::Draw()
 	{
-// 		bool bShowDemo = true;
-// 		ImGui::ShowDemoWindow(&bShowDemo);
+		bool bShowDemo = true;
+		ImGui::ShowDemoWindow(&bShowDemo);
 
-		//ImGui::Begin("Viewport");
 		
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
 		if (ImGui::BeginMainMenuBar()) {
-			if (ImGui::BeginMenu("File")) {
+			if (ImGui::BeginMenu("File")) 
+			{
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Edit")) {
+			if (ImGui::BeginMenu("Edit")) 
+			{
 				ImGui::EndMenu();
 			}
 			ImGui::EndMainMenuBar();

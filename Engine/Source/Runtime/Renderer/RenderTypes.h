@@ -19,13 +19,16 @@ namespace Durna
 	enum class DisplayBuffer : int32
 	{
 		FinalColor		= 0,
-		BaseColor		= 1,
-		WorldNormal		= 2,
-		SceneDepth		= 3,
-		Stencil			= 4,
-		Specular		= 5,
-		Roughness		= 6,
-		Metallic		= 7,
-		AO				= 8
+		BaseColor			,
+		WorldNormal			,
+		SceneDepth			,
+		Stencil				,
+		Specular			,
+		Roughness			,
+		Metallic			,
+		AO					,
+		Max
 	};
+
+	std::string DisplayBufferToString(int32 InDisplayBuffer);
 }

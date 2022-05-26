@@ -36,7 +36,7 @@ namespace Durna
 		return SingletonInstance.get();
 	}
 
-	DisplayBuffer Settings::GetDisplayBuffer() const
+	DisplayBuffer& Settings::GetDisplayBuffer()
 	{
 		return DisplayBufferMode;
 	}

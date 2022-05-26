@@ -21,3 +21,5 @@
 #include "Runtime/Misc/Assert.h"
 
 #include "Durna.h"
+
+#include "Runtime/Renderer/RenderTypes.h"

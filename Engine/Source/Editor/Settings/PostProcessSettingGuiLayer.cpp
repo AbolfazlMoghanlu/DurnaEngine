@@ -13,24 +13,6 @@ namespace Durna
 	{
 		ImGui::Begin("Post Process Setting");
 
-		int32 a = 0;
-
-		ImGui::Text("Display Buffer");
-
-		int32* DisplayMode = (int32*)(&Settings::Get()->DisplayBufferMode);
-
-		ImGui::RadioButton("FinalColor",	 DisplayMode, 0);
-		ImGui::RadioButton("BaseColor",		 DisplayMode, 1);
-		ImGui::RadioButton("WorldNormal",	 DisplayMode, 2);
-		ImGui::RadioButton("SceneDepth",	 DisplayMode, 3);
-		ImGui::RadioButton("Stencil",		 DisplayMode, 4);
-		ImGui::RadioButton("Specular",		 DisplayMode, 5);
-		ImGui::RadioButton("Roughness",		 DisplayMode, 6);
-		ImGui::RadioButton("Metallic",		 DisplayMode, 7);
-		ImGui::RadioButton("AO",			 DisplayMode, 8);
-
-		ImGui::Separator();
-
 		// Fog
 		if (ImGui::CollapsingHeader("Fog", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
 		{

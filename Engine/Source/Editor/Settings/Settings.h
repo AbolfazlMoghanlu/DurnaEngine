@@ -19,7 +19,7 @@ namespace Durna
 
 		static Settings* Get();
 
-		DisplayBuffer GetDisplayBuffer() const;
+		DisplayBuffer& GetDisplayBuffer();
 
 	protected:
 		std::unique_ptr<PostProcessSettingGuiLayer> OutlinerGui;
