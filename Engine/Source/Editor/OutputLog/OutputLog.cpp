@@ -9,7 +9,10 @@ namespace Durna
 	std::unique_ptr<OutputLog> OutputLog::SingletonInstance;
 
 	OutputLog::OutputLog()
-	{ }
+	{
+		// TODO: when container is full remove half of it and shift other half to first
+		LogMessages.reserve(2000);
+	}
 
 	OutputLog::~OutputLog()
 	{ }
@@ -18,15 +21,6 @@ namespace Durna
 	{
 		OutputLogLayer = std::make_unique<OutputLogGuiLayer>();
 		OutputLogLayer->Attach();
-
-		Logs.push_back("Log1");
-		Logs.push_back("Log2");
-		Logs.push_back("Log3");
-		Logs.push_back("Log4");
-		Logs.push_back("Log5");
-		Logs.push_back("Log6");
-		Logs.push_back("Log7");
-		Logs.push_back("Log8");
 
 	}
 
@@ -44,6 +38,22 @@ namespace Durna
 
 		return SingletonInstance.get();
 	}
+
+	const std::vector<LogMessage>& OutputLog::GetLogMessages() const
+	{
+		return LogMessages;
+	}
+
+	void OutputLog::AddLogMessage(const LogMessage& InLogMessage)
+	{
+		LogMessages.push_back(InLogMessage);
+	}
+
+	void OutputLog::AddLogMessage(LogCategory* InLogCategory, Verbosity InVerbosity, const std::string& InTime, const std::string& InMessage)
+	{
+		AddLogMessage(LogMessage(InLogCategory, InVerbosity, InTime, InMessage));
+	}
+
 }
 
 #endif

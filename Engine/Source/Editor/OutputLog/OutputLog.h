@@ -17,14 +17,17 @@ namespace Durna
 
 		static OutputLog* Get();
 
-		std::vector<std::string> Logs;
+		const std::vector<LogMessage>& GetLogMessages() const;
+		void AddLogMessage(const LogMessage& InLogMessage);
+		void AddLogMessage(LogCategory* InLogCategory, Verbosity InVerbosity,
+			const std::string& InTime, const std::string& InMessage);
 
 	protected:
 		std::unique_ptr<OutputLogGuiLayer> OutputLogLayer;
+		std::vector<LogMessage> LogMessages;
 
 	private:
 		static std::unique_ptr<OutputLog> SingletonInstance;
-
 	};
 }
 

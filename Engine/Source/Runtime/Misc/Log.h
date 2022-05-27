@@ -2,6 +2,8 @@
 
 #ifndef DRN_DIST
 
+//#include "Editor/OutputLog/OutputLog.h"
+
 #define LOG_DECLARE_CATEGORY(Category)																		\
 extern LogCategory Category;
 
@@ -9,14 +11,13 @@ extern LogCategory Category;
 LogCategory Category(Name);
 
 #define LOG(Category , Verbose , Format , ...)																\
-if (!Category.Suppressed && Verbosity::##Verbose <= Log::VerboseLevel)													\
-{																											\
-	std::unordered_map<const Verbosity, int>::const_iterator f = Log::ColorCodes.find(Verbosity::##Verbose);\
+if (!Category.Suppressed && Verbosity::##Verbose <= Log::VerboseLevel)										\
+{\
+	Verbosity VerbosityLevel = Verbosity::##Verbose;														\
+	std::unordered_map<const Verbosity, int>::const_iterator f = Log::ColorCodes.find(VerbosityLevel);		\
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);																\
 	SetConsoleTextAttribute(h, f->second);																	\
-	auto now = std::chrono::system_clock::now();															\
-	auto Ttime = std::chrono::system_clock::to_time_t(now);													\
-	std::cout << std::put_time(std::localtime(&Ttime), "[%d/%m/%Y_%X]");									\
+	std::cout << Durna::DateTime::Now().ToString();																						\
 	printf("%s: "##Format##"\n", Category.Name, __VA_ARGS__);												\
 	SetConsoleTextAttribute(h, 15);																			\
 }
@@ -54,6 +55,19 @@ struct LogCategory
 	bool Suppressed = false;
 };
 
+struct LogMessage
+{
+	LogMessage(LogCategory* InCategory, Verbosity InVerboseLevel, const std::string& InTime, const std::string& InMessage)
+		: Category(InCategory), VerboseLevel(InVerboseLevel), Time(InTime), Message(InMessage)
+	{ }
+
+	LogCategory* Category;
+	Verbosity VerboseLevel;
+
+	//TODO: use time class
+	std::string Time;
+	std::string Message;
+};
 
 #else
 #define LOG_DECLARE_CATEGORY(Category)	
@@ -63,5 +77,3 @@ struct LogCategory
 #define LOG_ENABLE_CATEGORY(Category)
 #define LOG_DISABLE_CATEGORY(Category)
 #endif 
-
-

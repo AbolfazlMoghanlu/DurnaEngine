@@ -15,9 +15,9 @@ namespace Durna
 
 		if (OutputLog::Get())
 		{
-			for (const std::string& str : OutputLog::Get()->Logs)
+			for (const LogMessage& Msg : OutputLog::Get()->GetLogMessages())
 			{
-				ImGui::Text(str.c_str());
+				ImGui::Text(Msg.Message.c_str());
 			}
 		}
 
