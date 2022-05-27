@@ -2,8 +2,11 @@
 
 #ifndef DRN_DIST
 
+#define LOG_MAX_CHARACTERS 500
+
 #define LOG_DECLARE_CATEGORY(Category)													\
-extern LogCategory Category;
+extern LogCategory Category;															\
+
 
 #define LOG_DEFINE_CATEGORY(Category , Name)											\
 LogCategory Category(Name);
@@ -12,8 +15,8 @@ LogCategory Category(Name);
 {																						\
 	Verbosity VerbosityLevel = Verbosity::##Verbose;									\
 	Durna::DateTime DTime = Durna::DateTime::Now();										\
-	char MsgText[500];																	\
-	std::snprintf(MsgText, 500, Format##"\n", __VA_ARGS__);								\
+	char MsgText[LOG_MAX_CHARACTERS];													\
+	std::snprintf(MsgText, LOG_MAX_CHARACTERS, Format##"\n", __VA_ARGS__);				\
 	LogMessage LogMsg(&Category, VerbosityLevel, DTime, MsgText);						\
 	PrintLogToConsole(LogMsg);															\
 }
@@ -54,10 +57,8 @@ public:
 
 struct LogCategory
 {
-	LogCategory(char* InName)
-	{
-		Name = InName;
-	}
+	LogCategory(char* InName);
+
 	char* Name;
 	bool Suppressed = false;
 };

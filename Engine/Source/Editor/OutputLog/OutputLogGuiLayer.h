@@ -9,6 +9,12 @@ namespace Durna
 	{
 	public:
 		virtual void Draw() override;
+
+	private:
+		void MakeMenuBar();
+		void MakeLogsTable();
+
+		void GetQualifiedLogsIndex(std::vector<int32>& Indices);
 	};
 
 }

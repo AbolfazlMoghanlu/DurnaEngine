@@ -24,6 +24,8 @@
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 
+LOG_DEFINE_CATEGORY(LogTest, "Test");
+
 void GameApplication::Init()
 {
 	Application::Init();	
@@ -162,10 +164,4 @@ void GameApplication::Tick(float DeltaTime)
 
 	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
 	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
-
-// 	char hourStr[1000];
-// 
-// 	std::snprintf(, 50, "aaa : %f", 12.0f);
-// 	std::cout << hourStr;
-
 }

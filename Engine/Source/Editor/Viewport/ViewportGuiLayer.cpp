@@ -20,9 +20,7 @@ namespace Durna
 			ImGui::EndMenuBar();
 		}
 
-		const ImVec2 WindowSize = ImGui::GetWindowSize();
-		ImVec2 WindowSizeYPadded(WindowSize.x, WindowSize.y - 35);
-		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), WindowSizeYPadded);
+		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), ImGui::GetContentRegionAvail());
 
 		ImGui::End();
 	}

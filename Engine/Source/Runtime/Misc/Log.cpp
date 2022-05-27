@@ -7,6 +7,15 @@
 
 Verbosity Log::VerboseLevel = Verbosity::Info;
 
+LogCategory::LogCategory(char* InName)
+{	
+	Name = InName;
+
+#if WITH_EDITOR
+	Durna::OutputLog::Get()->LogCategories.push_back(this);
+#endif
+}
+
 std::unordered_map<Verbosity, int> Log::ColorCodes = 
 {
 	{Verbosity::Info, 15},
@@ -37,3 +46,4 @@ void PrintLogToConsole(const LogMessage& InLogMessage)
 }
 
 #endif
+
