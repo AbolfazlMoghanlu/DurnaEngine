@@ -2,34 +2,41 @@
 
 #ifndef DRN_DIST
 
-//#include "Editor/OutputLog/OutputLog.h"
-
-#define LOG_DECLARE_CATEGORY(Category)																		\
+#define LOG_DECLARE_CATEGORY(Category)													\
 extern LogCategory Category;
 
-#define LOG_DEFINE_CATEGORY(Category , Name)																\
+#define LOG_DEFINE_CATEGORY(Category , Name)											\
 LogCategory Category(Name);
 
-#define LOG(Category , Verbose , Format , ...)																\
-if (!Category.Suppressed && Verbosity::##Verbose <= Log::VerboseLevel)										\
-{\
-	Verbosity VerbosityLevel = Verbosity::##Verbose;														\
-	std::unordered_map<const Verbosity, int>::const_iterator f = Log::ColorCodes.find(VerbosityLevel);		\
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);																\
-	SetConsoleTextAttribute(h, f->second);																	\
-	std::cout << Durna::DateTime::Now().ToString();																						\
-	printf("%s: "##Format##"\n", Category.Name, __VA_ARGS__);												\
-	SetConsoleTextAttribute(h, 15);																			\
+#define LOG(Category , Verbose , Format , ...)											\
+{																						\
+	Verbosity VerbosityLevel = Verbosity::##Verbose;									\
+	Durna::DateTime DTime = Durna::DateTime::Now();										\
+	char MsgText[500];																	\
+	std::snprintf(MsgText, 500, Format##"\n", __VA_ARGS__);								\
+	LogMessage LogMsg(&Category, VerbosityLevel, DTime, MsgText);						\
+	PrintLogToConsole(LogMsg);															\
 }
 
-#define LOG_VERBOSE_LEVEL(Verbose)																			\
+
+#define LOG_VERBOSE_LEVEL(Verbose)														\
 Log::VerboseLevel = Verbosity::##Verbose;
 
-#define LOG_ENABLE_CATEGORY(Category)																		\
+#define LOG_ENABLE_CATEGORY(Category)													\
 Category.Suppressed = false;
 
-#define LOG_DISABLE_CATEGORY(Category)																		\
+#define LOG_DISABLE_CATEGORY(Category)													\
 Category.Suppressed = true;
+
+#else
+#define LOG_DECLARE_CATEGORY(Category)	
+#define LOG_DEFINE_CATEGORY(Category , Name)
+#define LOG(Category , Verbose , Format , ...)
+#define LOG_VERBOSE_LEVEL(Verbose)
+#define LOG_ENABLE_CATEGORY(Category)
+#define LOG_DISABLE_CATEGORY(Category)
+#endif 
+
 
 enum class Verbosity : unsigned short int
 {
@@ -57,23 +64,15 @@ struct LogCategory
 
 struct LogMessage
 {
-	LogMessage(LogCategory* InCategory, Verbosity InVerboseLevel, const std::string& InTime, const std::string& InMessage)
+	LogMessage(LogCategory* InCategory, Verbosity InVerboseLevel, const Durna::DateTime& InTime, const std::string& InMessage)
 		: Category(InCategory), VerboseLevel(InVerboseLevel), Time(InTime), Message(InMessage)
 	{ }
 
 	LogCategory* Category;
 	Verbosity VerboseLevel;
 
-	//TODO: use time class
-	std::string Time;
+	Durna::DateTime Time;
 	std::string Message;
 };
 
-#else
-#define LOG_DECLARE_CATEGORY(Category)	
-#define DEFINE_LOG_CATEGORY(Category)
-#define LOG(Category , Verbose , Format , ...)
-#define LOG_VERBOSE_LEVEL(Verbose)
-#define LOG_ENABLE_CATEGORY(Category)
-#define LOG_DISABLE_CATEGORY(Category)
-#endif 
+void PrintLogToConsole(const LogMessage& InLogMessage);

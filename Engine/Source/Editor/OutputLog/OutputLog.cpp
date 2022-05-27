@@ -49,7 +49,7 @@ namespace Durna
 		LogMessages.push_back(InLogMessage);
 	}
 
-	void OutputLog::AddLogMessage(LogCategory* InLogCategory, Verbosity InVerbosity, const std::string& InTime, const std::string& InMessage)
+	void OutputLog::AddLogMessage(LogCategory* InLogCategory, Verbosity InVerbosity, const DateTime& InTime, const std::string& InMessage)
 	{
 		AddLogMessage(LogMessage(InLogCategory, InVerbosity, InTime, InMessage));
 	}

@@ -20,7 +20,7 @@ namespace Durna
 		const std::vector<LogMessage>& GetLogMessages() const;
 		void AddLogMessage(const LogMessage& InLogMessage);
 		void AddLogMessage(LogCategory* InLogCategory, Verbosity InVerbosity,
-			const std::string& InTime, const std::string& InMessage);
+			const DateTime& InTime, const std::string& InMessage);
 
 	protected:
 		std::unique_ptr<OutputLogGuiLayer> OutputLogLayer;
