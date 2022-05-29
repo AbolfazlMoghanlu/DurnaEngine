@@ -10,8 +10,15 @@ namespace Durna
 	public:
 		virtual void Draw() override;
 
+
+	private:
 		void ShowDisplayBufferMenuItem();
 
+		void OnViewportSizeChanged(float OldX, float NewX, float OldY, float NewY);
+
+
+		float ViewportSizeX = 0;
+		float ViewportSizeY = 0;
 	};
 }
 

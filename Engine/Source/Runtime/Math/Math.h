@@ -57,5 +57,7 @@ namespace Durna
 		{
 			return tanf(Value);
 		}
+
+		static bool IsNearlyEqual(float A, float B, float Telorance = 0.001f);
 	};
 }

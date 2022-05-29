@@ -7,6 +7,8 @@
 #include "Editor/Settings/Settings.h"
 #include "imgui.h"
 
+LOG_DEFINE_CATEGORY(LogViewport, "Viewport");
+
 namespace Durna
 {
 	void ViewportGuiLayer::Draw()
@@ -20,7 +22,16 @@ namespace Durna
 			ImGui::EndMenuBar();
 		}
 
-		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), ImGui::GetContentRegionAvail());
+		ImVec2 ViewportSize = ImGui::GetContentRegionAvail();
+		if (!Math::IsNearlyEqual(ViewportSizeX, ViewportSize.x) || !Math::IsNearlyEqual(ViewportSizeY, ViewportSize.y))
+		{
+			OnViewportSizeChanged(ViewportSizeX, ViewportSize.x, ViewportSizeY, ViewportSize.y);
+
+			ViewportSizeX = ViewportSize.x;
+			ViewportSizeY = ViewportSize.y;
+		}
+		
+		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), ViewportSize);
 
 		ImGui::End();
 	}
@@ -43,6 +54,12 @@ namespace Durna
 		}
 	}
 
+	void ViewportGuiLayer::OnViewportSizeChanged(float OldX, float NewX, float OldY, float NewY)
+	{
+		LOG(LogViewport, Info, "Viewport size changed to %f , %f", NewX, NewY);
+
+		Renderer::OnResizeWindow(NewX, NewY);
+	}
 }
 
 #endif

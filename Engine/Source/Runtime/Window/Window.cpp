@@ -46,7 +46,6 @@ namespace Durna
 			{
 				LOG(LogWindow, Info, "Changed window size to %i * %i.",  InWidth, InHeight);
 				Renderer::OnResizeWindow(InWidth, InHeight);
-				glViewport(0, 0, InWidth, InHeight);
 			});
 
 		MouseLastX = (float)Width / 2;

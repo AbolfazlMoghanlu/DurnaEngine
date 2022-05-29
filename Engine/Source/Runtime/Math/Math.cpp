@@ -36,5 +36,10 @@ namespace Durna
 		return trunc(A);
 	}
 
+	bool Math::IsNearlyEqual(float A, float B, float Telorance /*= 0.001f*/)
+	{
+		float Delta = A - B;
+		return Delta > -Telorance && Delta < Telorance;
+	}
 }
 

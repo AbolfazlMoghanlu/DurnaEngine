@@ -51,7 +51,7 @@ void GameApplication::Init()
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
-	SkySphere->SetActorScale(Vector3f(100.0f));
+	SkySphere->SetActorScale(Vector3f(500.0f));
 	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
 
 #if WITH_EDITOR
@@ -140,10 +140,12 @@ void GameApplication::Init()
 
 	CameraActor* CameraAct = new CameraActor;
 
-	CameraAct->GetCameraComponent()->SetFOV(45.0);
+	CameraAct->GetCameraComponent()->SetFOV(40.0);
 	CameraAct->GetCameraComponent()->SetPerspectiveMinZ(0.1f);
 	CameraAct->GetCameraComponent()->SetPerspectiveMaxZ(1000.0f);
 	CameraAct->GetCameraComponent()->SetWorldLocation(Vector3f(-1, 0, .25));
+	CameraAct->GetCameraComponent()->SetPerspectiveWidth(1440);
+	CameraAct->GetCameraComponent()->SetPerspectiveHeight(900);
 
 #if WITH_EDITOR
 	CameraAct->SetActorLabel("Camera");

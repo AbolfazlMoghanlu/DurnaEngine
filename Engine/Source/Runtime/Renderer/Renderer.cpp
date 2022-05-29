@@ -130,6 +130,8 @@ namespace Durna
 		ResolvedBuffer = ResolveDefferedBuffer::Create();
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
+		UpdatePostProcessUniforms();
+
 		ResolvedMaterial.SetShader(AssetLibrary::ResolvedShader);
 	}
 
@@ -171,6 +173,7 @@ namespace Durna
 
 		PostProccessMaterial.GetShader()->Use();
 #if WITH_EDITOR
+		// if there is editor keep uniforms in update with parameters in ui
 		UpdatePostProcessUniforms();
 #endif
 		
@@ -181,7 +184,10 @@ namespace Durna
 		ResolvedBuffer->Unbind();
 		RenderCommands::ClearColorBuffer();
 
+#if !WITH_EDITOR
+		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
 		RenderCommands::DrawFrameBufferToScreen(ResolvedBuffer.get(), &ResolvedMaterial);
+#endif
 
 #if WITH_EDITOR
 		ImGuiRenderer::Get()->Tick(DeltaTime);
@@ -213,14 +219,9 @@ namespace Durna
 	{
 		if (Gbuffer.get())
 		{
+			glViewport(0, 0, InWidth, InHeight);
 			Gbuffer->SetSize(InWidth, InHeight);
-		}
-
-		if (CameraComponent* CameraComp = CameraManager::Get()->GetActiveCamera())
-		{
-			CameraComp->SetPerspectiveWidth((float)InWidth);
-			CameraComp->SetPerspectiveHeight((float)InHeight);
-			CameraManager::Get()->MarkDirtyProjection();
+			ResolvedBuffer->SetSize(InWidth, InHeight);
 		}
 	}
 
@@ -228,5 +229,4 @@ namespace Durna
 	{
 		RenderQue.AddPrimitive(Pr);
 	}
-
 }
