@@ -22,6 +22,9 @@ namespace Durna
 
 		GLFWwindow* GetGLFWWindow() const;
 
+		EWindowMode WindowMode = EWindowMode::FullScreen;
+		IntPoint Resolution = IntPoint(800, 600);
+
 	private:
 
 		static void OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset);
@@ -30,8 +33,8 @@ namespace Durna
 		GLFWwindow* window;
 		std::string Title;
 
-		int Width;
-		int Height;
+		int32 Width;
+		int32 Height;
 
 		static float MouseLastX;
 		static float MouseLastY;

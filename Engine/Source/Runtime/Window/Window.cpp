@@ -45,7 +45,7 @@ namespace Durna
 		glfwSetFramebufferSizeCallback(window, [](GLFWwindow* InWindow, int InWidth, int InHeight)
 			{
 				LOG(LogWindow, Info, "Changed window size to %i * %i.",  InWidth, InHeight);
-				Renderer::OnResizeWindow(InWidth, InHeight);
+				//Renderer::OnResizeWindow(InWidth, InHeight);
 			});
 
 		MouseLastX = (float)Width / 2;

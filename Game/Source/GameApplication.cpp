@@ -16,6 +16,7 @@
 #include "Runtime/Engine/GameFramwork/StaticMeshActor.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
 #include "Runtime/Renderer/Material.h"
+#include "Runtime/Engine/GameFramwork/GameSettings.h"
 
 #include "Runtime/Engine/Camera/CameraActor.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
@@ -154,6 +155,13 @@ void GameApplication::Init()
 	World::AddActor(CameraAct);
 
 	CameraAct->GetCameraComponent()->Activate();
+
+	GameSettings::Get()->SetWindowMode(EWindowMode::FullScreen);
+	GameSettings::Get()->SetResolution(IntPoint(1440, 900));
+	GameSettings::Get()->ApplySettings();
+
+	
+	
 }
 
 void GameApplication::Tick(float DeltaTime)

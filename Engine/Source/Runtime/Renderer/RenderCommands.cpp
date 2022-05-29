@@ -16,6 +16,7 @@
 #include "Runtime/Renderer/FrameBuffer/FrameBuffer.h"
 #include "Runtime/Assets/AssetLibrary.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
+#include "Runtime/Window/Window.h"
 
 #include "Runtime/Engine/Actor.h"
 
@@ -153,4 +154,33 @@ namespace Durna
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
+	void RenderCommands::SetWindowSize(const IntPoint& Size)
+	{
+		glfwSetWindowSize(Renderer::GetWindow()->GetGLFWWindow(), Size.X, Size.Y);
+		SetViewportSize(Size);
+	}
+
+	void RenderCommands::MaximaizeWindow()
+	{
+		glfwMaximizeWindow(Renderer::GetWindow()->GetGLFWWindow());
+	}
+
+	IntPoint RenderCommands::GetWindowSize()
+	{
+		int SizeX = 0;
+		int SizeY = 0;
+		glfwGetWindowSize(Renderer::GetWindow()->GetGLFWWindow(), &SizeX, &SizeY);
+		return IntPoint(SizeX, SizeY);	
+	}
+	
+	void RenderCommands::SetViewportSize(const IntPoint& Size)
+	{
+		glViewport(0, 0, Size.X, Size.Y);
+	}
+
+	void RenderCommands::SetWindowResolution(const IntPoint& Res)
+	{
+		Renderer::GetWindow()->Resolution = Res;
+		Renderer::OnResizeWindow(Res.X, Res.Y);
+	}
 }

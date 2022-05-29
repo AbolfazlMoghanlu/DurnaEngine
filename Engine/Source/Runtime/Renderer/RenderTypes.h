@@ -31,4 +31,12 @@ namespace Durna
 	};
 
 	std::string DisplayBufferToString(int32 InDisplayBuffer);
+
+
+	enum class EWindowMode : uint8
+	{
+		FullScreen = 0,
+		Windowed,
+		BorderlessWindowed
+	};
 }

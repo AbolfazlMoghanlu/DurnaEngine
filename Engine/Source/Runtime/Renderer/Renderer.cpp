@@ -31,6 +31,8 @@
 #include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
+#include "Runtime/Engine/GameFramwork/GameSettings.h"
+
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
 #endif
@@ -140,6 +142,8 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
 
+		RenderCommands::SetViewportSize(MainWindow->Resolution);
+
 		Gbuffer->Bind();
 		Gbuffer->BindDrawBuffers();
 
@@ -185,6 +189,8 @@ namespace Durna
 		RenderCommands::ClearColorBuffer();
 
 #if !WITH_EDITOR
+		RenderCommands::SetViewportSize(RenderCommands::GetWindowSize());
+		
 		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
 		RenderCommands::DrawFrameBufferToScreen(ResolvedBuffer.get(), &ResolvedMaterial);
 #endif
@@ -219,7 +225,6 @@ namespace Durna
 	{
 		if (Gbuffer.get())
 		{
-			glViewport(0, 0, InWidth, InHeight);
 			Gbuffer->SetSize(InWidth, InHeight);
 			ResolvedBuffer->SetSize(InWidth, InHeight);
 		}

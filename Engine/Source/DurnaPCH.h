@@ -25,3 +25,4 @@
 #include "Runtime/Misc/Assert.h"
 
 #include "Runtime/Renderer/RenderTypes.h"
+#include "Runtime/Math/IntPoint.h"
