@@ -23,6 +23,22 @@ namespace Durna
 	{
 		if (ImGui::BeginMenuBar())
 		{
+			// option for toggling each column in log table
+			if (ImGui::BeginMenu("Columns"))
+			{
+				if (ImGui::MenuItem("Time", NULL, OutputLog::Get()->bShowTime))
+				{
+					OutputLog::Get()->bShowTime = !OutputLog::Get()->bShowTime;
+				}
+
+				if (ImGui::MenuItem("Category", NULL, OutputLog::Get()->bShowCategory))
+				{
+					OutputLog::Get()->bShowCategory = !OutputLog::Get()->bShowCategory;
+				}
+
+				ImGui::EndMenu();
+			}
+
 			// variant verbosities can toggled off and on
 			if (ImGui::BeginMenu("Verbosity"))
 			{
@@ -73,11 +89,23 @@ namespace Durna
 			ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Resizable |
 			ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable;
 
-		if (ImGui::BeginTable("OutputLogTable", 3, flags, outer_size))
+		int Columns = 1;
+		if (OutputLog::Get()->bShowTime)
+			Columns++;
+		if (OutputLog::Get()->bShowCategory)
+			Columns++;
+
+		if (ImGui::BeginTable("OutputLogTable", Columns, flags, outer_size))
 		{
 			ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visible
-			ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_None);
-			ImGui::TableSetupColumn("Category", ImGuiTableColumnFlags_None);
+			if (OutputLog::Get()->bShowTime)
+			{
+				ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_None);
+			}
+			if (OutputLog::Get()->bShowCategory)
+			{
+				ImGui::TableSetupColumn("Category", ImGuiTableColumnFlags_None);
+			}
 			ImGui::TableSetupColumn("Message", ImGuiTableColumnFlags_None);
 			ImGui::TableHeadersRow();
 
@@ -101,13 +129,21 @@ namespace Durna
 						ImGui::PushStyleColor(0, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
 					}
 
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Text(Logs[QualifiedLogs[row]].Time.ToString().c_str());
+					int32 i = 0;
 
-					ImGui::TableSetColumnIndex(1);
-					ImGui::Text(Logs[QualifiedLogs[row]].Category->Name);
+					if (OutputLog::Get()->bShowTime)
+					{
+						ImGui::TableSetColumnIndex(i++);
+						ImGui::Text(Logs[QualifiedLogs[row]].Time.ToString().c_str());
+					}
 
-					ImGui::TableSetColumnIndex(2);
+					if (OutputLog::Get()->bShowCategory)
+					{
+						ImGui::TableSetColumnIndex(i++);
+						ImGui::Text(Logs[QualifiedLogs[row]].Category->Name);
+					}
+
+					ImGui::TableSetColumnIndex(i++);
 					ImGui::Text(Logs[QualifiedLogs[row]].Message.c_str());
 
 					ImGui::PopStyleColor(1);

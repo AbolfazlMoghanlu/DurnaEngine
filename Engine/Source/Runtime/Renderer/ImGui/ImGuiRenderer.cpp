@@ -84,8 +84,8 @@ namespace Durna
 
 	void ImGuiRenderer::Draw()
 	{
-		bool bShowDemo = true;
-		ImGui::ShowDemoWindow(&bShowDemo);
+// 		bool bShowDemo = true;
+// 		ImGui::ShowDemoWindow(&bShowDemo);
 
 		
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());

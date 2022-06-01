@@ -24,17 +24,22 @@ namespace Durna
 
 		std::vector<LogCategory*> LogCategories;
 
-		bool bInfoLogEnabled = true;
-		bool bWarningLogEnabled = true;
-		bool bErrorLogEnabled = true;
 
 	protected:
 		std::unique_ptr<OutputLogGuiLayer> OutputLogLayer;
 		std::vector<LogMessage> LogMessages;
 
+		bool bInfoLogEnabled = true;
+		bool bWarningLogEnabled = true;
+		bool bErrorLogEnabled = true;
+
+		bool bShowTime = true;
+		bool bShowCategory = true;
 
 	private:
 		static std::unique_ptr<OutputLog> SingletonInstance;
+
+		friend class OutputLogGuiLayer;
 	};
 }
 
