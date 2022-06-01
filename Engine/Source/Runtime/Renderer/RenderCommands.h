@@ -37,12 +37,18 @@ namespace Durna
 
 		static void SetDrawWireframe();
 
+		// ------------ window and resolution ------------------
+
 		static IntPoint GetWindowSize();
 		static void SetWindowSize(const IntPoint& Size);
+
 		static void MaximaizeWindow();
+		static void RestoreWindow();
 
 		static void SetViewportSize(const IntPoint& Size);
 		static void SetWindowResolution(const IntPoint& Res);
+
+
 
 	private:
 	};

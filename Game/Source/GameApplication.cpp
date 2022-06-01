@@ -159,9 +159,6 @@ void GameApplication::Init()
 	GameSettings::Get()->SetWindowMode(EWindowMode::FullScreen);
 	GameSettings::Get()->SetResolution(IntPoint(1440, 900));
 	GameSettings::Get()->ApplySettings();
-
-	
-	
 }
 
 void GameApplication::Tick(float DeltaTime)

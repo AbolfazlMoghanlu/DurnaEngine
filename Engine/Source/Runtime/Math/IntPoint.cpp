@@ -17,4 +17,16 @@ namespace Durna
 	IntPoint::IntPoint()
 		: IntPoint(0, 0)
 	{ }
+
+	void IntPoint::operator=(const IntPoint& R)
+	{
+		X = R.X;
+		Y = R.Y;
+	}
+
+	const bool IntPoint::operator!=(const IntPoint& R) const
+	{
+		return (X != R.X || Y != R.Y);
+	}
+
 }

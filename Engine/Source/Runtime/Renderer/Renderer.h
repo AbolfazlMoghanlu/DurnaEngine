@@ -32,7 +32,8 @@ namespace Durna
 		static Window* GetWindow();
 		static float GetTime();
 
-		static void OnResizeWindow(int32 InWidth, int32 InHeight);
+		static void OnResolutionChanged(const IntPoint& InResolution);
+		static void ResizeBuffers(const IntPoint& InResolution);
 
 		static void RegisterToRenderQueue(PrimitiveComponent* Pr);
 

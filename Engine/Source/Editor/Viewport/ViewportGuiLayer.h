@@ -13,12 +13,13 @@ namespace Durna
 
 	private:
 		void ShowDisplayBufferMenuItem();
+		void ShowResolutionOption();
 
-		void OnViewportSizeChanged(float OldX, float NewX, float OldY, float NewY);
+		void OnViewportSizeChanged(const IntPoint& OldSize, const IntPoint& NewSize);
 
+		IntPoint ViewportImageSize = IntPoint(800, 600);
 
-		float ViewportSizeX = 0;
-		float ViewportSizeY = 0;
+		friend class Viewport;
 	};
 }
 

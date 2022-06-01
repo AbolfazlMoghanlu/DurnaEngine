@@ -2,8 +2,10 @@
 #include "ViewportGuiLayer.h"
 
 #if WITH_EDITOR
+#include "Editor/Viewport/Viewport.h"
 #include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
 #include "Runtime/Renderer/Renderer.h"
+#include "Runtime/Renderer/RenderCommands.h"
 #include "Editor/Settings/Settings.h"
 #include "imgui.h"
 
@@ -18,20 +20,21 @@ namespace Durna
 		if(ImGui::BeginMenuBar())
 		{
 			ShowDisplayBufferMenuItem();
+			ShowResolutionOption();
 
 			ImGui::EndMenuBar();
 		}
 
-		ImVec2 ViewportSize = ImGui::GetContentRegionAvail();
-		if (!Math::IsNearlyEqual(ViewportSizeX, ViewportSize.x) || !Math::IsNearlyEqual(ViewportSizeY, ViewportSize.y))
-		{
-			OnViewportSizeChanged(ViewportSizeX, ViewportSize.x, ViewportSizeY, ViewportSize.y);
+		const ImVec2 AvaliableSize = ImGui::GetContentRegionAvail();
+		const IntPoint ImageSize = IntPoint((int32)AvaliableSize.x, (int32)AvaliableSize.y);
 
-			ViewportSizeX = ViewportSize.x;
-			ViewportSizeY = ViewportSize.y;
+		if (ViewportImageSize != ImageSize)
+		{
+			OnViewportSizeChanged(ViewportImageSize, ImageSize);
+			ViewportImageSize = ImageSize;
 		}
-		
-		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), ViewportSize);
+
+		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), AvaliableSize);
 
 		ImGui::End();
 	}
@@ -54,11 +57,24 @@ namespace Durna
 		}
 	}
 
-	void ViewportGuiLayer::OnViewportSizeChanged(float OldX, float NewX, float OldY, float NewY)
+	void ViewportGuiLayer::ShowResolutionOption()
 	{
-		LOG(LogViewport, Info, "Viewport size changed to %f , %f", NewX, NewY);
+		ImGui::Checkbox("Custom Resolution", &Viewport::Get()->bCustomResolution);
 
-		Renderer::OnResizeWindow(NewX, NewY);
+		ImGui::BeginDisabled(!Viewport::Get()->bCustomResolution);
+
+		ImGui::PushItemWidth(80.0f);
+		ImGui::InputInt2("", &Viewport::Get()->Resolution.X);
+		ImGui::PopItemWidth();
+
+		ImGui::EndDisabled();
+	}
+
+	void ViewportGuiLayer::OnViewportSizeChanged(const IntPoint& OldSize, const IntPoint& NewSize)
+	{
+		LOG(LogViewport, Info, "Viewport size changed to %i , %i", NewSize.X, NewSize.Y);
+
+		Viewport::Get()->OnViewportSizeChanged(OldSize, NewSize);
 	}
 }
 

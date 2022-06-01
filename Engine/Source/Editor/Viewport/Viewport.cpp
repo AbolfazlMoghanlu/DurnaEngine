@@ -3,6 +3,7 @@
 
 #if WITH_EDITOR
 #include "Editor/Viewport/ViewportGuiLayer.h"
+#include "Runtime/Renderer/RenderCommands.h"
 
 namespace Durna
 {
@@ -22,7 +23,17 @@ namespace Durna
 
 	void Viewport::Tick(float DeltaTime)
 	{
+		if (bCustomResolution && PreviousFrameResolution != Resolution)
+		{
+			RenderCommands::SetWindowResolution(Resolution);
+			PreviousFrameResolution = Resolution;
+		}
 
+		else if (!bCustomResolution && Resolution != ViewportLayer->ViewportImageSize)
+		{
+			Resolution = ViewportLayer->ViewportImageSize;
+			RenderCommands::SetWindowResolution(Resolution);
+		}
 	}
 
 	Viewport* Viewport::Get()
@@ -33,6 +44,15 @@ namespace Durna
 		}
 
 		return SingletonInstance.get();
+	}
+
+	void Viewport::OnViewportSizeChanged(const IntPoint& OldSize, const IntPoint& NewSize)
+	{
+		if (!bCustomResolution)
+		{
+			Resolution = NewSize;
+			RenderCommands::SetWindowResolution(Resolution);
+		}
 	}
 }
 

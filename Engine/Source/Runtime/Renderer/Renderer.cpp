@@ -221,12 +221,20 @@ namespace Durna
 		return Time;
 	}
 
-	void Renderer::OnResizeWindow(int32 InWidth, int32 InHeight)
+	void Renderer::OnResolutionChanged(const IntPoint& InResolution)
+	{
+		ResizeBuffers(InResolution);
+	}
+
+	void Renderer::ResizeBuffers(const IntPoint& InResolution)
 	{
 		if (Gbuffer.get())
 		{
-			Gbuffer->SetSize(InWidth, InHeight);
-			ResolvedBuffer->SetSize(InWidth, InHeight);
+			Gbuffer->SetSize(InResolution.X, InResolution.Y);
+		}
+		if (ResolvedBuffer.get())
+		{
+			ResolvedBuffer->SetSize(InResolution.X, InResolution.Y);
 		}
 	}
 

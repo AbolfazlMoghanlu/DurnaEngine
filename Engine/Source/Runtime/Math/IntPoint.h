@@ -12,6 +12,8 @@ namespace Durna
 		IntPoint(int InValue);
 		IntPoint();
 
+		void operator=(const IntPoint& R);
+		const bool operator!=(const IntPoint& R) const;
 
 	public:
 		static const IntPoint Zero;

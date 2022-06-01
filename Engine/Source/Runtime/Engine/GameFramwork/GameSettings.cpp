@@ -58,6 +58,7 @@ namespace Durna
 		}
 		else
 		{
+			RenderCommands::RestoreWindow();
 			RenderCommands::SetWindowSize(Resolution);
 		}
 	}
