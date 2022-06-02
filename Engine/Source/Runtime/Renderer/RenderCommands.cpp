@@ -154,42 +154,9 @@ namespace Durna
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
-	void RenderCommands::SetWindowSize(const IntPoint& Size)
-	{
-		glfwSetWindowSize(Renderer::GetWindow()->GetGLFWWindow(), Size.X, Size.Y);
-	}
-
-	void RenderCommands::MaximaizeWindow()
-	{
-		glfwMaximizeWindow(Renderer::GetWindow()->GetGLFWWindow());
-	}
-
-	void RenderCommands::RestoreWindow()
-	{
-		glfwRestoreWindow(Renderer::GetWindow()->GetGLFWWindow());
-	}
-
-	IntPoint RenderCommands::GetWindowSize()
-	{
-		int SizeX = 0;
-		int SizeY = 0;
-		glfwGetWindowSize(Renderer::GetWindow()->GetGLFWWindow(), &SizeX, &SizeY);
-		return IntPoint(SizeX, SizeY);	
-	}
-	
 	void RenderCommands::SetViewportSize(const IntPoint& Size, const IntPoint& Offset)
 	{
 		glViewport(Offset.X, Offset.Y, Size.X, Size.Y);
-	}
-
-	void RenderCommands::SetWindowResolution(const IntPoint& Res)
-	{
-		Renderer::GetWindow()->Resolution = Res;
-	}
-
-	void RenderCommands::SetWindowMode(EWindowMode InWindowMode)
-	{
-		Renderer::GetWindow()->WindowMode = InWindowMode;
 	}
 
 }

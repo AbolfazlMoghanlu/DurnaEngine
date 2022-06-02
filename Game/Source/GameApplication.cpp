@@ -157,9 +157,9 @@ void GameApplication::Init()
 
 	CameraAct->GetCameraComponent()->Activate();
 
-	GameSettings::Get()->SetWindowMode(EWindowMode::BorderlessFullscreen);
-	GameSettings::Get()->SetResolution(IntPoint(2880, 1800));
-	GameSettings::Get()->ApplySettings();
+// 	GameSettings::Get()->SetWindowMode(EWindowMode::FullScreen);
+// 	GameSettings::Get()->SetResolution(IntPoint(2880, 1800));
+// 	GameSettings::Get()->ApplySettings();
 }
 
 void GameApplication::Tick(float DeltaTime)

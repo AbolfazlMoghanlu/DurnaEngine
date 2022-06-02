@@ -113,7 +113,7 @@ namespace Durna
 
 			// make list for visible logs
 			ImGuiListClipper clipper;
-			clipper.Begin(QualifiedLogs.size());
+			clipper.Begin((int32)QualifiedLogs.size());
 			while (clipper.Step())
 			{
 				for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++)

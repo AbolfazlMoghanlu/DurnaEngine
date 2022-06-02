@@ -51,8 +51,8 @@ namespace Durna
 
 	void GameSettings::ApplyResolutionSetting()
 	{
-		RenderCommands::SetWindowResolution(Resolution);
-		RenderCommands::SetWindowMode(WindowMode);
+		Renderer::GetWindow()->SetWindowResolution(Resolution);
+		Renderer::GetWindow()->SetWindowMode(WindowMode);
 		Renderer::GetWindow()->UpdateWindowSettings();
 	}
 }

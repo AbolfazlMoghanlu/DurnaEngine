@@ -38,9 +38,9 @@ namespace Durna
 		return std::make_shared<Window>(InTitle, Width, Height);
 	}
 
-	void Window::InitalizeWindow(const std::string& InTitle, float InWidth, float InHeight)
+	void Window::InitalizeWindow(const std::string& InTitle, int32 InWidth, int32 InHeight)
 	{
-		LOG(LogWindow, Info, "Initializing \"%s\" GlfwWindow in %i * %i.", Title.c_str(), Width, Height);
+		LOG(LogWindow, Info, "Initializing \"%s\" GlfwWindow in %i * %i.", Title.c_str(), InWidth, InHeight);
 
 		GlfwWindow = glfwCreateWindow(InWidth, InHeight, Title.c_str(), nullptr, nullptr);
 		glfwSetWindowUserPointer(GlfwWindow, (void*) this);
@@ -208,41 +208,80 @@ namespace Durna
 		return GlfwWindow;
 	}
 
+
+	void Window::SetWindowSize(const IntPoint& Size)
+	{
+		glfwSetWindowSize(GlfwWindow, Size.X, Size.Y);
+	}
+
+	void Window::MaximaizeWindow()
+	{
+		glfwMaximizeWindow(GlfwWindow);
+	}
+
+	void Window::RestoreWindow()
+	{
+		glfwRestoreWindow(GlfwWindow);
+	}
+
+	IntPoint Window::GetWindowSize()
+	{
+		int SizeX = 0;
+		int SizeY = 0;
+		glfwGetWindowSize(GlfwWindow, &SizeX, &SizeY);
+		return IntPoint(SizeX, SizeY);
+	}
+
+	void Window::SetWindowResolution(const IntPoint& Res)
+	{
+		Resolution = Res;
+	}
+
+	void Window::SetConstraintedResolution(const IntPoint& Res)
+	{
+		ConstraintedResolution = Res;
+	}
+
+	void Window::SetWindowMode(EWindowMode InWindowMode)
+	{
+		WindowMode = InWindowMode;
+	}
+
 	void Window::UpdateWindowSettings()
 	{
-		CameraManager::Get()->GetActiveCamera()->SetPerspectiveWidth(Resolution.X);
-		CameraManager::Get()->GetActiveCamera()->SetPerspectiveHeight(Resolution.Y);
+		CameraManager::Get()->GetActiveCamera()->SetPerspectiveWidth((float)Resolution.X);
+		CameraManager::Get()->GetActiveCamera()->SetPerspectiveHeight((float)Resolution.Y);
 
 		if (WindowMode == EWindowMode::FullScreen)
 		{
 			// TODO: move GlfwWindow functions from render command to this class
-			RenderCommands::MaximaizeWindow();
-			IntPoint WindowSize = RenderCommands::GetWindowSize();
+			MaximaizeWindow();
+			IntPoint WindowSize = GetWindowSize();
 			float AspectRatio = (float)Resolution.X / (float)Resolution.Y;
 			if (AspectRatio >= WindowSize.X / (float)WindowSize.Y)
 			{
-				ConstraintedResolution = IntPoint(WindowSize.X, WindowSize.X / AspectRatio);
+				ConstraintedResolution = IntPoint((int32)(WindowSize.X, WindowSize.X / AspectRatio));
 				ConstraintedOffset = IntPoint(0, (WindowSize.Y - ConstraintedResolution.Y) / 2);
 			}
 			else
 			{
-				ConstraintedResolution = IntPoint(WindowSize.Y * AspectRatio, WindowSize.Y);
+				ConstraintedResolution = IntPoint((int32)(WindowSize.Y * AspectRatio, WindowSize.Y));
 				ConstraintedOffset = IntPoint((WindowSize.X - ConstraintedResolution.X) / 2, 0);
 			}
 		}
 
 		else if (WindowMode == EWindowMode::Windowed)
 		{
-			RenderCommands::RestoreWindow();
-			RenderCommands::SetWindowSize(Resolution);
+			RestoreWindow();
+			SetWindowSize(Resolution);
 			ConstraintedResolution = Resolution;
 			ConstraintedOffset = IntPoint::Zero;
 		}
 		
 		else if (WindowMode == EWindowMode::BorderlessFullscreen)
 		{
-			RenderCommands::MaximaizeWindow();
-			IntPoint WindowSize = RenderCommands::GetWindowSize();
+			MaximaizeWindow();
+			IntPoint WindowSize = GetWindowSize();
 			ConstraintedResolution = WindowSize;
 			ConstraintedOffset = IntPoint::Zero;
 		}

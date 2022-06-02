@@ -13,7 +13,8 @@ namespace Durna
 
 		TimeCode(int32 InSeconds)
 		{
-			Minutes = InSeconds / 60;
+			Seconds = InSeconds;
+			Minutes = Seconds / 60;
 			Hours = Minutes / 60;
 
 			Seconds %= 60;

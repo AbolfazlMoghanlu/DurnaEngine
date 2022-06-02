@@ -28,6 +28,8 @@ namespace Durna
 	private:
 		static std::unique_ptr<Viewport> SingletonInstance;
 
+		void UpdateViewport();
+
 		friend class ViewportGuiLayer;
 	};
 }

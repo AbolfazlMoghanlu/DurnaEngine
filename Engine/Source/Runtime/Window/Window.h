@@ -20,6 +20,18 @@ namespace Durna
 
 		bool IsClosing() const;
 
+
+		IntPoint GetWindowSize();
+		void SetWindowSize(const IntPoint& Size);
+
+		void MaximaizeWindow();
+		void RestoreWindow();
+
+		void SetWindowResolution(const IntPoint& Res);
+		void SetConstraintedResolution(const IntPoint& Res);
+
+		void SetWindowMode(EWindowMode InWindowMode);
+		
 		void UpdateWindowSettings();
 
 	protected:
@@ -38,7 +50,7 @@ namespace Durna
 	
 	private:
 
-		void InitalizeWindow(const std::string& InTitle, float InWidth, float InHeight);
+		void InitalizeWindow(const std::string& InTitle, int32 InWidth, int32 InHeight);
 		void BindCallbacks();
 		
 		static void s_OnFrameBufferSizeChanged(GLFWwindow* InWindow, int InWidth, int InHeight);

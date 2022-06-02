@@ -34,7 +34,7 @@ namespace Durna
 			ViewportImageSize = ImageSize;
 		}
 
-		ImGui::Image((void*)Renderer::ResolvedBuffer->GetTextureID(), AvaliableSize);
+		ImGui::Image((void*)(size_t)(Renderer::ResolvedBuffer->GetTextureID()), AvaliableSize);
 
 		ImGui::End();
 	}

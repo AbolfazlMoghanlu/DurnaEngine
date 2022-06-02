@@ -4,6 +4,8 @@
 #if WITH_EDITOR
 #include "Editor/Viewport/ViewportGuiLayer.h"
 #include "Runtime/Renderer/RenderCommands.h"
+#include "Runtime/Renderer/Renderer.h"
+#include "Runtime/Window/Window.h"
 
 namespace Durna
 {
@@ -25,14 +27,14 @@ namespace Durna
 	{
 		if (bCustomResolution && PreviousFrameResolution != Resolution)
 		{
-			RenderCommands::SetWindowResolution(Resolution);
 			PreviousFrameResolution = Resolution;
+			UpdateViewport();
 		}
 
 		else if (!bCustomResolution && Resolution != ViewportLayer->ViewportImageSize)
 		{
 			Resolution = ViewportLayer->ViewportImageSize;
-			RenderCommands::SetWindowResolution(Resolution);
+			UpdateViewport();
 		}
 	}
 
@@ -51,8 +53,14 @@ namespace Durna
 		if (!bCustomResolution)
 		{
 			Resolution = NewSize;
-			RenderCommands::SetWindowResolution(Resolution);
 		}
+		UpdateViewport();
+	}
+
+	void Viewport::UpdateViewport()
+	{
+		Renderer::GetWindow()->SetWindowResolution(Resolution);
+		Renderer::OnResolutionChanged(Resolution);
 	}
 }
 
