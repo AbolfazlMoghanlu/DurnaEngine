@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <windows.h>
+#include <functional>
 #include <chrono>
 #include <ctime>
 #include <iomanip>

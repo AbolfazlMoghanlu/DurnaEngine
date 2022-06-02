@@ -20,47 +20,37 @@ LOG_DEFINE_CATEGORY(LogWindow, "Window");
 
 namespace Durna
 {
-	float Window::MouseLastX = 0.0f;
-	float Window::MouseLastY = 0.0f;
-
-	Window::Window(std::string InTitle, int InWidth, int InHeight)
+	Window::Window(const std::string& InTitle, int InWidth, int InHeight)
 		: Title(InTitle)
-		, Width(InWidth)
-		, Height(InHeight)
-		, window(nullptr)
-	{
-		Init();
+		, GlfwWindow(nullptr)
+	{ 
+		InitalizeWindow(InTitle, InWidth, InHeight);
+		BindCallbacks();
 	}
 
 	Window::~Window()
 	{
-		// @bug: there is a crash with log
-		//LOG(LogWindow, Info, "Destroying \"%s\" window.", Title.c_str());
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(GlfwWindow);
 	}
 
-	void Window::Init()
+	std::shared_ptr<Window> Window::Create(const std::string& InTitle, int32 Width, int32 Height)
 	{
-		LOG(LogWindow, Info, "Initializing \"%s\" window in %i * %i.", Title.c_str(), Width, Height);
-		window = glfwCreateWindow(Width, Height, Title.c_str(), nullptr, nullptr);
-
-		glfwMakeContextCurrent(window);
-		
-		glfwSetFramebufferSizeCallback(window, [](GLFWwindow* InWindow, int InWidth, int InHeight)
-			{
-				LOG(LogWindow, Info, "Changed window size to %i * %i.",  InWidth, InHeight);
-			});
-
-		MouseLastX = (float)Width / 2;
-		MouseLastY = (float)Height / 2;
-
-		glfwSetScrollCallback(window, OnScroll);
-		glfwSetCursorPosCallback(window, OnMouseMove);
-
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		return std::make_shared<Window>(InTitle, Width, Height);
 	}
 
-	
+	void Window::InitalizeWindow(const std::string& InTitle, float InWidth, float InHeight)
+	{
+		LOG(LogWindow, Info, "Initializing \"%s\" GlfwWindow in %i * %i.", Title.c_str(), Width, Height);
+
+		GlfwWindow = glfwCreateWindow(InWidth, InHeight, Title.c_str(), nullptr, nullptr);
+		glfwSetWindowUserPointer(GlfwWindow, (void*) this);
+
+		glfwMakeContextCurrent(GlfwWindow);
+		glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		MouseLastX = (float)InWidth / 2;
+		MouseLastY = (float)InHeight / 2;
+	}
 
 	void Window::Tick(float DeltaTime)
 	{
@@ -72,14 +62,86 @@ namespace Durna
 		}
 	}
 
+	void Window::BindCallbacks()
+	{
+		glfwSetFramebufferSizeCallback(GlfwWindow, s_OnFrameBufferSizeChanged);
+		glfwSetScrollCallback(GlfwWindow, s_OnScroll);
+		glfwSetCursorPosCallback(GlfwWindow, s_OnMouseMove);
+	}
+
+	void Window::s_OnFrameBufferSizeChanged(GLFWwindow* InWindow, int InWidth, int InHeight)
+	{
+		if (Window* window = (Window*)glfwGetWindowUserPointer(InWindow))
+		{
+			window->OnFrameBufferSizeChanged(InWidth, InHeight);
+		}
+	}
+
+	void Window::s_OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset)
+	{
+		if (Window* window = (Window*)glfwGetWindowUserPointer(InWindow))
+		{
+			window->OnScroll(XOffset, YOffset);
+		}
+	}
+
+	void Window::s_OnMouseMove(GLFWwindow* InWindow, double XPos, double YPos)
+	{
+		if (Window* window = (Window*)glfwGetWindowUserPointer(InWindow))
+		{
+			window->OnMouseMove(XPos, YPos);
+		}
+	}
+
+	void Window::OnFrameBufferSizeChanged(int InWidth, int InHeight)
+	{
+		LOG(LogWindow, Info, "Changed GlfwWindow size to %i * %i.", InWidth, InHeight);
+	}
+
+	void Window::OnScroll(double XOffset, double YOffset)
+	{
+		float ClampedFOV = Math::Clamp<float>(CameraManager::Get()->GetActiveCamera()->GetFOV() + (float)YOffset * 5.0f, 1.0f, 90.0f);
+		CameraManager::Get()->GetActiveCamera()->SetFOV(ClampedFOV);
+	}
+
+	void Window::OnMouseMove(double XPos, double YPos)
+	{
+		if (!GlfwWindow)
+		{
+			return;
+		}
+		
+		float XOffset = (float)XPos - MouseLastX;
+		float YOffset = (float)YPos - MouseLastY;
+
+		MouseLastX = (float)XPos;
+		MouseLastY = (float)YPos;		
+		
+		if (glfwGetMouseButton(GlfwWindow, GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
+			if (ActiveCamera)
+			{
+				ActiveCamera->SetRelativeRotation(
+					Rotatorf(-YOffset * 0.2f, XOffset * 0.2f, 0.0f) + ActiveCamera->GetWorldRotation());
+			}
+		}
+		else
+		{
+			glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	}
+
 	void Window::ProcessInput(float DeltaTime)
 	{
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		if (glfwGetKey(GlfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
-			glfwSetWindowShouldClose(window, true);
+			glfwSetWindowShouldClose(GlfwWindow, true);
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_D) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(GlfwWindow, GLFW_KEY_D) && glfwGetMouseButton(GlfwWindow, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
@@ -92,7 +154,7 @@ namespace Durna
 			}
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(GlfwWindow, GLFW_KEY_A) && glfwGetMouseButton(GlfwWindow, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
@@ -105,7 +167,7 @@ namespace Durna
 			}
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_W) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(GlfwWindow, GLFW_KEY_W) && glfwGetMouseButton(GlfwWindow, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
@@ -118,7 +180,7 @@ namespace Durna
 			}
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_S) && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+		if (glfwGetKey(GlfwWindow, GLFW_KEY_S) && glfwGetMouseButton(GlfwWindow, GLFW_MOUSE_BUTTON_RIGHT))
 		{
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
@@ -132,49 +194,18 @@ namespace Durna
 		}
 	}
 
-	void Window::OnScroll(GLFWwindow* InWindow, double XOffset, double YOffset)
-	{
-		float ClampedFOV = Math::Clamp<float>(CameraManager::Get()->GetActiveCamera()->GetFOV() + (float)YOffset * 5.0f, 1.0f, 90.0f);
-		CameraManager::Get()->GetActiveCamera()->SetFOV(ClampedFOV);
-	}
-
-	void Window::OnMouseMove(GLFWwindow* InWindow, double XPos, double YPos)
-	{
-		float XOffset = (float)XPos - MouseLastX;
-		float YOffset = (float)YPos - MouseLastY;
-
-		MouseLastX = (float)XPos;
-		MouseLastY = (float)YPos;
-
-		if (glfwGetMouseButton(InWindow, GLFW_MOUSE_BUTTON_RIGHT))
-		{
-			glfwSetInputMode(InWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
-			if (ActiveCamera)
-			{
-				ActiveCamera->SetRelativeRotation(
-				Rotatorf(-YOffset * 0.2f, XOffset * 0.2f, 0.0f) + ActiveCamera->GetWorldRotation());
-			}
-		}
-		else
-		{
-			glfwSetInputMode(InWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-	}
-
 	bool Window::IsClosing() const
 	{
-		if (window)
+		if (GlfwWindow)
 		{
-			return glfwWindowShouldClose(window);
+			return glfwWindowShouldClose(GlfwWindow);
 		}
 		return true;
 	}
 
 	GLFWwindow* Window::GetGLFWWindow() const
 	{
-		return window;
+		return GlfwWindow;
 	}
 
 	void Window::UpdateWindowSettings()
@@ -184,7 +215,7 @@ namespace Durna
 
 		if (WindowMode == EWindowMode::FullScreen)
 		{
-			// TODO: move window functions from render command to this class
+			// TODO: move GlfwWindow functions from render command to this class
 			RenderCommands::MaximaizeWindow();
 			IntPoint WindowSize = RenderCommands::GetWindowSize();
 			float AspectRatio = (float)Resolution.X / (float)Resolution.Y;

@@ -56,7 +56,7 @@ namespace Durna
 		
 
 	private:
-		static std::unique_ptr<Window> MainWindow;
+		static std::shared_ptr<Window> MainWindow;
 		static float Time;
 
 

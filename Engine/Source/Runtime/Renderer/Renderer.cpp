@@ -42,7 +42,7 @@ LOG_DEFINE_CATEGORY(LogRenderer, "Renderer")
 
 namespace Durna
 {
-	std::unique_ptr<Window> Renderer::MainWindow = nullptr;
+	std::shared_ptr<Window> Renderer::MainWindow = nullptr;
 	float Renderer::Time = 0.0f;
 
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
@@ -111,7 +111,7 @@ namespace Durna
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		MainWindow = std::make_unique <Window>("DurnaEngine", 800, 600);
+		MainWindow = Window::Create("DurnaEngine", 800, 600);
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{

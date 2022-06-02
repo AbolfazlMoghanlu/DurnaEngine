@@ -172,8 +172,4 @@ void GameApplication::Tick(float DeltaTime)
 
 	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
 	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
-
-	//float a = 1440.0f / 1920.0f;
-
-	//RenderCommands::SetViewportSize(IntPoint(900 , 600));
 }
