@@ -18,6 +18,11 @@ namespace Durna
 		: IntPoint(0, 0)
 	{ }
 
+	IntPoint IntPoint::operator*(const IntPoint& R)
+	{
+		return IntPoint(X * R.X, Y * R.Y);
+	}
+
 	void IntPoint::operator=(const IntPoint& R)
 	{
 		X = R.X;

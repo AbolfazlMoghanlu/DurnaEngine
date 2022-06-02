@@ -8,6 +8,10 @@
 
 #include "Runtime/Math/Math.h"
 
+#include "Runtime/Renderer/RenderCommands.h"
+#include "Runtime/Engine/Camera/CameraManager.h"
+#include "Runtime/Engine/Camera/CameraComponent.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
@@ -45,7 +49,6 @@ namespace Durna
 		glfwSetFramebufferSizeCallback(window, [](GLFWwindow* InWindow, int InWidth, int InHeight)
 			{
 				LOG(LogWindow, Info, "Changed window size to %i * %i.",  InWidth, InHeight);
-				//Renderer::OnResizeWindow(InWidth, InHeight);
 			});
 
 		MouseLastX = (float)Width / 2;
@@ -173,6 +176,46 @@ namespace Durna
 	{
 		return window;
 	}
+
+	void Window::UpdateWindowSettings()
+	{
+		CameraManager::Get()->GetActiveCamera()->SetPerspectiveWidth(Resolution.X);
+		CameraManager::Get()->GetActiveCamera()->SetPerspectiveHeight(Resolution.Y);
+
+		if (WindowMode == EWindowMode::FullScreen)
+		{
+			// TODO: move window functions from render command to this class
+			RenderCommands::MaximaizeWindow();
+			IntPoint WindowSize = RenderCommands::GetWindowSize();
+			float AspectRatio = (float)Resolution.X / (float)Resolution.Y;
+			if (AspectRatio >= WindowSize.X / (float)WindowSize.Y)
+			{
+				ConstraintedResolution = IntPoint(WindowSize.X, WindowSize.X / AspectRatio);
+				ConstraintedOffset = IntPoint(0, (WindowSize.Y - ConstraintedResolution.Y) / 2);
+			}
+			else
+			{
+				ConstraintedResolution = IntPoint(WindowSize.Y * AspectRatio, WindowSize.Y);
+				ConstraintedOffset = IntPoint((WindowSize.X - ConstraintedResolution.X) / 2, 0);
+			}
+		}
+
+		else if (WindowMode == EWindowMode::Windowed)
+		{
+			RenderCommands::RestoreWindow();
+			RenderCommands::SetWindowSize(Resolution);
+			ConstraintedResolution = Resolution;
+			ConstraintedOffset = IntPoint::Zero;
+		}
+		
+		else if (WindowMode == EWindowMode::BorderlessFullscreen)
+		{
+			RenderCommands::MaximaizeWindow();
+			IntPoint WindowSize = RenderCommands::GetWindowSize();
+			ConstraintedResolution = WindowSize;
+			ConstraintedOffset = IntPoint::Zero;
+		}
+		
+		Renderer::OnResolutionChanged(Resolution);
+	}
 }
-
-

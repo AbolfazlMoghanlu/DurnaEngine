@@ -37,6 +37,6 @@ namespace Durna
 	{
 		FullScreen = 0,
 		Windowed,
-		BorderlessWindowed
+		BorderlessFullscreen
 	};
 }

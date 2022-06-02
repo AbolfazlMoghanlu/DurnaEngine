@@ -142,8 +142,6 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
 
-		RenderCommands::SetViewportSize(MainWindow->Resolution);
-
 		Gbuffer->Bind();
 		Gbuffer->BindDrawBuffers();
 
@@ -155,6 +153,7 @@ namespace Durna
 		RenderCommands::EnableStencilTest();
 		RenderCommands::ClearStencilBuffer();
 
+		RenderCommands::SetViewportSize(MainWindow->Resolution);
 
 		for (PrimitiveComponent* Pr : RenderQue.Queue)
 		{
@@ -188,9 +187,9 @@ namespace Durna
 		ResolvedBuffer->Unbind();
 		RenderCommands::ClearColorBuffer();
 
-#if !WITH_EDITOR
-		RenderCommands::SetViewportSize(RenderCommands::GetWindowSize());
-		
+#if !WITH_EDITOR	
+		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
+
 		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
 		RenderCommands::DrawFrameBufferToScreen(ResolvedBuffer.get(), &ResolvedMaterial);
 #endif

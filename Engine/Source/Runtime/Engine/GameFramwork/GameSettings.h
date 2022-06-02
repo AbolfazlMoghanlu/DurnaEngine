@@ -19,7 +19,7 @@ namespace Durna
 		void ApplySettings();
 
 	protected:
-		EWindowMode WindowMode = EWindowMode::BorderlessWindowed;
+		EWindowMode WindowMode = EWindowMode::BorderlessFullscreen;
 		IntPoint Resolution = IntPoint(1440, 900);
 		
 	private:

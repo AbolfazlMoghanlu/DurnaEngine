@@ -20,6 +20,7 @@
 
 #include "Runtime/Engine/Camera/CameraActor.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
+#include "Runtime/Renderer/RenderCommands.h"
 
 
 #include "Runtime/Renderer/Shader.h"
@@ -145,8 +146,8 @@ void GameApplication::Init()
 	CameraAct->GetCameraComponent()->SetPerspectiveMinZ(0.1f);
 	CameraAct->GetCameraComponent()->SetPerspectiveMaxZ(1000.0f);
 	CameraAct->GetCameraComponent()->SetWorldLocation(Vector3f(-1, 0, .25));
-	CameraAct->GetCameraComponent()->SetPerspectiveWidth(1440);
-	CameraAct->GetCameraComponent()->SetPerspectiveHeight(900);
+	CameraAct->GetCameraComponent()->SetPerspectiveWidth(1920);
+	CameraAct->GetCameraComponent()->SetPerspectiveHeight(1270);
 
 #if WITH_EDITOR
 	CameraAct->SetActorLabel("Camera");
@@ -156,8 +157,8 @@ void GameApplication::Init()
 
 	CameraAct->GetCameraComponent()->Activate();
 
-	GameSettings::Get()->SetWindowMode(EWindowMode::FullScreen);
-	GameSettings::Get()->SetResolution(IntPoint(1440, 900));
+	GameSettings::Get()->SetWindowMode(EWindowMode::BorderlessFullscreen);
+	GameSettings::Get()->SetResolution(IntPoint(2880, 1800));
 	GameSettings::Get()->ApplySettings();
 }
 
@@ -171,4 +172,8 @@ void GameApplication::Tick(float DeltaTime)
 
 	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
 	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
+
+	//float a = 1440.0f / 1920.0f;
+
+	//RenderCommands::SetViewportSize(IntPoint(900 , 600));
 }

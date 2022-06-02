@@ -24,6 +24,10 @@ namespace Durna
 
 		EWindowMode WindowMode = EWindowMode::FullScreen;
 		IntPoint Resolution = IntPoint(800, 600);
+		IntPoint ConstraintedResolution = IntPoint(800, 600);
+		IntPoint ConstraintedOffset = IntPoint(0, 0);
+
+		void UpdateWindowSettings();
 
 	private:
 
@@ -40,6 +44,3 @@ namespace Durna
 		static float MouseLastY;
 	};
 }
-
-
-

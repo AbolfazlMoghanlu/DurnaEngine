@@ -45,9 +45,10 @@ namespace Durna
 		static void MaximaizeWindow();
 		static void RestoreWindow();
 
-		static void SetViewportSize(const IntPoint& Size);
+		static void SetViewportSize(const IntPoint& Size, const IntPoint& Offset = IntPoint::Zero);
 		static void SetWindowResolution(const IntPoint& Res);
 
+		static void SetWindowMode(EWindowMode InWindowMode);
 
 
 	private:

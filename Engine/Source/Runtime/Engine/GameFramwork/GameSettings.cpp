@@ -2,6 +2,7 @@
 #include "GameSettings.h"
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Renderer/Renderer.h"
+#include "Runtime/Window/Window.h"
 
 namespace Durna
 {
@@ -51,15 +52,7 @@ namespace Durna
 	void GameSettings::ApplyResolutionSetting()
 	{
 		RenderCommands::SetWindowResolution(Resolution);
-
-		if (WindowMode == EWindowMode::FullScreen)
-		{
-			RenderCommands::MaximaizeWindow();
-		}
-		else
-		{
-			RenderCommands::RestoreWindow();
-			RenderCommands::SetWindowSize(Resolution);
-		}
+		RenderCommands::SetWindowMode(WindowMode);
+		Renderer::GetWindow()->UpdateWindowSettings();
 	}
 }

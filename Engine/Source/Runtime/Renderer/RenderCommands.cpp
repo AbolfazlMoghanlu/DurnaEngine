@@ -157,7 +157,6 @@ namespace Durna
 	void RenderCommands::SetWindowSize(const IntPoint& Size)
 	{
 		glfwSetWindowSize(Renderer::GetWindow()->GetGLFWWindow(), Size.X, Size.Y);
-		SetViewportSize(Size);
 	}
 
 	void RenderCommands::MaximaizeWindow()
@@ -178,15 +177,19 @@ namespace Durna
 		return IntPoint(SizeX, SizeY);	
 	}
 	
-	void RenderCommands::SetViewportSize(const IntPoint& Size)
+	void RenderCommands::SetViewportSize(const IntPoint& Size, const IntPoint& Offset)
 	{
-		glViewport(0, 0, Size.X, Size.Y);
+		glViewport(Offset.X, Offset.Y, Size.X, Size.Y);
 	}
 
 	void RenderCommands::SetWindowResolution(const IntPoint& Res)
 	{
-		RenderCommands::SetViewportSize(Res);
 		Renderer::GetWindow()->Resolution = Res;
-		Renderer::OnResolutionChanged(Res);
 	}
+
+	void RenderCommands::SetWindowMode(EWindowMode InWindowMode)
+	{
+		Renderer::GetWindow()->WindowMode = InWindowMode;
+	}
+
 }
