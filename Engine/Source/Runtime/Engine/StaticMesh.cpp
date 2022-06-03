@@ -8,7 +8,7 @@ namespace Durna
 		: VertexPositions(InVertexPositions)
 		, VertexIndices(InVertexIndices)
 		, VertexUVs(InUVs)
-		, VertexNormal(InNormals)
+		, VertexNormals(InNormals)
 		, VertexColors(InVertexColor)
 	{
 		VertexCount = (uint32)(InVertexPositions.size() / 3);
@@ -23,5 +23,4 @@ namespace Durna
 	{
 
 	}
-
 }

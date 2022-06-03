@@ -13,12 +13,15 @@ uniform float time;
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
-layout (location = 2) in vec3 VNormal;
+layout (location = 2) in vec3 vNormal;
+layout (location = 3) in vec3 vTangent;
+layout (location = 4) in vec3 vBionormal;
 
 out vec4 V_Color;
 out vec3 WorldPosition;
 out vec2 TexCoord;
-out vec3 WorldNormal;
+out mat3 TBN;
+
 
 void main()
 {
@@ -26,7 +29,12 @@ void main()
 	gl_Position =  Projection * View * vec4(WorldPosition, 1);
 
 	TexCoord = aTexCoord;
-	WorldNormal = normalize((Transform * vec4(VNormal, 0)).xyz);
+
+	vec3 WorldTangent = normalize(Transform * vec4(vTangent, 0.0f)).xyz;
+	vec3 WorldBionormal = normalize(Transform * vec4(vBionormal, 0.0f)).xyz;
+	vec3 WorldNormal = normalize(Transform * vec4(vNormal, 0.0f)).xyz;
+
+	TBN = mat3(WorldTangent, WorldBionormal, WorldNormal);
 }
 
 
@@ -41,7 +49,7 @@ layout(location = 3) out vec4 S_R_M_AO;
 
 in vec3 WorldPosition;
 in vec2 TexCoord;
-in vec3 WorldNormal;
+in mat3 TBN;
 
 uniform sampler2D TextureAlbedo;
 uniform sampler2D TextureNormal;
@@ -55,16 +63,15 @@ uniform float Specular;
 void main()
 {
 	vec4 Color = texture(TextureAlbedo, TexCoord * vec2(1, -1));
-	vec3 TangentNormal = texture(TextureNormal, TexCoord * vec2(1, -1)).xyz;
+	vec3 NormalMap = texture(TextureNormal, TexCoord * vec2(1, -1)).xyz;
 	vec4 Masks = texture(TextureMasks, TexCoord * vec2(1, -1));
 
-	TangentNormal = normalize(TangentNormal * 2 - 1);
+	NormalMap = normalize(NormalMap * 2 - 1);
 
 	Color = vec4(pow(Color.xyz, vec3(2.2f)), 1);
 
 	FragColor = Color;
 	FragPosition = WorldPosition;
-	//Normal = WorldNormal;
-	Normal = TangentNormal * WorldNormal;
+	Normal = normalize(TBN * NormalMap);
 	S_R_M_AO = Masks;
 }

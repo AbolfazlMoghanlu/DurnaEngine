@@ -14,6 +14,9 @@ uniform float time;
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 2) in vec3 VNormal;
+layout (location = 3) in vec3 vTangent;
+layout (location = 4) in vec3 vBionormal;
+
 
 out vec4 V_Color;
 out vec3 WorldPosition;

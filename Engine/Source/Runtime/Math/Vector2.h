@@ -18,8 +18,16 @@ namespace Durna
 
 		Vector2() : X(0), Y(0) {};
 		Vector2(T InF) : X(InF), Y(InF) {};
-		Vector2(T InX, T InY) : X(InX), Y(InX) {};
+		Vector2(T InX, T InY) : X(InX), Y(InY) {};
+
+		Vector2<T> operator-(const Vector2<T>& R);
 	};
+
+	template<typename T>
+	Vector2<T> Vector2<T>::operator-(const Vector2<T>& R)
+	{
+		return Vector2<T>(X - R.X, Y - R.Y);
+	}
 
 	template<typename T>
 	const Vector2<T> Vector2<T>::ZeroVector = Vector2<T>(0, 0);

@@ -1,6 +1,9 @@
 #include "DurnaPCH.h"
 #include "ModelLoader.h"
 #include "Runtime/Engine/StaticMesh.h"
+#include "Runtime/Math/Vector3.h"
+#include "Runtime/Math/Vector2.h"
+#include "Runtime/Math/Math.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "ThirdParty/TinyObjLoader/tiny_obj_loader.h"
@@ -56,9 +59,9 @@ namespace Durna
 					Target->VertexUVs.push_back(TX);
 					Target->VertexUVs.push_back(TY);
 
-					Target->VertexNormal.push_back(NX);
-					Target->VertexNormal.push_back(NY);
-					Target->VertexNormal.push_back(NZ);
+					Target->VertexNormals.push_back(NX);
+					Target->VertexNormals.push_back(NY);
+					Target->VertexNormals.push_back(NZ);
 
 					Target->VertexColors.push_back(CX);
 					Target->VertexColors.push_back(CY);
@@ -73,6 +76,68 @@ namespace Durna
 
 
 			Target->VertexCount = int32(Target->VertexPositions.size() / 3);
+
+			// calculate tangent and bionormal
+			for (int32 i = 0; i < Target->VertexCount; i += 3)
+			{
+				Vector3f Pos1 = Vector3f(Target->VertexPositions[i * 3],
+					Target->VertexPositions[i * 3 + 1], Target->VertexPositions[i * 3 + 2]);
+
+				Vector3f Pos2 = Vector3f(Target->VertexPositions[(i + 1) * 3],
+					Target->VertexPositions[(i + 1) * 3 + 1], Target->VertexPositions[(i + 2) * 3 + 2]);
+
+				Vector3f Pos3 = Vector3f(Target->VertexPositions[(i + 2) * 3],
+					Target->VertexPositions[(i + 2) * 3 + 1], Target->VertexPositions[(i + 2) * 3 + 2]);
+
+				Vector3f Edge1 = Pos2 - Pos1;
+				Vector3f Edge2 = Pos3 - Pos1;
+				
+				Vector2f UV1 = Vector2f(Target->VertexUVs[i * 2]		, Target->VertexUVs[i * 2 + 1]);
+				Vector2f UV2 = Vector2f(Target->VertexUVs[(i + 1) * 2]	, Target->VertexUVs[(i + 1) * 2 + 1]);
+				Vector2f UV3 = Vector2f(Target->VertexUVs[(i + 2) * 2]	, Target->VertexUVs[(i + 2) * 2 + 1]);
+
+				Vector2f DeltaUVs1 = UV2 - UV1;
+				Vector2f DeltaUVs2 = UV3 - UV1;
+
+				float d = DeltaUVs1.X * DeltaUVs2.Y - DeltaUVs2.X * DeltaUVs1.Y;
+				d = d != 0 ? d : SMALL_NUMBER;
+				float f = 1.0f / d;
+
+				Vector3f Tangent;
+				Tangent.X = f * (DeltaUVs2.Y * Edge1.X - DeltaUVs1.Y * Edge2.X);
+				Tangent.Y = f * (DeltaUVs2.Y * Edge1.Y - DeltaUVs1.Y * Edge2.Y);
+				Tangent.Z = f * (DeltaUVs2.Y * Edge1.Z - DeltaUVs1.Y * Edge2.Z);
+				Tangent = Tangent.Normalize();
+
+				Vector3f Bionormal;
+				Bionormal.X = f * (DeltaUVs2.X * Edge1.X + DeltaUVs1.X * Edge2.X);
+				Bionormal.Y = f * (DeltaUVs2.X * Edge1.Y + DeltaUVs1.X * Edge2.Y);
+				Bionormal.Z = f * (DeltaUVs2.X * Edge1.Z + DeltaUVs1.X * Edge2.Z);
+				Bionormal = Bionormal.Normalize();
+
+				auto PushVertexTangent = [&]()
+				{
+					Target->VertexTangents.push_back(Tangent.X);
+					Target->VertexTangents.push_back(Tangent.Y);
+					Target->VertexTangents.push_back(Tangent.Z);
+				};
+
+				PushVertexTangent();
+				PushVertexTangent();
+				PushVertexTangent();
+
+
+				auto PushVertexBionormal = [&]()
+				{
+ 					Target->VertexBionormals.push_back(Bionormal.X);
+ 					Target->VertexBionormals.push_back(Bionormal.Y);
+ 					Target->VertexBionormals.push_back(Bionormal.Z);
+				};
+
+				PushVertexBionormal();
+				PushVertexBionormal();
+				PushVertexBionormal();
+			}
 		}
 		
 	}

@@ -120,7 +120,7 @@ void GameApplication::Init()
 
 	
 	RockActor = new StaticMeshActor();
-	RockActor->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMesh, 1, 1);
+	RockActor->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMesh, 1, 1, 0, 1, 1);
 	RockActor->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::RockShader);
 	RockActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureAlbedo", AssetLibrary::Rock_Al_Texture));
 	RockActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureNormal", AssetLibrary::Rock_N_Texture));

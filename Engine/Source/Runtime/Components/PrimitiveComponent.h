@@ -26,7 +26,8 @@ namespace Durna
 		void BindPreDraw(void (*InFunc)(PrimitiveComponent* InComponent, Shader* InShader));
 		void UnbindPreDraw();
 
-		void SetStaticMesh(StaticMesh* InMesh, bool bUV = false, bool bNormal = false, bool bColor = false);
+		void SetStaticMesh(StaticMesh* InMesh, bool bUV = false, bool bNormal = false, bool bColor = false,
+			bool bTangent = false, bool bBionormal = false);
 		StaticMesh* GetStaticMesh() const;
 
 		Material* GetMaterial() const;

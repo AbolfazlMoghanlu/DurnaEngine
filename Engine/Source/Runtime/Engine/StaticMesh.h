@@ -16,7 +16,6 @@ namespace Durna
 
 	public:
 		/*
-		 * List of vertex relative positions.
 		 * Size should be multiplication of 3
 		 */
 		std::vector<float> VertexPositions;
@@ -24,19 +23,27 @@ namespace Durna
 		std::vector<uint32> VertexIndices;
 
 		/*
-		 * List of vertex UVs.
 		 * Size should be multiplication of 2
 		 */
 		std::vector<float> VertexUVs;
 
 		/*
-		 * List of vertex Normals.
 		 * Size should be multiplication of 3
 		 */
-		std::vector<float> VertexNormal;
+		std::vector<float> VertexNormals;
 
 		/*
-		 * List of vertex colors.
+		 * Size should be multiplication of 3
+		 */
+		std::vector<float> VertexTangents;
+
+		/*
+		 * Size should be multiplication of 3
+		 */
+		std::vector<float> VertexBionormals;
+
+
+		/*
 		 * Size should be multiplication of 4
 		 */
 		std::vector<float> VertexColors;

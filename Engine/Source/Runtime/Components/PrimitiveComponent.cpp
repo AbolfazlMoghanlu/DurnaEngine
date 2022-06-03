@@ -48,7 +48,8 @@ namespace Durna
 		PreDrawFunc = nullptr;
 	}
 
-	void PrimitiveComponent::SetStaticMesh(StaticMesh* InMesh, bool bUV /*= false*/, bool bNormal /*= false*/, bool bColor /*= false*/)
+	void PrimitiveComponent::SetStaticMesh(StaticMesh* InMesh, bool bUV, bool bNormal, bool bColor,
+		bool bTangent, bool bBionormal)
 	{
 		Mesh = InMesh;
 
@@ -68,12 +69,22 @@ namespace Durna
 
 			if (bNormal)
 			{
-				VB->AddLayout(VertexBufferLayout(&Mesh->VertexNormal, 3, false));
+				VB->AddLayout(VertexBufferLayout(&Mesh->VertexNormals, 3, false));
 			}
 
 			if (bColor)
 			{
 				VB->AddLayout(VertexBufferLayout(&Mesh->VertexColors, 4, false));
+			}
+
+			if (bTangent)
+			{
+				VB->AddLayout(VertexBufferLayout(&Mesh->VertexTangents, 3, false));
+			}
+
+			if (bBionormal)
+			{
+				VB->AddLayout(VertexBufferLayout(&Mesh->VertexBionormals, 3, false));
 			}
 
 			VB->UpdateLayout();
