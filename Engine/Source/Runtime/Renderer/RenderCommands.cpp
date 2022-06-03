@@ -76,6 +76,45 @@ namespace Durna
 	}
 
 
+	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp, const ViewMatrix<float>& InViewMatrix)
+	{
+		Comp->VA->Bind();
+		Comp->SourceMaterial->Use();
+
+		//  ---------------- Matrices --------------------------
+		ScaleRotationTranslationMatrix<float> Transform(Comp->GetWorldScale(), Comp->GetWorldRotation(), Comp->GetWorldLocation());
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
+
+		ViewMatrix V = InViewMatrix;
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("View", V.M[0]);
+
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::Get()->GetProjectionMatrix());
+		Comp->SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::Get()->GetWFactor());
+		// -----------------------------------------------------
+
+ 		if (Comp->PreDrawFunc != nullptr)
+ 		{
+ 			Comp->PreDrawFunc(Comp, Comp->SourceMaterial->GetShader());
+ 		}
+
+		uint32 StencilValue = Comp->StencilValue;
+		uint32 StencilMask = static_cast<uint32>(Comp->StencilValue);
+
+#if WITH_EDITOR
+		if (Editor::Get()->IsOwningActorSelected(Comp) &
+			(!Editor::Get()->bIsAnyComponentSelected() || Editor::Get()->IsComponentSelected(Comp)))
+		{
+			StencilValue |= 128;
+			StencilMask |= 128;
+		}
+#endif
+
+		glStencilFunc(GL_ALWAYS, StencilValue, 0xFF);
+		glStencilMask(StencilMask);
+
+		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
+	}
+
 	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial)
 	{
 		if (InFrameBuffer && InMaterial && InMaterial->GetShader())

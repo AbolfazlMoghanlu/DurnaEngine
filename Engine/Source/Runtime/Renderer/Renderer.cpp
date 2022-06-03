@@ -6,8 +6,6 @@
 #include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 #include "Runtime/Renderer/ImGui/ImGuiLayer.h"
 
-//#include <imgui.h>
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -32,6 +30,7 @@
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
 #include "Runtime/Engine/GameFramwork/GameSettings.h"
+#include "Runtime/Math/ViewMatrix.h"
 
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
@@ -47,6 +46,7 @@ namespace Durna
 
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
 	std::shared_ptr<ResolveDefferedBuffer> Renderer::ResolvedBuffer = nullptr;
+	std::shared_ptr<FrameBuffer> Renderer::ShadowFBO = nullptr;
 
 	RenderQueue Renderer::RenderQue;
 
@@ -61,7 +61,7 @@ namespace Durna
 
 	LinearColor Renderer::DiffuseLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	float Renderer::DiffuseLightIntensity = 0.3f;
-	Rotatorf Renderer::DiffuseLightRation = Rotatorf(50.0f, 180.0f, 0.0f);
+	Rotatorf Renderer::DiffuseLightRation = Rotatorf(270.0f, 180.0f, 0.0f);
 
 	void Renderer::UpdatePostProcessUniforms()
 	{
@@ -130,6 +130,11 @@ namespace Durna
 
 		Gbuffer = GBuffer::Create();
 		ResolvedBuffer = ResolveDefferedBuffer::Create();
+		ShadowFBO = FrameBuffer::Create();
+		ShadowFBO->AddAttachment("Buffer_ShadowMap", FrameBufferAttachmentType::Depth,
+			FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth,
+			FrameBufferAttachmentDataType::Float);
+		ShadowFBO->SetSize(1024, 1024);
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
 		UpdatePostProcessUniforms();
@@ -141,6 +146,31 @@ namespace Durna
 	{
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
+
+		RenderCommands::SetViewportSize(IntPoint(1024, 1024));
+		ShadowFBO->Bind();
+//		ShadowFBO->BindDrawBuffers();
+ 		glDrawBuffer(GL_NONE);
+ 		glReadBuffer(GL_NONE);
+ 		glClear(GL_DEPTH_BUFFER_BIT);
+ 		glEnable(GL_DEPTH_TEST);
+
+
+		Vector3f LightForwardVector = DiffuseLightRation.GetForwardVector();
+		Vector3f LightRightVector = Vector3f::CrossProduct(Vector3f::UpVector, LightForwardVector).Normalize();
+		Vector3f LightUpVector = Vector3f::CrossProduct(LightForwardVector, LightRightVector).Normalize();
+
+		ViewMatrix<float> LightViewMatrix = ViewMatrix<float>(Vector3f(0.5f, 0, 1.0f),
+			LightForwardVector, LightRightVector, LightUpVector);
+
+		for (PrimitiveComponent* Pr : RenderQue.Queue)
+		{
+			if (Pr)
+			{
+				RenderCommands::DrawPrimitive(Pr, LightViewMatrix);
+			}
+		}
+
 
 		Gbuffer->Bind();
 		Gbuffer->BindDrawBuffers();
@@ -160,6 +190,7 @@ namespace Durna
 			if (Pr)
 			{
 				RenderCommands::DrawPrimitive(Pr);
+				//RenderCommands::DrawPrimitive(Pr, LightViewMatrix);
 			}
 		}
 
@@ -180,8 +211,20 @@ namespace Durna
 		UpdatePostProcessUniforms();
 #endif
 		
- 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
+		PostProccessMaterial.GetShader()->Use();
+		Texture::ActivateTexture(6);
+		glBindTexture(GL_TEXTURE_2D, ShadowFBO->Attachments[0]->TextureID);
 
+		int UniformLocation = glGetUniformLocation(PostProccessMaterial.GetShader()->ID, "ShadowMap");
+		glUniform1i(UniformLocation, 6);
+
+		PostProccessMaterial.GetShader()->SetUniformMatrix4f("LightMatrix", LightViewMatrix.M[0]);
+
+		PostProccessMaterial.GetShader()->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
+		PostProccessMaterial.GetShader()->SetUniformMatrix4f("Projection", CameraManager::Get()->GetProjectionMatrix());
+
+
+ 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
 
 		ResolvedBuffer->Unbind();
 		ResolvedBuffer->Unbind();

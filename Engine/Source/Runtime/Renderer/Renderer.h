@@ -52,6 +52,8 @@ namespace Durna
 		// TODO: make private
 		static std::shared_ptr<GBuffer> Gbuffer;
 		static std::shared_ptr<ResolveDefferedBuffer> ResolvedBuffer;
+		static std::shared_ptr<FrameBuffer> ShadowFBO;
+
 	protected:
 		
 

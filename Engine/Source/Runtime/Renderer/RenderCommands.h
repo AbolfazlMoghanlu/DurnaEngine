@@ -2,6 +2,7 @@
 
 #include "Runtime/Components/PrimitiveComponent.h"
 #include "Runtime/Math/LinearColor.h"
+#include "Runtime/Math/ViewMatrix.h"
 
 namespace Durna
 {
@@ -16,6 +17,9 @@ namespace Durna
 		~RenderCommands();
 
 		static void DrawPrimitive(PrimitiveComponent* Comp);
+		static void DrawPrimitive(PrimitiveComponent* Comp, const ViewMatrix<float>& InViewMatrix);
+
+
 		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial);
 
 		static void EnableDepthTest();

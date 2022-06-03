@@ -160,7 +160,7 @@ void GameApplication::Init()
 			InShader->SetUniform2f("UVScale", Vector2f(10.0f));
 		});
 
-	FloorActor->SetActorLocation(Vector3f(0.5f, 0.0f, -0.5f));
+	FloorActor->SetActorLocation(Vector3f(0.0f, 0.0f, -0.5f));
 	FloorActor->SetActorRotation(Rotatorf(0.0f, 00.0f, 270.0f));
 	FloorActor->SetActorScale(Vector3f(5.0f, 5.0f, 5.0f));
 

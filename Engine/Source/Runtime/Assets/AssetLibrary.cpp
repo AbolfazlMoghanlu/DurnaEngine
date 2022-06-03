@@ -51,6 +51,7 @@ namespace Durna
 	Shader* AssetLibrary::PostProcessShader;
 	Shader* AssetLibrary::RockShader;
 	Shader* AssetLibrary::ResolvedShader;
+	Shader* AssetLibrary::ShadowmapShader;
 
 	void AssetLibrary::Init()
 	{
@@ -99,5 +100,6 @@ namespace Durna
 		PostProcessShader = new Shader(Path::ShaderRelativePath("PostProcess.glsl"));
 		RockShader = new Shader(Path::ShaderRelativePath("RockShader.glsl"));
 		ResolvedShader = new Shader(Path::ShaderRelativePath("ResolvedShader.glsl"));
+		ShadowmapShader = new Shader(Path::ShaderRelativePath("ShadowMapShader.glsl"));
 	}
 }

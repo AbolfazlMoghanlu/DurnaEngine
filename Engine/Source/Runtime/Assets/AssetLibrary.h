@@ -52,5 +52,6 @@ namespace Durna
 		static Shader* PostProcessShader;
 		static Shader* RockShader;
 		static Shader* ResolvedShader;
+		static Shader* ShadowmapShader;
 	};
 }

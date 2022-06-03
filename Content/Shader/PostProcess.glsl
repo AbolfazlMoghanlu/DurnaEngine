@@ -26,7 +26,11 @@ uniform sampler2D Buffer_Normal;
 uniform sampler2D Buffer_Specular_Roughness_Metalic_AO;
 uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
+uniform sampler2D ShadowMap;
 
+uniform mat4 LightMatrix;
+uniform mat4 View;
+uniform mat4 Projection;
 
 uniform vec3 CameraLocation;
 
@@ -64,9 +68,18 @@ void main()
     float Metallic    = S_R_M_AO.z;
     float AO         = S_R_M_AO.w;
 
-
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
+
+    vec4 LightSpacePoition = LightMatrix * vec4(WorldPosition, 1);
+    
+    vec3 C = LightSpacePoition.xyz / LightSpacePoition.w;
+    C = C * 0.5f + 0.5f;
+
+    float Shadow = C.z - texture(ShadowMap, C.xy).x;
+    Shadow = Shadow > 0.29 ? Shadow : 0.0f;
+    Shadow *= 2;
+    Shadow = clamp(Shadow, 0, 1);
 
     vec4 Color = SceneColor;
     
@@ -76,15 +89,16 @@ void main()
     if(StencilMask != 64)
     {
        vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
-       vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, DiffuseLightDirection), 0) * DiffuseLightIntensity;
+       vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, -DiffuseLightDirection), 0) * DiffuseLightIntensity;
 
        vec3 ViewDirection = normalize(CameraLocation - WorldPosition);
        vec3 ReflectionVector = reflect(-DiffuseLightDirection, Normal);
+    
        float SpecularLightFactor = pow(max(dot(ViewDirection, ReflectionVector), 0), Specular * 32);
    
        DiffuseLight *= (1 + SpecularLightFactor);
 
-       Color = Color * vec4((AmbientLight + DiffuseLight), 1);
+       Color = Color * vec4((AmbientLight + DiffuseLight * (1 - Shadow)), 1);
     }
 
 
@@ -133,6 +147,7 @@ void main()
         // final color
         case 0:
            FragColor = Color; 
+           //FragColor = vec4(Shadow); 
         break;
 
         // base color
