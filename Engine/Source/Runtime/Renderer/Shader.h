@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Runtime/Math/Vector3.h>
+#include "Runtime/Math/Vector3.h"
+#include "Runtime/Math/Vector2.h"
 #include "Runtime/Math/Color.h"
 #include "Runtime/Math/LinearColor.h"
 
@@ -21,6 +22,7 @@ namespace Durna
 
 		void SetUniform1i(const std::string& UniformName, int32 Value);
 		void SetUniform1f(const std::string& UniformName, float Value);
+		void SetUniform2f(const std::string& UniformName, Vector2f Value);
 		void SetUniformVec3f(char* UniformName, const Vector3f& Vec3);
 		void SetUniformVec3f(char* UniformName, const Color& InColor);
 		void SetUniformVec3f(char* UniformName, const LinearColor& InColor);

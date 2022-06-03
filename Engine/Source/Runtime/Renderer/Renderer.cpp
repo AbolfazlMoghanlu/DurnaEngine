@@ -57,10 +57,10 @@ namespace Durna
 
 	
 	LinearColor Renderer::AmbientLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	float Renderer::AmbientLightIntensity = 0.5f;
+	float Renderer::AmbientLightIntensity = 1.0f;
 
 	LinearColor Renderer::DiffuseLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	float Renderer::DiffuseLightIntensity = 1.0f;
+	float Renderer::DiffuseLightIntensity = 0.3f;
 	Rotatorf Renderer::DiffuseLightRation = Rotatorf(50.0f, 180.0f, 0.0f);
 
 	void Renderer::UpdatePostProcessUniforms()

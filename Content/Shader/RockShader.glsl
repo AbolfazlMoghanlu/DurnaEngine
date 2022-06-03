@@ -10,6 +10,7 @@ uniform mat4 View;
 uniform mat4 Projection;
 
 uniform float time;
+uniform vec2 UVScale;
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
@@ -28,7 +29,7 @@ void main()
 	WorldPosition = (Transform * vec4(aPos, 1)).xyz;
 	gl_Position =  Projection * View * vec4(WorldPosition, 1);
 
-	TexCoord = aTexCoord;
+	TexCoord = aTexCoord * UVScale;
 
 	vec3 WorldTangent = normalize(Transform * vec4(vTangent, 0.0f)).xyz;
 	vec3 WorldBionormal = normalize(Transform * vec4(vBionormal, 0.0f)).xyz;

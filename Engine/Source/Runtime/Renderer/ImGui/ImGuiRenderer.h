@@ -19,7 +19,7 @@ namespace Durna
 
 		static ImGuiRenderer* Get();
 
-		float SkyLightIntensity = 0.5;
+		float SkyLightIntensity = 1.0f;
 
 	protected:
 		virtual void BeginDraw();

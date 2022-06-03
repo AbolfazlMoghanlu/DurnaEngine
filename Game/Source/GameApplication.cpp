@@ -128,6 +128,12 @@ void GameApplication::Init()
 	RockActor->GetMeshComponent()->StencilValue = 16;
 	RockActor->GetMeshComponent()->StencilMask = StencilMaskBitfield::Bit_5;
 
+	RockActor->GetMeshComponent()->BindPreDraw(
+		[](PrimitiveComponent* InComponent, Shader* InShader)
+		{
+			InShader->SetUniform2f("UVScale", Vector2f(1.0f));
+		});
+
 	RockActor->SetActorLocation(Vector3f(0.5f, 0.0f, -0.2f));
 	RockActor->SetActorRotation(Rotatorf(0.0f, 00.0f, 270.0f));
 	RockActor->SetActorScale(Vector3f(0.1f));
@@ -135,10 +141,35 @@ void GameApplication::Init()
 #if WITH_EDITOR
 	RockActor->SetActorLabel("Rock");
 #endif
-
+	
 	World::AddActor(RockActor);
 	
 
+	FloorActor = new StaticMeshActor();
+	FloorActor->GetMeshComponent()->SetStaticMesh(AssetLibrary::PlaneMesh, 1, 1, 0, 1, 1);
+	FloorActor->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::RockShader);
+	FloorActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureAlbedo", AssetLibrary::WoodenFloor_Al_Texture));
+	FloorActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureNormal", AssetLibrary::WoodenFloor_N_Texture));
+	FloorActor->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureMasks", AssetLibrary::WoodenFloor_S_R_M_AO_Texture));
+	FloorActor->GetMeshComponent()->StencilValue = 16;
+	FloorActor->GetMeshComponent()->StencilMask = StencilMaskBitfield::Bit_5;
+
+	FloorActor->GetMeshComponent()->BindPreDraw(
+		[](PrimitiveComponent* InComponent, Shader* InShader)
+		{
+			InShader->SetUniform2f("UVScale", Vector2f(10.0f));
+		});
+
+	FloorActor->SetActorLocation(Vector3f(0.5f, 0.0f, -0.5f));
+	FloorActor->SetActorRotation(Rotatorf(0.0f, 00.0f, 270.0f));
+	FloorActor->SetActorScale(Vector3f(5.0f, 5.0f, 5.0f));
+
+#if WITH_EDITOR
+	FloorActor->SetActorLabel("Floor");
+#endif
+
+	World::AddActor(FloorActor);
+	
 
 	CameraActor* CameraAct = new CameraActor;
 

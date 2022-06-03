@@ -99,6 +99,12 @@ namespace Durna
 		glUniform1f(UniformLocation, Value);
 	}
 
+	void Shader::SetUniform2f(const std::string& UniformName, Vector2f Value)
+	{
+		int UniformLocation = glGetUniformLocation(ID, UniformName.c_str());
+		glUniform2f(UniformLocation, Value.X, Value.Y);
+	}
+
 	void Shader::SetUniformMatrix4f(const std::string& UniformName, float* Value)
 	{
 		int UniformLocation = glGetUniformLocation(ID, UniformName.c_str());

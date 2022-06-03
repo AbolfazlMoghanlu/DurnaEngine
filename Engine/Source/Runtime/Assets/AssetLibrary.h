@@ -16,6 +16,7 @@ namespace Durna
 
 		static StaticMesh* GizmoMesh;
 		static StaticMesh* RockMesh;
+		static StaticMesh* PlaneMesh;
 
 		static PrimitiveComponent* ScreenQuad;
 
@@ -28,10 +29,18 @@ namespace Durna
 		static Image* Rock_N_Image;
 		static Image* Rock_S_R_M_AO_Image;
 
+		static Image* WoodenFloor_Al_Image;
+		static Image* WoodenFloor_N_Image;
+		static Image* WoodenFloor_S_R_M_AO_Image;
+
 		static Texture* Rock_Al_Texture;
 		static Texture* Rock_N_Texture;
 		static Texture* Rock_S_R_M_AO_Texture;
 		
+		static Texture* WoodenFloor_Al_Texture;
+		static Texture* WoodenFloor_N_Texture;
+		static Texture* WoodenFloor_S_R_M_AO_Texture;
+
 		static Texture* TileTexture;
 		static Texture* WallTexture;
 		static Texture* SkyTexture;
@@ -45,4 +54,3 @@ namespace Durna
 		static Shader* ResolvedShader;
 	};
 }
-
