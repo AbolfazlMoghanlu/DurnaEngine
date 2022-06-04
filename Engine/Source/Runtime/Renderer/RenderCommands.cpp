@@ -76,7 +76,7 @@ namespace Durna
 	}
 
 
-	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp, const ViewMatrix<float>& InViewMatrix)
+	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp, const ViewMatrix<float>& InViewMatrix, const OrthoMatrix<float>& InOrthu)
 	{
 		Comp->VA->Bind();
 		Comp->SourceMaterial->Use();
@@ -88,7 +88,8 @@ namespace Durna
 		ViewMatrix V = InViewMatrix;
 		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("View", V.M[0]);
 
-		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", CameraManager::Get()->GetProjectionMatrix());
+		OrthoMatrix O = InOrthu;
+		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", O.M[0]);
 		Comp->SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::Get()->GetWFactor());
 		// -----------------------------------------------------
 

@@ -108,4 +108,14 @@ namespace Durna
 	{
 		return SourceMaterial.get();
 	}
+
+	bool PrimitiveComponent::GetCastShadow() const
+	{
+		return bCastShadow;
+	}
+
+	void PrimitiveComponent::SetCastShadow(bool Enabled)
+	{
+		bCastShadow = Enabled;
+	}
 }

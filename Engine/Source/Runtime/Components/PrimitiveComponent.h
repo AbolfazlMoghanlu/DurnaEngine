@@ -35,6 +35,12 @@ namespace Durna
 		int32 StencilValue = 0;
 		StencilMaskBitfield StencilMask = StencilMaskBitfield::Bit_None;
 
+		bool GetCastShadow() const;
+		void SetCastShadow(bool Enabled);
+
+	protected:
+		bool bCastShadow = true; 
+
 	private:
 		StaticMesh* Mesh;
 		std::unique_ptr<Material> SourceMaterial;

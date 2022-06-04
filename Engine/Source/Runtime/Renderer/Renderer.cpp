@@ -31,6 +31,7 @@
 
 #include "Runtime/Engine/GameFramwork/GameSettings.h"
 #include "Runtime/Math/ViewMatrix.h"
+#include "Runtime/Math/OrthoMatrix.h"
 
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
@@ -160,14 +161,55 @@ namespace Durna
 		Vector3f LightRightVector = Vector3f::CrossProduct(Vector3f::UpVector, LightForwardVector).Normalize();
 		Vector3f LightUpVector = Vector3f::CrossProduct(LightForwardVector, LightRightVector).Normalize();
 
-		ViewMatrix<float> LightViewMatrix = ViewMatrix<float>(Vector3f(0.5f, 0, 1.0f),
+		Vector3f LightLocation = Vector3f(0.5f, 0, 2.0f);
+
+		ViewMatrix<float> LightViewMatrix = ViewMatrix<float>(LightLocation,
 			LightForwardVector, LightRightVector, LightUpVector);
+
+		OrthoMatrix<float> LightProjectionMatrix = OrthoMatrix<float>(1, 1, 100.0f, 1.0f);
+		
+		float a = 2;
+
+		float top		= a;
+		float right		= a;
+		float bottom	= -a;
+		float left		= -a;
+
+		// @bug: near and far planes are reversed
+ 		float n = 2.5;
+ 		float f = 0.2f;
+
+		float tx = -(right + left) / (right - left);
+		float ty = -(top + bottom) / (top - bottom);
+		float tz = -(f + n) / (f - n);
+
+		LightProjectionMatrix.M[0][0] = 2 / (right - left);
+		LightProjectionMatrix.M[0][1] = 0;
+		LightProjectionMatrix.M[0][2] = 0;
+		LightProjectionMatrix.M[0][3] = tx;
+
+
+		LightProjectionMatrix.M[1][0] = 0;
+		LightProjectionMatrix.M[1][1] = 2 / (top - bottom);
+		LightProjectionMatrix.M[1][2] = 0;
+		LightProjectionMatrix.M[1][3] = ty;
+
+		LightProjectionMatrix.M[2][0] = 0;
+		LightProjectionMatrix.M[2][1] = 0;
+		LightProjectionMatrix.M[2][2] = -2 / (f - n);
+		LightProjectionMatrix.M[2][3] = tz;
+
+		LightProjectionMatrix.M[3][0] = 0;
+		LightProjectionMatrix.M[3][1] = 0;
+		LightProjectionMatrix.M[3][2] = 0;
+		LightProjectionMatrix.M[3][3] = 1;
+		
 
 		for (PrimitiveComponent* Pr : RenderQue.Queue)
 		{
-			if (Pr)
+			if (Pr && Pr->GetCastShadow())
 			{
-				RenderCommands::DrawPrimitive(Pr, LightViewMatrix);
+				RenderCommands::DrawPrimitive(Pr, LightViewMatrix, LightProjectionMatrix);
 			}
 		}
 
@@ -190,7 +232,7 @@ namespace Durna
 			if (Pr)
 			{
 				RenderCommands::DrawPrimitive(Pr);
-				//RenderCommands::DrawPrimitive(Pr, LightViewMatrix);
+				//RenderCommands::DrawPrimitive(Pr, LightViewMatrix, LightProjectionMatrix);
 			}
 		}
 
@@ -221,7 +263,10 @@ namespace Durna
 		PostProccessMaterial.GetShader()->SetUniformMatrix4f("LightMatrix", LightViewMatrix.M[0]);
 
 		PostProccessMaterial.GetShader()->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
-		PostProccessMaterial.GetShader()->SetUniformMatrix4f("Projection", CameraManager::Get()->GetProjectionMatrix());
+		PostProccessMaterial.GetShader()->SetUniformMatrix4f("Projection", LightProjectionMatrix.M[0]);
+	
+		PostProccessMaterial.GetShader()->SetUniformVec3f("LightLocation", LightLocation);
+		PostProccessMaterial.GetShader()->SetUniformVec3f("LightDirection", LightForwardVector);
 
 
  		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);

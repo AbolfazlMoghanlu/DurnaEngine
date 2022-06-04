@@ -50,6 +50,7 @@ void GameApplication::Init()
 
 	SkyComponent->StencilValue = 64;
 	SkyComponent->StencilMask = StencilMaskBitfield::Bit_7;
+	SkyComponent->SetCastShadow(false);
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
@@ -173,8 +174,8 @@ void GameApplication::Init()
 
 	CameraActor* CameraAct = new CameraActor;
 
-	CameraAct->GetCameraComponent()->SetFOV(40.0);
-	CameraAct->GetCameraComponent()->SetPerspectiveMinZ(0.1f);
+	CameraAct->GetCameraComponent()->SetFOV(45.0f);
+	CameraAct->GetCameraComponent()->SetPerspectiveMinZ(1.0f);
 	CameraAct->GetCameraComponent()->SetPerspectiveMaxZ(1000.0f);
 	CameraAct->GetCameraComponent()->SetWorldLocation(Vector3f(-1, 0, .25));
 	CameraAct->GetCameraComponent()->SetPerspectiveWidth(1920);

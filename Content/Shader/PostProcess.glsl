@@ -33,7 +33,8 @@ uniform mat4 View;
 uniform mat4 Projection;
 
 uniform vec3 CameraLocation;
-
+uniform vec3 LightDirection;
+uniform vec3 LightLocation;
 
 uniform int DisplayBufer;
 
@@ -71,15 +72,28 @@ void main()
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
 
-    vec4 LightSpacePoition = LightMatrix * vec4(WorldPosition, 1);
+    vec4 LightSpacePoition = Projection * LightMatrix * vec4(WorldPosition, 1);
     
-    vec3 C = LightSpacePoition.xyz / LightSpacePoition.w;
+    float w = LightSpacePoition.w != 0 ? LightSpacePoition.w : 1.0f;
+    vec3 C = LightSpacePoition.xyz / w;
+    //vec3 C = LightSpacePoition.xyz;
     C = C * 0.5f + 0.5f;
 
-    float Shadow = C.z - texture(ShadowMap, C.xy).x;
-    Shadow = Shadow > 0.29 ? Shadow : 0.0f;
-    Shadow *= 2;
-    Shadow = clamp(Shadow, 0, 1);
+    vec2 Uv = C.xy;
+
+    float Shadow;;
+    float bias = 0.001;
+    float D = texture(ShadowMap, Uv).x;
+    Shadow = C.z - bias > D ? 1.0f : 0.0f;
+
+    float CameraFacing = dot(LightDirection, WorldPosition - LightLocation);
+
+    if(Uv.x < 0.01 || Uv.x > 0.99 || Uv.y < 0.01 || Uv.y > 0.99 || CameraFacing < 0)
+    {
+        Shadow = 0;
+        //Uv = vec2(0);
+    }
+
 
     vec4 Color = SceneColor;
     
@@ -148,6 +162,11 @@ void main()
         case 0:
            FragColor = Color; 
            //FragColor = vec4(Shadow); 
+           //FragColor = vec4(Uv, 0, 1.0);
+           //FragColor = vec4(C.z);
+           //FragColor = vec4(LightSpacePoition.w);
+           //FragColor = vec4(D);
+           //FragColor = vec4(CameraFacing);
         break;
 
         // base color
