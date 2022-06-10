@@ -3,7 +3,6 @@
 
 namespace Durna
 {
-	
 	ResolveDefferedBuffer::ResolveDefferedBuffer()
 	{
 		AddAttachment("Buffer_Color", FrameBufferAttachmentType::Color_0,
@@ -17,7 +16,7 @@ namespace Durna
 
 	ResolveDefferedBuffer::~ResolveDefferedBuffer()
 	{
-
+		
 	}
 
 	std::shared_ptr<ResolveDefferedBuffer> ResolveDefferedBuffer::Create()
@@ -29,5 +28,4 @@ namespace Durna
 	{
 		return TextureID;
 	}
-
 }

@@ -29,6 +29,8 @@
 #include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
+#include "Runtime/Renderer/FrameBuffer/ShadowFrameBuffer.h"
+
 #include "Runtime/Engine/GameFramwork/GameSettings.h"
 #include "Runtime/Math/ViewMatrix.h"
 #include "Runtime/Math/OrthoMatrix.h"
@@ -47,7 +49,7 @@ namespace Durna
 
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
 	std::shared_ptr<ResolveDefferedBuffer> Renderer::ResolvedBuffer = nullptr;
-	std::shared_ptr<FrameBuffer> Renderer::ShadowFBO = nullptr;
+	std::shared_ptr<ShadowFrameBuffer> Renderer::ShadowFBO = nullptr;
 
 	RenderQueue Renderer::RenderQue;
 
@@ -131,11 +133,17 @@ namespace Durna
 
 		Gbuffer = GBuffer::Create();
 		ResolvedBuffer = ResolveDefferedBuffer::Create();
+		/*
 		ShadowFBO = FrameBuffer::Create();
 		ShadowFBO->AddAttachment("Buffer_ShadowMap", FrameBufferAttachmentType::Depth,
 			FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth,
 			FrameBufferAttachmentDataType::Float);
 		ShadowFBO->SetSize(1024, 1024);
+		*/
+
+		ShadowFBO = ShadowFrameBuffer::Create();
+		ShadowFBO->SetSize(1024, 1024);
+
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
 		UpdatePostProcessUniforms();
@@ -150,9 +158,7 @@ namespace Durna
 
 		RenderCommands::SetViewportSize(IntPoint(1024, 1024));
 		ShadowFBO->Bind();
-//		ShadowFBO->BindDrawBuffers();
- 		glDrawBuffer(GL_NONE);
- 		glReadBuffer(GL_NONE);
+
  		glClear(GL_DEPTH_BUFFER_BIT);
  		glEnable(GL_DEPTH_TEST);
 
@@ -166,45 +172,8 @@ namespace Durna
 		ViewMatrix<float> LightViewMatrix = ViewMatrix<float>(LightLocation,
 			LightForwardVector, LightRightVector, LightUpVector);
 
-		OrthoMatrix<float> LightProjectionMatrix = OrthoMatrix<float>(1, 1, 100.0f, 1.0f);
+		OrthoMatrix<float> LightProjectionMatrix = OrthoMatrix<float>(2.0f, -2.0f, 2.0f, -2.0f, 0.2f, 2.5f);
 		
-		float a = 2;
-
-		float top		= a;
-		float right		= a;
-		float bottom	= -a;
-		float left		= -a;
-
-		// @bug: near and far planes are reversed
- 		float n = 2.5;
- 		float f = 0.2f;
-
-		float tx = -(right + left) / (right - left);
-		float ty = -(top + bottom) / (top - bottom);
-		float tz = -(f + n) / (f - n);
-
-		LightProjectionMatrix.M[0][0] = 2 / (right - left);
-		LightProjectionMatrix.M[0][1] = 0;
-		LightProjectionMatrix.M[0][2] = 0;
-		LightProjectionMatrix.M[0][3] = tx;
-
-
-		LightProjectionMatrix.M[1][0] = 0;
-		LightProjectionMatrix.M[1][1] = 2 / (top - bottom);
-		LightProjectionMatrix.M[1][2] = 0;
-		LightProjectionMatrix.M[1][3] = ty;
-
-		LightProjectionMatrix.M[2][0] = 0;
-		LightProjectionMatrix.M[2][1] = 0;
-		LightProjectionMatrix.M[2][2] = -2 / (f - n);
-		LightProjectionMatrix.M[2][3] = tz;
-
-		LightProjectionMatrix.M[3][0] = 0;
-		LightProjectionMatrix.M[3][1] = 0;
-		LightProjectionMatrix.M[3][2] = 0;
-		LightProjectionMatrix.M[3][3] = 1;
-		
-
 		for (PrimitiveComponent* Pr : RenderQue.Queue)
 		{
 			if (Pr && Pr->GetCastShadow())

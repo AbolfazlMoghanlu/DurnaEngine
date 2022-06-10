@@ -41,4 +41,11 @@ namespace Durna
 		float ZScale = 0.005f;
 		float ZOffset = 150.0f;
 	};
+
+
+	struct MinimalViewInfo
+	{
+		Vector3f Location;
+		Rotatorf Rotation;
+	};
 }

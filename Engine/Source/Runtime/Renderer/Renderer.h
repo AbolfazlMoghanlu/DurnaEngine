@@ -16,6 +16,7 @@ namespace Durna
 	class RenderQueue;
 	class GBuffer;
 	class ResolveDefferedBuffer;
+	class ShadowFrameBuffer;
 
 	class Renderer
 	{
@@ -52,7 +53,7 @@ namespace Durna
 		// TODO: make private
 		static std::shared_ptr<GBuffer> Gbuffer;
 		static std::shared_ptr<ResolveDefferedBuffer> ResolvedBuffer;
-		static std::shared_ptr<FrameBuffer> ShadowFBO;
+		static std::shared_ptr<ShadowFrameBuffer> ShadowFBO;		
 
 	protected:
 		
