@@ -70,14 +70,9 @@ namespace Durna
 			RelativeLocation = Inlocation;
 		}
 
-		else
-		{
-
-		}
-
 		if (bMarkDirty)
 		{
-			MarkDirtyRotationRecursive();
+			MarkDirtyLocationRecursive();
 		}
 	}
 
@@ -146,7 +141,13 @@ namespace Durna
 
 	void SceneComponent::SetWorldRotation(const Rotatorf& InRotator, bool bMarkDirty /*= true*/)
 	{
+		if (GetOwningActor()->GetRoot() == this)
+		{
+			WorldRotation = InRotator;
+			RelativeRotation = InRotator;
+		}
 
+		MarkDirtyRotationRecursive();
 	}
 
 	void SceneComponent::UpdateRotation()
@@ -215,7 +216,13 @@ namespace Durna
 
 	void SceneComponent::SetWorldScale(const Vector3f& InScale, bool bMarkDirty /*= true*/)
 	{
+		if (GetOwningActor()->GetRoot() == this)
+		{
+			WorldScale = InScale;
+			RelativeScale = InScale;
+		}
 
+		MarkDirtyScaleRecursive();
 	}
 
 	void SceneComponent::UpdateScale()

@@ -4,6 +4,10 @@
 #include "Runtime/Math/Vector3.h"
 #include "Runtime/Math/Rotator.h"
 
+#if WITH_EDITOR
+#include "Editor/DetailsPanel/DetailPanelInterface.h"
+#endif
+
 namespace Durna
 {
 	class SceneComponent : public Component
@@ -62,6 +66,11 @@ namespace Durna
 		void MarkDirtyScale();
 		void MarkDirtyScaleRecursive();
 
+
+#if WITH_EDITOR
+		DetailPanelInterface* Panel = nullptr;
+#endif
+
 	private:
 		
 		SceneComponent* Parent = nullptr;
@@ -84,6 +93,7 @@ namespace Durna
 		bool bDirtyScale	= true;
 
 		friend class Actor;
+		friend class DetailsPanelGuiLayer;
 	};
 
 }

@@ -18,6 +18,7 @@ namespace Durna
 
 
 	private:
+		friend class DirectionalLightComponentPanel;
 	};
 }
 

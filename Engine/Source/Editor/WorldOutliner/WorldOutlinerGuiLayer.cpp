@@ -26,7 +26,10 @@ namespace Durna
 					bSelected = true;
 				}
 			
-				ImGui::Button(It->GetActorLabel().c_str());
+				if (ImGui::Button(It->GetActorLabel().c_str()))
+				{
+					Editor::Get()->ClearSelectedComponent();
+				}
 
 				if (ImGui::IsItemClicked())
 				{

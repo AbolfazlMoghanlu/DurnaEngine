@@ -17,6 +17,7 @@ namespace Durna
 		ImGui::Begin("DetailPanel");
 
 		Actor* SelectedActor = Editor::Get()->GetSelectedActor();
+		SceneComponent* SelectedComponent = Editor::Get()->GetSelectedComponent();
 
 		if (SelectedActor)
 		{
@@ -25,8 +26,12 @@ namespace Durna
 
 			BuildComponents(SelectedActor);
 
-			BuildTransformHeader(Editor::Get()->GetSelectedComponent() ?
-				Editor::Get()->GetSelectedComponent() : SelectedActor->GetRoot());
+			BuildTransformHeader(SelectedComponent ? SelectedComponent : SelectedActor->GetRoot());
+
+			if (SelectedComponent && SelectedComponent->Panel != nullptr)
+			{
+				SelectedComponent->Panel->DrawPanel();
+			}
 		}
 		
 		ImGui::End();
@@ -85,22 +90,55 @@ namespace Durna
 	{
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			std::stringstream LocationText;
-			LocationText << "Location	";
-			LocationText << InSceneComponent->GetRelativeLocation().ToString();
-			ImGui::Text(LocationText.str().c_str());
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(0, 80);
 
-			std::stringstream RotationText;
-			RotationText << "Location	";
-			RotationText << InSceneComponent->GetRelativeRotation().ToString();
-			ImGui::Text(RotationText.str().c_str());
+			// ------- location -------------------------
+			ImGui::Text("Location");
+			ImGui::NextColumn();
+			ImGui::DragFloat3("##Location", &InSceneComponent->RelativeLocation.X, 0.1f, -1000.0f, 1000.0f);
 
-			std::stringstream ScaleText;
-			ScaleText << "Location	";
-			ScaleText << InSceneComponent->GetRelativeScale().ToString();
-			ImGui::Text(ScaleText.str().c_str());
+			// if it's root then update it's world to relative
+			if (InSceneComponent->Parent == nullptr)
+			{
+				InSceneComponent->WorldLocation = InSceneComponent->RelativeLocation;
+			}
+
+			InSceneComponent->MarkDirtyLocationRecursive();
+			
+			// ------- rotation -------------------------
+			ImGui::NextColumn();
+			ImGui::Text("Rotation");
+			ImGui::NextColumn();
+
+			ImGui::DragFloat3("##Rotation", &InSceneComponent->RelativeRotation.Pitch, 1.0f, -360.0f, 360.0f);
+
+			// if it's root then update it's world to relative
+			if (InSceneComponent->Parent == nullptr)
+			{
+				InSceneComponent->WorldRotation = InSceneComponent->RelativeRotation;
+			}
+
+			InSceneComponent->MarkDirtyRotationRecursive();
+
+			
+			// ------- scale -------------------------
+			ImGui::NextColumn();
+			ImGui::Text("Scale");
+			ImGui::NextColumn();
+			ImGui::DragFloat3("##Scale", &InSceneComponent->RelativeScale.X, 0.1f, -10.0f, 10.0f);
+			ImGui::Columns(1);
+
+			// if it's root then update it's world to relative
+			if (InSceneComponent->Parent == nullptr)
+			{
+				InSceneComponent->WorldScale = InSceneComponent->RelativeScale;
+			}
+
+			InSceneComponent->MarkDirtyScaleRecursive();
 		}
 	}
 }
+
 
 #endif

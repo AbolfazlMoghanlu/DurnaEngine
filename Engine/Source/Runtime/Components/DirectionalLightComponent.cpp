@@ -3,14 +3,26 @@
 #include "Runtime/Math/ViewMatrix.h"
 #include "Runtime/Math/OrthoMatrix.h"
 
+#if WITH_EDITOR
+#include "Editor/DetailsPanel/DirectionalLightComponentPanel.h"
+#endif
+
 namespace Durna
 {
 	DirectionalLightComponent::DirectionalLightComponent(const std::string& InLabel)
 		: LightComponent(InLabel)
-	{ }
+	{
+#if WITH_EDITOR
+		Panel = new DirectionalLightComponentPanel(this);
+#endif
+	}
 
 	DirectionalLightComponent::~DirectionalLightComponent()
-	{ }
+	{ 
+#if WITH_EDITOR
+		delete Panel;
+#endif
+	}
 
 	void DirectionalLightComponent::Tick(float DateTime)
 	{

@@ -35,7 +35,7 @@ namespace Durna
 
 	void Actor::SetActorLocation(const Vector3f& InLocation)
 	{
-		return Root->SetWorldLocation(InLocation);
+		Root->SetWorldLocation(InLocation);
 		Root->MarkDirtyLocationRecursive();
 	}
 
@@ -46,7 +46,7 @@ namespace Durna
 
 	void Actor::SetActorRotation(const Rotatorf& InRotator)
 	{
-		Root->WorldRotation = InRotator;
+		Root->SetWorldRotation(InRotator);
 		Root->MarkDirtyRotationRecursive();
 	}
 
@@ -57,7 +57,7 @@ namespace Durna
 
 	void Actor::SetActorScale(const Vector3f& InScale)
 	{
-		Root->WorldScale = InScale;
+		Root->SetWorldScale(InScale);
 		Root->MarkDirtyScaleRecursive();
 	}
 

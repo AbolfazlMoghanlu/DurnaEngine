@@ -65,10 +65,6 @@ namespace Durna
 	LinearColor Renderer::AmbientLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	float Renderer::AmbientLightIntensity = 1.0f;
 
-	LinearColor Renderer::DiffuseLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	float Renderer::DiffuseLightIntensity = 0.3f;
-	Rotatorf Renderer::DiffuseLightRation = Rotatorf(270.0f, 180.0f, 0.0f);
-
 	void Renderer::UpdatePostProcessUniforms()
 	{
 		if (PostProccessMaterial.GetShader())
@@ -96,9 +92,16 @@ namespace Durna
 			PostProccessMaterial.GetShader()->SetUniformVec3f("AmbientLightColor", AmbientLightColor);
 			PostProccessMaterial.GetShader()->SetUniform1f("AmbientLightIntensity", AmbientLightIntensity);
 
-			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightColor", DiffuseLightColor);
-			PostProccessMaterial.GetShader()->SetUniform1f("DiffuseLightIntensity", DiffuseLightIntensity);
-			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightDirection", DiffuseLightRation.GetForwardVector());
+			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightColor", World::Get()->GetDirectionalLight() ? 
+				World::Get()->GetDirectionalLight()->GetLightComponent()->GetLightColor() : LinearColor::White);
+
+			PostProccessMaterial.GetShader()->SetUniform1f("DiffuseLightIntensity", World::Get()->GetDirectionalLight() ? 
+				World::Get()->GetDirectionalLight()->GetLightComponent()->GetIntensity() : 1.0f);
+
+			Rotatorf DiffuseLightRotation = World::Get()->GetDirectionalLight() ?
+				World::Get()->GetDirectionalLight()->GetLightComponent()->GetWorldRotation() : Rotatorf(0.0f);
+
+			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightDirection", DiffuseLightRotation.GetForwardVector());
 		}
 	}
 

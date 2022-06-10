@@ -46,10 +46,6 @@ namespace Durna
 		static LinearColor AmbientLightColor;
 		static float AmbientLightIntensity;
 
-		static LinearColor DiffuseLightColor;
-		static float DiffuseLightIntensity;
-		static Rotatorf DiffuseLightRation;
-
 		// TODO: make private
 		static std::shared_ptr<GBuffer> Gbuffer;
 		static std::shared_ptr<ResolveDefferedBuffer> ResolvedBuffer;	

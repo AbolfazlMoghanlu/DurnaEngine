@@ -29,12 +29,12 @@ namespace Durna
 		Intensity = InIntensity;
 	}
 
-	Color LightComponent::GetLightColor() const
+	LinearColor LightComponent::GetLightColor() const
 	{
 		return LightColor;
 	}
 
-	void LightComponent::SetLightColor(const Color& InColor)
+	void LightComponent::SetLightColor(const LinearColor& InColor)
 	{
 		LightColor = InColor;
 	}

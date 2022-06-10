@@ -2,6 +2,7 @@
 
 #include "Runtime/Components/SceneComponent.h"
 #include "Runtime/Math/Color.h"
+#include "Runtime/Math/LinearColor.h"
 #include "Runtime/Math/Matrix.h"
 
 namespace Durna
@@ -19,8 +20,8 @@ namespace Durna
 		float GetIntensity() const;
 		void SetIntensity(float InIntensity);
 
-		Color GetLightColor() const;
-		void SetLightColor(const Color& InColor);
+		LinearColor GetLightColor() const;
+		void SetLightColor(const LinearColor& InColor);
 
 		float GetMaxDrawDistance() const;
 		void SetMaxDrawDistance(float InMaxDrawDistance);
@@ -46,7 +47,7 @@ namespace Durna
 
 	protected:
 		float Intensity = 1.0f;
-		Color LightColor = Color::White;
+		LinearColor LightColor = LinearColor::White;
 
 		float MaxDrawDistance = 1.0f;
 		float MaxFadeRange = 1.0f;
