@@ -15,6 +15,7 @@ namespace Durna
 	StaticMesh* AssetLibrary::GizmoMesh;
 	StaticMesh* AssetLibrary::RockMesh;
 	StaticMesh* AssetLibrary::PlaneMesh;
+	StaticMesh* AssetLibrary::ArrowMesh;
 
 	PrimitiveComponent* AssetLibrary::ScreenQuad;
 
@@ -52,6 +53,7 @@ namespace Durna
 	Shader* AssetLibrary::RockShader;
 	Shader* AssetLibrary::ResolvedShader;
 	Shader* AssetLibrary::ShadowmapShader;
+	Shader* AssetLibrary::ArrowShader;
 
 	void AssetLibrary::Init()
 	{
@@ -62,7 +64,10 @@ namespace Durna
 		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.obj"), RockMesh);
 
 		PlaneMesh = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("SM_Plane.obj"), PlaneMesh);
+		ModelLoader::Load(Path::ModelRelativePath("SM_Plane.obj"), PlaneMesh); 
+		
+		ArrowMesh = new StaticMesh;
+		ModelLoader::Load(Path::ModelRelativePath("Arrow.obj"), ArrowMesh);
 
 		ScreenQuad = new PrimitiveComponent("ScreenQuad");
 		ScreenQuad->SetStaticMesh(&BaseShapes::Plane, 1);
@@ -101,5 +106,6 @@ namespace Durna
 		RockShader = new Shader(Path::ShaderRelativePath("RockShader.glsl"));
 		ResolvedShader = new Shader(Path::ShaderRelativePath("ResolvedShader.glsl"));
 		ShadowmapShader = new Shader(Path::ShaderRelativePath("ShadowMapShader.glsl"));
+		ArrowShader = new Shader(Path::ShaderRelativePath("ArrowShader.glsl"));
 	}
 }

@@ -51,6 +51,6 @@ namespace Durna
 		//	0.2f, 2.5f);
 
 		LightProjectionMatrix = OrthoMatrix<float>(2.0f, -2.0f, 2.0f, -2.0f,
-			0.2f, 2.5f);
+			0.02f, 2.5f);
 	}
 }

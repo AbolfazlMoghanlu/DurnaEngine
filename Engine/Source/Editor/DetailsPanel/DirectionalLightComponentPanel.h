@@ -17,6 +17,9 @@ namespace Durna
 
 	private:
 		DirectionalLightComponent* Target;
+
+		bool bChachedCastShadow = false;
+		int32 CachedShadowResolution = 0;
 	};
 }
 

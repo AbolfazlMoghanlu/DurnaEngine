@@ -16,8 +16,6 @@ namespace Durna
 	World::World()
 	{ 
 		InitPrimitiveActors();
-
-		std::cout << "waerawe";
 	}
 
 	World::~World()

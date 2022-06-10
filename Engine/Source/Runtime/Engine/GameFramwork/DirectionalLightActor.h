@@ -5,6 +5,7 @@
 namespace Durna
 {
 	class DirectionalLightComponent;
+	class PrimitiveComponent;
 
 	class DirectionalLightActor : public Actor
 	{
@@ -16,6 +17,7 @@ namespace Durna
 
 	protected:
 		std::unique_ptr<DirectionalLightComponent> LightSourceComponent;
+		std::unique_ptr<PrimitiveComponent> ArrowComponent;
 		
 	private:
 		

@@ -17,6 +17,7 @@ namespace Durna
 		static StaticMesh* GizmoMesh;
 		static StaticMesh* RockMesh;
 		static StaticMesh* PlaneMesh;
+		static StaticMesh* ArrowMesh;
 
 		static PrimitiveComponent* ScreenQuad;
 
@@ -53,5 +54,6 @@ namespace Durna
 		static Shader* RockShader;
 		static Shader* ResolvedShader;
 		static Shader* ShadowmapShader;
+		static Shader* ArrowShader;
 	};
 }

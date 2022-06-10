@@ -32,8 +32,39 @@ namespace Durna
 					ImGui::TableNextColumn();
 					ImGui::ColorEdit4("##LightColor", &Target->LightColor.R);
 
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::Text("Cast Shadow");
+					ImGui::TableNextColumn();
+					ImGui::Checkbox("##CastShadow", &Target->bCastShadow);
+
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::Text("Shadow Resolution");
+					ImGui::TableNextColumn();
+	
+					if (!bChachedCastShadow)
+						ImGui::BeginDisabled();
+					
+					ImGui::DragInt("##ShadowResolution", &Target->ShadowResolution, 1, 32, 2048);
+
+					if (!bChachedCastShadow)
+						ImGui::EndDisabled();
+
 					ImGui::EndTable();
 				}
+			}
+
+			if (bChachedCastShadow != Target->bCastShadow)
+			{
+				bChachedCastShadow = Target->bCastShadow;
+				Target->SetCastShadow(bChachedCastShadow);
+			}
+
+			if (CachedShadowResolution != Target->GetShadowResolution())
+			{
+				CachedShadowResolution = Target->GetShadowResolution();
+				Target->SetShadowResolution(CachedShadowResolution);
 			}
 		}
 	}

@@ -74,6 +74,7 @@ void GameApplication::Init()
 			InShader->SetUniformVec3f("ActorLocation", InComponent->GetOwningActor()->GetActorLocation());
 		});
 	WorldGizmo->GetMeshComponent()->SetRelativeScale(Vector3f(0.1f));
+	WorldGizmo->GetMeshComponent()->SetCastShadow(false);
 
 #if WITH_EDITOR
 	WorldGizmo->SetActorLabel("WorldGizmo");
