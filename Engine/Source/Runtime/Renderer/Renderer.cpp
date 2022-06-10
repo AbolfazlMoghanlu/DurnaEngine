@@ -35,6 +35,10 @@
 #include "Runtime/Math/ViewMatrix.h"
 #include "Runtime/Math/OrthoMatrix.h"
 
+#include "Runtime/Engine/GameFramwork/DirectionalLightActor.h"
+#include "Runtime/Components/DirectionalLightComponent.h"
+#include "Runtime/Engine/World.h"
+
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
 #endif
@@ -49,7 +53,6 @@ namespace Durna
 
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
 	std::shared_ptr<ResolveDefferedBuffer> Renderer::ResolvedBuffer = nullptr;
-	std::shared_ptr<ShadowFrameBuffer> Renderer::ShadowFBO = nullptr;
 
 	RenderQueue Renderer::RenderQue;
 
@@ -133,17 +136,6 @@ namespace Durna
 
 		Gbuffer = GBuffer::Create();
 		ResolvedBuffer = ResolveDefferedBuffer::Create();
-		/*
-		ShadowFBO = FrameBuffer::Create();
-		ShadowFBO->AddAttachment("Buffer_ShadowMap", FrameBufferAttachmentType::Depth,
-			FrameBufferAttachmentFormat::Depth, FrameBufferAttachmentFormat::Depth,
-			FrameBufferAttachmentDataType::Float);
-		ShadowFBO->SetSize(1024, 1024);
-		*/
-
-		ShadowFBO = ShadowFrameBuffer::Create();
-		ShadowFBO->SetSize(1024, 1024);
-
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
 		UpdatePostProcessUniforms();
@@ -156,57 +148,8 @@ namespace Durna
 		MainWindow->Tick(DeltaTime);
 		Time += DeltaTime;
 
-		RenderCommands::SetViewportSize(IntPoint(1024, 1024));
-		ShadowFBO->Bind();
-
- 		glClear(GL_DEPTH_BUFFER_BIT);
- 		glEnable(GL_DEPTH_TEST);
-
-
-		Vector3f LightForwardVector = DiffuseLightRation.GetForwardVector();
-		Vector3f LightRightVector = Vector3f::CrossProduct(Vector3f::UpVector, LightForwardVector).Normalize();
-		Vector3f LightUpVector = Vector3f::CrossProduct(LightForwardVector, LightRightVector).Normalize();
-
-		Vector3f LightLocation = Vector3f(0.5f, 0, 2.0f);
-
-		ViewMatrix<float> LightViewMatrix = ViewMatrix<float>(LightLocation,
-			LightForwardVector, LightRightVector, LightUpVector);
-
-		OrthoMatrix<float> LightProjectionMatrix = OrthoMatrix<float>(2.0f, -2.0f, 2.0f, -2.0f, 0.2f, 2.5f);
+		Render();
 		
-		for (PrimitiveComponent* Pr : RenderQue.Queue)
-		{
-			if (Pr && Pr->GetCastShadow())
-			{
-				RenderCommands::DrawPrimitive(Pr, LightViewMatrix, LightProjectionMatrix);
-			}
-		}
-
-
-		Gbuffer->Bind();
-		Gbuffer->BindDrawBuffers();
-
-		RenderCommands::ClearColorBuffer();
-
-		RenderCommands::EnableDepthTest();
-		RenderCommands::ClearDepthBuffer();
-
-		RenderCommands::EnableStencilTest();
-		RenderCommands::ClearStencilBuffer();
-
-		RenderCommands::SetViewportSize(MainWindow->Resolution);
-
-		for (PrimitiveComponent* Pr : RenderQue.Queue)
-		{
-			if (Pr)
-			{
-				RenderCommands::DrawPrimitive(Pr);
-				//RenderCommands::DrawPrimitive(Pr, LightViewMatrix, LightProjectionMatrix);
-			}
-		}
-
-		Gbuffer->Unbind();
-		Gbuffer->UnbindDrawBuffers();
 
 		RenderCommands::DisableDepthTest();
 		RenderCommands::DisableStencilTest();
@@ -221,22 +164,38 @@ namespace Durna
 		// if there is editor keep uniforms in update with parameters in ui
 		UpdatePostProcessUniforms();
 #endif
+
+		DirectionalLightComponent* DirectionalLightSource = World::Get()->GetDirectionalLight()->GetLightComponent();
+		if (DirectionalLightSource && DirectionalLightSource->IsVisible() && DirectionalLightSource->GetCastShadow())
+		{
+			std::shared_ptr<ShadowFrameBuffer> DirectionalLightFBO = DirectionalLightSource->GetShadowFrameBuffer();
+
+			if (DirectionalLightFBO.get())
+			{
+				PostProccessMaterial.GetShader()->Use();
+				Texture::ActivateTexture(6);
+
+
+				glBindTexture(GL_TEXTURE_2D, DirectionalLightFBO->GetTextureID());
+
+				int UniformLocation = glGetUniformLocation(PostProccessMaterial.GetShader()->ID, "ShadowMap");
+				glUniform1i(UniformLocation, 6);
+
+				Matrix<float> V = DirectionalLightSource->GetViewMatrix();
+				Matrix<float> P = DirectionalLightSource->GetProjectionMatrix();
+
+				PostProccessMaterial.GetShader()->SetUniformMatrix4f("LightMatrix", V.M[0]);
+
+				PostProccessMaterial.GetShader()->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
+				PostProccessMaterial.GetShader()->SetUniformMatrix4f("Projection", P.M[0]);
+
+				PostProccessMaterial.GetShader()->SetUniformVec3f("LightLocation", DirectionalLightSource->GetWorldLocation());
+				Rotatorf DirectionalLightRotation = DirectionalLightSource->GetWorldRotation();
+				PostProccessMaterial.GetShader()->SetUniformVec3f("LightDirection", DirectionalLightRotation.GetForwardVector());
+			}
+		}
+
 		
-		PostProccessMaterial.GetShader()->Use();
-		Texture::ActivateTexture(6);
-		glBindTexture(GL_TEXTURE_2D, ShadowFBO->Attachments[0]->TextureID);
-
-		int UniformLocation = glGetUniformLocation(PostProccessMaterial.GetShader()->ID, "ShadowMap");
-		glUniform1i(UniformLocation, 6);
-
-		PostProccessMaterial.GetShader()->SetUniformMatrix4f("LightMatrix", LightViewMatrix.M[0]);
-
-		PostProccessMaterial.GetShader()->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
-		PostProccessMaterial.GetShader()->SetUniformMatrix4f("Projection", LightProjectionMatrix.M[0]);
-	
-		PostProccessMaterial.GetShader()->SetUniformVec3f("LightLocation", LightLocation);
-		PostProccessMaterial.GetShader()->SetUniformVec3f("LightDirection", LightForwardVector);
-
 
  		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
 
@@ -259,6 +218,83 @@ namespace Durna
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
 
 		RenderQue.Clear();
+	}
+
+
+	void Renderer::Render()
+	{
+		RenderShadowBuffers();
+
+		BeginRenderGBuffer();
+		RenderGBuffer();
+		FinishRenderGBuffer();
+	}
+
+
+	void Renderer::BeginRenderGBuffer()
+	{
+		Gbuffer->Bind();
+		Gbuffer->BindDrawBuffers();
+
+		RenderCommands::ClearColorBuffer();
+
+		RenderCommands::EnableDepthTest();
+		RenderCommands::ClearDepthBuffer();
+
+		RenderCommands::EnableStencilTest();
+		RenderCommands::ClearStencilBuffer();
+
+		RenderCommands::SetViewportSize(MainWindow->Resolution);
+	}
+
+	void Renderer::RenderGBuffer()
+	{
+		for (PrimitiveComponent* Pr : RenderQue.Queue)
+		{
+			if (Pr)
+			{
+				RenderCommands::DrawPrimitive(Pr);
+				//RenderCommands::DrawPrimitive(Pr, LightViewMatrix, LightProjectionMatrix);
+			}
+		}
+	}
+
+	void Renderer::FinishRenderGBuffer()
+	{
+		Gbuffer->Unbind();
+		Gbuffer->UnbindDrawBuffers();
+	}
+
+	void Renderer::RenderShadowBuffers()
+	{
+		glEnable(GL_DEPTH_TEST);
+
+
+		DirectionalLightComponent* DirectionalLightSource = World::Get()->GetDirectionalLight()->GetLightComponent();
+		
+		if (DirectionalLightSource && DirectionalLightSource->IsVisible() && DirectionalLightSource->GetCastShadow())
+		{
+			std::shared_ptr<ShadowFrameBuffer> DirectionalLightFBO = DirectionalLightSource->GetShadowFrameBuffer();
+
+			if (DirectionalLightFBO.get())
+			{
+				RenderCommands::SetViewportSize(DirectionalLightSource->GetShadowResolution());
+				DirectionalLightFBO->Bind();
+
+				glClear(GL_DEPTH_BUFFER_BIT);
+
+				for (PrimitiveComponent* Pr : RenderQue.Queue)
+				{
+					if (Pr && Pr->GetCastShadow())
+					{
+						RenderCommands::DrawPrimitive(Pr, DirectionalLightSource->GetViewMatrix(),
+							DirectionalLightSource->GetProjectionMatrix());
+					}
+				}
+			}
+
+		}
+
 	}
 
 	void Renderer::Shutdown()

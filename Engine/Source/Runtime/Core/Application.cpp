@@ -27,7 +27,7 @@ namespace Durna
 
 	void Application::Tick(float DeltaTime)
 	{
-		World::Tick(DeltaTime);
+		World::Get()->Tick(DeltaTime);
 		CameraManager::Get()->Tick(DeltaTime);
 		Renderer::Tick(DeltaTime);
 	}

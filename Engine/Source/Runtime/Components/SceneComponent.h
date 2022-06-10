@@ -11,7 +11,7 @@ namespace Durna
 	public:
 		SceneComponent(const std::string& InLabel);
 		
-		void Tick(float DeltaTime) override;
+		virtual void Tick(float DeltaTime) override;
 
 		void AttachSceneComponent(SceneComponent* InComponent);
 

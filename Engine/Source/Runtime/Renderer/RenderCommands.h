@@ -18,7 +18,7 @@ namespace Durna
 		~RenderCommands();
 
 		static void DrawPrimitive(PrimitiveComponent* Comp);
-		static void DrawPrimitive(PrimitiveComponent* Comp, const ViewMatrix<float>& InViewMatrix, const OrthoMatrix<float>& InOrthu);
+		static void DrawPrimitive(PrimitiveComponent* Comp, const Matrix<float>& InViewMatrix, const Matrix<float>& InOrthu);
 
 
 		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial);

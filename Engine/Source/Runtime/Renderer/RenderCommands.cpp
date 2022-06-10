@@ -76,7 +76,7 @@ namespace Durna
 	}
 
 
-	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp, const ViewMatrix<float>& InViewMatrix, const OrthoMatrix<float>& InOrthu)
+	void RenderCommands::DrawPrimitive(PrimitiveComponent* Comp, const Matrix<float>& InViewMatrix, const Matrix<float>& InOrthu)
 	{
 		Comp->VA->Bind();
 		Comp->SourceMaterial->Use();
@@ -85,10 +85,10 @@ namespace Durna
 		ScaleRotationTranslationMatrix<float> Transform(Comp->GetWorldScale(), Comp->GetWorldRotation(), Comp->GetWorldLocation());
 		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Transform", Transform.M[0]);
 
-		ViewMatrix V = InViewMatrix;
+		Matrix V = InViewMatrix;
 		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("View", V.M[0]);
 
-		OrthoMatrix O = InOrthu;
+		Matrix O = InOrthu;
 		Comp->SourceMaterial->GetShader()->SetUniformMatrix4f("Projection", O.M[0]);
 		Comp->SourceMaterial->GetShader()->SetUniform1f("WFactor", CameraManager::Get()->GetWFactor());
 		// -----------------------------------------------------

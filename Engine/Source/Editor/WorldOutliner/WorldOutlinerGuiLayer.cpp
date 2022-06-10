@@ -15,7 +15,7 @@ namespace Durna
 	{
 		ImGui::Begin("World Outliner");
 
-		for (LinkedListIterator It(World::Actors); It; ++It)
+		for (LinkedListIterator It(World::Get()->Actors); It; ++It)
 		{
 			if (It && It->IsVisibleInWorldOutliner())
 			{	

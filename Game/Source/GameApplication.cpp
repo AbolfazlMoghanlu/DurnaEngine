@@ -61,7 +61,7 @@ void GameApplication::Init()
 	SkySphere->SetActorLabel("SkySphere");
 #endif
 
-	World::AddActor(SkySphere);
+	World::Get()->AddActor(SkySphere);
 
 	WorldGizmo = new StaticMeshActor();
 	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1, 1);
@@ -79,7 +79,7 @@ void GameApplication::Init()
 	WorldGizmo->SetActorLabel("WorldGizmo");
 #endif
 
-	World::AddActor(WorldGizmo);
+	World::Get()->AddActor(WorldGizmo);
 	
 	pr1 = new PrimitiveComponent("PrimitiveComponent_1");
 	pr1->SetStaticMesh(CubeMesh, 1, 1);
@@ -117,7 +117,7 @@ void GameApplication::Init()
 	Actor1->SetActorLabel("TestSphereActor");
 #endif
 
-	World::AddActor(Actor1);
+	World::Get()->AddActor(Actor1);
 
 	
 	RockActor = new StaticMeshActor();
@@ -143,7 +143,7 @@ void GameApplication::Init()
 	RockActor->SetActorLabel("Rock");
 #endif
 	
-	World::AddActor(RockActor);
+	World::Get()->AddActor(RockActor);
 	
 
 	FloorActor = new StaticMeshActor();
@@ -169,7 +169,7 @@ void GameApplication::Init()
 	FloorActor->SetActorLabel("Floor");
 #endif
 
-	World::AddActor(FloorActor);
+	World::Get()->AddActor(FloorActor);
 	
 
 	CameraActor* CameraAct = new CameraActor;
@@ -185,7 +185,7 @@ void GameApplication::Init()
 	CameraAct->SetActorLabel("Camera");
 #endif
 
-	World::AddActor(CameraAct);
+	World::Get()->AddActor(CameraAct);
 
 	CameraAct->GetCameraComponent()->Activate();
 

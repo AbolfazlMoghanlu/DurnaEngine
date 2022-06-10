@@ -5,6 +5,7 @@
 namespace Durna
 {
 	class Actor;
+	class DirectionalLightActor;
 
 	class World
 	{
@@ -12,15 +13,24 @@ namespace Durna
 		World();
 		~World();
 
-		static void Tick(float DeltaTime);
-		static void AddActor(Actor* InActor);
+		static World* Get();
+
+		void Tick(float DeltaTime);
+		void AddActor(Actor* InActor);
+
+		DirectionalLightActor* GetDirectionalLight();
 
 	private:
-		static LinkedList<Actor> Actors;
+		static std::unique_ptr<World> MainWorld;
+
+		void InitPrimitiveActors();
+
+		LinkedList<Actor> Actors;
+
+		DirectionalLightActor* DirectionalLightSource;
 
 		friend class WorldOutliner;
 		friend class WorldOutlinerGuiLayer;
 	};
-
 }
 
