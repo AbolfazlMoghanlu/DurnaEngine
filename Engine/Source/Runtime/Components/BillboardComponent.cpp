@@ -19,7 +19,9 @@ namespace Durna
 		BindPreDraw(
 			[](PrimitiveComponent* InComponent, Shader* InShader)
 			{
-				CommonRenderUniforms::UploadCameraForwardVector(InShader);
+				CommonRenderUniforms::UploadOrientation(InShader, InComponent);
+				CommonRenderUniforms::UploadCameraLocation(InShader);
+				CommonRenderUniforms::UploadRenderTime(InShader);
 			});
 	}
 

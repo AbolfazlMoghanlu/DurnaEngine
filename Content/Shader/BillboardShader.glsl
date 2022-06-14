@@ -11,17 +11,32 @@ layout (location = 1) in vec2 aTexCoord;
 out vec3 WorldPosition;
 out vec2 TexCoord;
 
-uniform vec3 CameraForwardVector;
+uniform vec3 CameraLocation;
+uniform float Time;
+uniform float ObjectOrientation;
 
 void main()
 {
-	//float Delta = atan(CameraForwardVector.y, CameraForwardVector.x);
-
-	//vec3 RotatedPosition = vec3(aPos.x * cos(Delta) - aPos.y * sin(Delta) , aPos.x * sin(Delta) + aPos.y * cos(Delta), aPos.z);
-	//vec3 RotatedPosition = vec3(aPos.x, aPos.y * cos(Delta) - aPos.z * sin(Delta), aPos.y * sin(Delta) + aPos.z * cos(Delta));
-	//vec3 RotatedPosition = vec3(aPos.x, aPos.y * cos(Delta) - aPos.z * sin(Delta), aPos.y * sin(Delta) + aPos.z * cos(Delta));
-
 	WorldPosition = (Transform * vec4(aPos, 1)).xyz;
+
+	vec2 CameraForwardVector = normalize((CameraLocation - WorldPosition).xy);
+	vec3 PivotPoint = (Transform * vec4(0, 0, 0, 1)).xyz;
+
+
+	WorldPosition -= PivotPoint;
+
+	float CameraRotation = atan(CameraForwardVector.y, CameraForwardVector.x);
+
+	float Delta = -ObjectOrientation * 3.14f / 180.0f;
+	Delta += CameraRotation;
+
+	Delta -= 3.14 / 2;
+
+	vec3 WorldPosition = vec3(WorldPosition.x * cos(Delta) - WorldPosition.y * sin(Delta),
+		WorldPosition.x * sin(Delta) + WorldPosition.y * cos(Delta), WorldPosition.z);
+
+	WorldPosition += PivotPoint;
+
 	gl_Position =  Projection * View * vec4(WorldPosition, 1);
 
 	TexCoord = aTexCoord;
