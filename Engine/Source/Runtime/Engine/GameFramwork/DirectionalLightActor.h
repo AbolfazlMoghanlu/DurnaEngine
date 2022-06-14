@@ -6,6 +6,7 @@ namespace Durna
 {
 	class DirectionalLightComponent;
 	class PrimitiveComponent;
+	class BillboardComponent;
 
 	class DirectionalLightActor : public Actor
 	{
@@ -17,8 +18,11 @@ namespace Durna
 
 	protected:
 		std::unique_ptr<DirectionalLightComponent> LightSourceComponent;
+
+#if WITH_EDITOR
 		std::unique_ptr<PrimitiveComponent> ArrowComponent;
-		
+		std::unique_ptr<BillboardComponent> Billboard;
+#endif
 	private:
 		
 	};

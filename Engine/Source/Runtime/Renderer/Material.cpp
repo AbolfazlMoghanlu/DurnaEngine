@@ -75,4 +75,13 @@ namespace Durna
 		TextureElements.clear();
 	}
 
+	EShadingModel Material::GetShadingModel() const
+	{
+		return ShadingModel;
+	}
+
+	void Material::SetShadingModel(EShadingModel InShadingModel)
+	{
+		ShadingModel = InShadingModel;
+	}
 }

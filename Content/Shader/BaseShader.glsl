@@ -40,6 +40,7 @@ layout(location = 0) out vec3 FragPosition;
 layout(location = 1) out vec4 FragColor;
 layout(location = 2) out vec3 Normal;
 layout(location = 3) out vec4 S_R_M_AO;
+layout(location = 4) out uint FragShadingModel;
 
 
 in vec3 WorldPosition;
@@ -54,6 +55,8 @@ uniform mat4 Transform;
 uniform float time;
 uniform float Specular;
 
+uniform int ShadingModel;
+
 void main()
 {
 	vec4 Color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
@@ -62,4 +65,5 @@ void main()
 	FragPosition = WorldPosition;
 	Normal = WorldNormal;
 	S_R_M_AO = vec4(Specular, 0.0f, 0.0f, 0.0f);
+	FragShadingModel = ShadingModel;
 }

@@ -16,4 +16,9 @@ namespace Durna
 	{
 		InShader->SetUniformVec3f("CameraLocation", CameraManager::Get()->GetViewLocation());
 	}
+
+	void CommonRenderUniforms::UploadCameraForwardVector(Shader* InShader)
+	{
+		InShader->SetUniformVec3f("CameraForwardVector", CameraManager::Get()->GetViewRotation().GetForwardVector());
+	}
 }

@@ -176,13 +176,13 @@ namespace Durna
 			if (DirectionalLightFBO.get())
 			{
 				PostProccessMaterial.GetShader()->Use();
-				Texture::ActivateTexture(6);
+				Texture::ActivateTexture(7);
 
 
 				glBindTexture(GL_TEXTURE_2D, DirectionalLightFBO->GetTextureID());
 
 				int UniformLocation = glGetUniformLocation(PostProccessMaterial.GetShader()->ID, "ShadowMap");
-				glUniform1i(UniformLocation, 6);
+				glUniform1i(UniformLocation, 7);
 
 				Matrix<float> V = DirectionalLightSource->GetViewMatrix();
 				Matrix<float> P = DirectionalLightSource->GetProjectionMatrix();

@@ -34,6 +34,8 @@ namespace Durna
 		static Image* WoodenFloor_N_Image;
 		static Image* WoodenFloor_S_R_M_AO_Image;
 
+		static Image* DirectionalLightImage;
+
 		static Texture* Rock_Al_Texture;
 		static Texture* Rock_N_Texture;
 		static Texture* Rock_S_R_M_AO_Texture;
@@ -46,6 +48,8 @@ namespace Durna
 		static Texture* WallTexture;
 		static Texture* SkyTexture;
 		static Texture* RgbTexture;
+
+		static Texture* DirectionalLightTexture;
 		
 		static Shader* BaseShader;
 		static Shader* SkyShader;
@@ -55,5 +59,6 @@ namespace Durna
 		static Shader* ResolvedShader;
 		static Shader* ShadowmapShader;
 		static Shader* ArrowShader;
+		static Shader* BillboardShader;
 	};
 }

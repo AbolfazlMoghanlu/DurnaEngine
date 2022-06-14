@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Runtime/Renderer/Texture.h"
+#include "Runtime/Renderer/RenderTypes.h"
 
 namespace Durna
 {
@@ -32,6 +33,12 @@ namespace Durna
 		void BindTextures();
 		void AddTextureElement(const TextureElement& InElement);
 		void ResetTextureElements();
+
+		EShadingModel GetShadingModel() const;
+		void SetShadingModel(EShadingModel InShadingModel);
+
+	protected:
+		EShadingModel ShadingModel = EShadingModel::DefaultLit; 
 
 	private:
 		Shader* SourceShader;

@@ -28,6 +28,10 @@ namespace Durna
 		AddAttachment("Buffer_Specular_Roughness_Metalic_AO", FrameBufferAttachmentType::Color_3,
 			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA32f,
 			FrameBufferAttachmentDataType::Float);
+
+		AddAttachment("Buffer_ShadingModel", FrameBufferAttachmentType::Color_4,
+			FrameBufferAttachmentFormat::Red_Int, FrameBufferAttachmentFormat::R8UI,
+			FrameBufferAttachmentDataType::uByte);
 		
 		RebuildBuffer();
 	}
@@ -93,7 +97,6 @@ namespace Durna
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+		CheckForComplationError();
 	}
 }

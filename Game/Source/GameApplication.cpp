@@ -51,6 +51,7 @@ void GameApplication::Init()
 	SkyComponent->StencilValue = 64;
 	SkyComponent->StencilMask = StencilMaskBitfield::Bit_7;
 	SkyComponent->SetCastShadow(false);
+	SkyComponent->GetMaterial()->SetShadingModel(EShadingModel::Unlit);
 
 	SkySphere = new Actor();
 	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
@@ -67,6 +68,7 @@ void GameApplication::Init()
 	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1, 1);
 	WorldGizmo->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::GizmoShader);
 	WorldGizmo->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("BaseColor", AssetLibrary::RgbTexture));
+	WorldGizmo->GetMeshComponent()->GetMaterial()->SetShadingModel(EShadingModel::Unlit);
 	WorldGizmo->GetMeshComponent()->BindPreDraw(
 		[](PrimitiveComponent* InComponent, Shader* InShader)
 		{

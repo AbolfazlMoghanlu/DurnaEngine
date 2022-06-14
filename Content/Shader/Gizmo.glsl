@@ -38,12 +38,14 @@ layout(location = 0) out vec3 FragPosition;
 layout(location = 1) out vec4 FragColor;
 layout(location = 2) out vec3 Normal;
 layout(location = 3) out vec4 S_R_M_AO;
+layout(location = 4) out uint FragShadingModel;
 
 in vec3 WorldPosition;
 in vec3 WorldNormal;
 in vec2 UVs;
 
 uniform sampler2D BaseColor;
+uniform int ShadingModel;
 
 void main()
 {
@@ -52,4 +54,5 @@ void main()
 	FragPosition = WorldPosition;
 	Normal = WorldNormal;
 	S_R_M_AO = vec4(0);
+	FragShadingModel = ShadingModel;
 }

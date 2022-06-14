@@ -23,8 +23,10 @@ layout(location = 0) out vec3 FragPosition;
 layout(location = 1) out vec4 FragColor;
 layout(location = 2) out vec3 Normal;
 layout(location = 3) out vec4 S_R_M_AO;
+layout (location = 4) out uint FragShadingModel;
 
 in vec3 WorldPosition;
+uniform int ShadingModel;
 
 void main()
 {
@@ -33,4 +35,5 @@ void main()
 	FragPosition = WorldPosition;
 	Normal = vec3(0.0f, 0.0f, 1.0f);
 	S_R_M_AO = vec4(0);
+	FragShadingModel = ShadingModel;
 }

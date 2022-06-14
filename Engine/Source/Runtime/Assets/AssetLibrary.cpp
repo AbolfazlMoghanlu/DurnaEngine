@@ -31,6 +31,7 @@ namespace Durna
 	Image* AssetLibrary::WoodenFloor_Al_Image;
 	Image* AssetLibrary::WoodenFloor_N_Image;
 	Image* AssetLibrary::WoodenFloor_S_R_M_AO_Image;
+	Image* AssetLibrary::DirectionalLightImage;
 
 	Texture* AssetLibrary::Rock_Al_Texture;
 	Texture* AssetLibrary::Rock_N_Texture;
@@ -46,6 +47,8 @@ namespace Durna
 
 	Texture* AssetLibrary::RgbTexture;
 
+	Texture* AssetLibrary::DirectionalLightTexture;
+
 	Shader* AssetLibrary::BaseShader;
 	Shader* AssetLibrary::SkyShader;
 	Shader* AssetLibrary::GizmoShader;
@@ -54,6 +57,7 @@ namespace Durna
 	Shader* AssetLibrary::ResolvedShader;
 	Shader* AssetLibrary::ShadowmapShader;
 	Shader* AssetLibrary::ArrowShader;
+	Shader* AssetLibrary::BillboardShader;
 
 	void AssetLibrary::Init()
 	{
@@ -84,6 +88,8 @@ namespace Durna
 		WoodenFloor_Al_Image = new Image(Path::TextureRelativePath("T_WoodenFloor_Al.jpg").c_str());
 		WoodenFloor_N_Image = new Image(Path::TextureRelativePath("T_WoodenFloor_N.jpg").c_str());
 		WoodenFloor_S_R_M_AO_Image = new Image(Path::TextureRelativePath("T_WoodenFloor_S_R_M_A.png").c_str());
+
+		DirectionalLightImage = new Image(Path::TextureRelativePath("Icons/T_DirectionalLight_Icon_196x196.jpg").c_str());
 			
 
 		TileTexture = new Texture(TileImage);
@@ -99,6 +105,8 @@ namespace Durna
 		WoodenFloor_N_Texture = new Texture(WoodenFloor_N_Image);
 		WoodenFloor_S_R_M_AO_Texture = new Texture(WoodenFloor_S_R_M_AO_Image);
 
+		DirectionalLightTexture = new Texture(DirectionalLightImage);
+
 		BaseShader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		SkyShader = new Shader(Path::ShaderRelativePath("SkySphere.glsl"));
 		GizmoShader = new Shader(Path::ShaderRelativePath("Gizmo.glsl"));
@@ -107,5 +115,6 @@ namespace Durna
 		ResolvedShader = new Shader(Path::ShaderRelativePath("ResolvedShader.glsl"));
 		ShadowmapShader = new Shader(Path::ShaderRelativePath("ShadowMapShader.glsl"));
 		ArrowShader = new Shader(Path::ShaderRelativePath("ArrowShader.glsl"));
+		BillboardShader = new Shader(Path::ShaderRelativePath("BillboardShader.glsl"));
 	}
 }

@@ -27,7 +27,14 @@ namespace Durna
 		Roughness			,
 		Metallic			,
 		AO					,
+		ShadingModel		,
 		Max
+	};
+
+	enum class EShadingModel : int32
+	{
+		DefaultLit		= 0,
+		Unlit			
 	};
 
 	std::string DisplayBufferToString(int32 InDisplayBuffer);

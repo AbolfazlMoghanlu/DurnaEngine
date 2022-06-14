@@ -71,6 +71,9 @@ namespace Durna
 
 		glStencilFunc(GL_ALWAYS, StencilValue, 0xFF);
 		glStencilMask(StencilMask);
+
+		Comp->GetMaterial()->GetShader()->SetUniform1i("ShadingModel",
+			static_cast<int32>(Comp->GetMaterial()->GetShadingModel()));
 		
 		glDrawElements(GL_TRIANGLES, Comp->EB->GetCount(), GL_UNSIGNED_INT, 0);
 	}

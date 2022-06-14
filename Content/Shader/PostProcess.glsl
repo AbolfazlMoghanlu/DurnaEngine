@@ -24,6 +24,7 @@ uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
 uniform sampler2D Buffer_Normal;
 uniform sampler2D Buffer_Specular_Roughness_Metalic_AO;
+uniform usampler2D Buffer_ShadingModel;
 uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
 uniform sampler2D ShadowMap;
@@ -68,6 +69,7 @@ void main()
     float Roughness  = S_R_M_AO.y;
     float Metallic    = S_R_M_AO.z;
     float AO         = S_R_M_AO.w;
+    uint FragShadingModel = texture(Buffer_ShadingModel, TexCoords).r;
 
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
@@ -99,8 +101,7 @@ void main()
     
 
     // light
-
-    if(StencilMask != 64)
+    if(FragShadingModel == 0)
     {
        vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
        vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, -DiffuseLightDirection), 0) * DiffuseLightIntensity;
@@ -207,6 +208,22 @@ void main()
         // ao
         case 8:
            FragColor = vec4(AO);
+        break;
+        
+        // shading model
+        case 9:
+           if(FragShadingModel == 0)
+           {
+               FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+           }
+           else if(FragShadingModel == 1)
+           {
+               FragColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+           }
+           else
+           {
+               FragColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+           }
         break;
 
 

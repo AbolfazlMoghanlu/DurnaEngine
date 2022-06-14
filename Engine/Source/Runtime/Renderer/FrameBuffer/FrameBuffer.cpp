@@ -6,6 +6,8 @@
 
 #include "Runtime/Renderer/Texture.h"
 
+LOG_DEFINE_CATEGORY(LogFramebuffer, "Framebuffer")
+
 namespace Durna
 {
 	FrameBufferAttachment::FrameBufferAttachment()
@@ -126,10 +128,60 @@ namespace Durna
 				GL_TEXTURE_2D, Attachment->TextureID, 0);
 		}
 
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+		CheckForComplationError();
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void FrameBuffer::CheckForComplationError()
+	{
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			LOG(LogFramebuffer, Error, "Framebuffer is not complete!");
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_UNDEFINED)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_UNDEFINED\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_UNSUPPORTED)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_UNSUPPORTED\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE\".", );
+			}
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS)
+			{
+				LOG(LogFramebuffer, Error, "Framebuffer failed do to \"GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS\".", );
+			}
+
+			int32 ErrorCode = glGetError();
+			LOG(LogFramebuffer, Error, "ErrorCode = %i", ErrorCode);
+		}
 	}
 
 }
