@@ -37,7 +37,10 @@
 
 #include "Runtime/Engine/GameFramwork/DirectionalLightActor.h"
 #include "Runtime/Components/DirectionalLightComponent.h"
+#include "Runtime/Engine/GameFramwork/SkyLightActor.h"
+#include "Runtime/Components/SkyLightComponent.h"
 #include "Runtime/Engine/World.h"
+
 
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
@@ -89,8 +92,11 @@ namespace Durna
 			PostProccessMaterial.GetShader()->SetUniform1i("BlurStepNumber", PPSetting.BlurStepNumber);
 
 			// Light
-			PostProccessMaterial.GetShader()->SetUniformVec3f("AmbientLightColor", AmbientLightColor);
-			PostProccessMaterial.GetShader()->SetUniform1f("AmbientLightIntensity", AmbientLightIntensity);
+			PostProccessMaterial.GetShader()->SetUniform1f("AmbientLightIntensity", World::Get()->GetSkyLight() ?
+				World::Get()->GetSkyLight()->GetLightComponent()->GetIntensity() : 1.0f);
+
+			PostProccessMaterial.GetShader()->SetUniformVec3f("AmbientLightColor", World::Get()->GetSkyLight() ?
+				World::Get()->GetSkyLight()->GetLightComponent()->GetLightColor() : LinearColor::White);
 
 			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightColor", World::Get()->GetDirectionalLight() ? 
 				World::Get()->GetDirectionalLight()->GetLightComponent()->GetLightColor() : LinearColor::White);

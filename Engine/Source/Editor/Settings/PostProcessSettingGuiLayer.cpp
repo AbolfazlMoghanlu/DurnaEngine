@@ -29,12 +29,6 @@ namespace Durna
 			ImGui::SliderInt("Step Number", &Renderer::PPSetting.BlurStepNumber, 0, 5);
 		}
 
-		if (ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
-		{
-			ImGui::ColorEdit3("Ambient Light Color", &Renderer::AmbientLightColor.R);
-			ImGui::SliderFloat("Ambient Light Intensity", &Renderer::AmbientLightIntensity, 0, 5);
-		}
-
 		ImGui::End();
 	}
 }

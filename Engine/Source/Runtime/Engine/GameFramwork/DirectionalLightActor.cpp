@@ -15,20 +15,22 @@ namespace Durna
 		AttachSceneComponent(LightSourceComponent.get());
 
 #if WITH_EDITOR
-		ArrowComponent = std::make_unique<PrimitiveComponent>("Arrow");
-		AttachSceneComponent(ArrowComponent.get(), LightSourceComponent.get());
-
-		ArrowComponent->SetStaticMesh(AssetLibrary::ArrowMesh);
-		ArrowComponent->GetMaterial()->SetShader(AssetLibrary::ArrowShader);
-		ArrowComponent->GetMaterial()->SetShadingModel(EShadingModel::Unlit);
-		ArrowComponent->SetRelativeScale(Vector3f(0.25f));
-		ArrowComponent->SetCastShadow(false);
 
 		Billboard = std::make_unique<BillboardComponent>("Billboard");
 		AttachSceneComponent(Billboard.get());
-		Billboard->SetTexture(AssetLibrary::DirectionalLightTexture);
+		Billboard->SetTexture(AssetLibrary::DirectionalLightIconTexture);
 		Billboard->SetRelativeScale(Vector3f(0.1f));
-		Billboard->SetRelativeLocation(Vector3f(0.0f, 0.0f, 0.1f));
+
+		ArrowComponent = std::make_unique<PrimitiveComponent>("Arrow");
+		AttachSceneComponent(ArrowComponent.get(), Billboard.get());
+		
+		ArrowComponent->SetStaticMesh(AssetLibrary::ArrowMesh);
+		ArrowComponent->GetMaterial()->SetShader(AssetLibrary::ArrowShader);
+		ArrowComponent->GetMaterial()->SetShadingModel(EShadingModel::Unlit);
+		ArrowComponent->SetRelativeScale(Vector3f(1.0f));
+		ArrowComponent->SetRelativeLocation(Vector3f(0.0f, 0.0f, -0.1f));
+		ArrowComponent->SetCastShadow(false);
+
 #endif
 	}
 

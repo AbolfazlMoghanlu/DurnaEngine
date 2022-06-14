@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include "Runtime/Engine/GameFramwork/DirectionalLightActor.h"
 #include "Runtime/Components/DirectionalLightComponent.h"
+#include "Runtime/Engine/GameFramwork/SkyLightActor.h"
 
 // TODO: Remove
 #include "Runtime/Renderer/Renderer.h"
@@ -62,9 +63,14 @@ namespace Durna
 		Actors.AddFirst(InActor);
 	}
 
-	DirectionalLightActor* World::GetDirectionalLight()
+	DirectionalLightActor* World::GetDirectionalLight() const
 	{
 		return DirectionalLightSource;
+	}
+
+	SkyLightActor* World::GetSkyLight() const
+	{
+		return SkyLightSource;
 	}
 
 	void World::InitPrimitiveActors()
@@ -77,6 +83,14 @@ namespace Durna
 
 #if WITH_EDITOR
 		DirectionalLightSource->SetActorLabel("Directional Light");
+#endif
+
+		SkyLightSource = new SkyLightActor();
+		SkyLightSource->SetActorLocation(Vector3f(0.0f, 0.0f, 0.2f));
+		AddActor(SkyLightSource);
+
+#if WITH_EDITOR
+		SkyLightSource->SetActorLabel("Sky Light");
 #endif
 	}
 }
