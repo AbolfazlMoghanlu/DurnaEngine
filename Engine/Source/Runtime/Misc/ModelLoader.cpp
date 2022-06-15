@@ -8,6 +8,12 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "ThirdParty/TinyObjLoader/tiny_obj_loader.h"
 
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+
+
+
 namespace Durna
 {
 	void ModelLoader::Load(const std::string& InPath, StaticMesh* Target)
@@ -18,7 +24,7 @@ namespace Durna
 		std::string warn, err;
 
 		bool bSuccess = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, InPath.c_str());
-
+		
 		if (!bSuccess)
 		{ 
 			std::cout << "failed";
@@ -140,6 +146,42 @@ namespace Durna
 			}
 		}
 		
+	}
+
+	void ModelLoader::TempLoad(const std::string& InPath, StaticMesh* Target)
+	{
+		Assimp::Importer importer;
+		const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+			return;
+		}
+
+		aiNode* Root = scene->mRootNode;
+
+		if (Root && Root->mNumChildren > 0)
+		{
+			aiNode* Child = Root->mChildren[0];
+
+			aiMesh* M = scene->mMeshes[Child->mMeshes[0]];
+
+			if (M)
+			{
+				std::cout << M->mNumVertices << std::endl;
+			}
+
+			else
+			{
+				std::cout << "No Mesh!\n";
+			}
+		}
+
+		else
+		{
+			std::cout << "No ROot!\n";
+		}
 	}
 
 }

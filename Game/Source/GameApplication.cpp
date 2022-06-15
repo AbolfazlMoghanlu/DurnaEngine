@@ -30,6 +30,8 @@ LOG_DEFINE_CATEGORY(LogTest, "Test");
 
 void GameApplication::Init()
 {
+	ModelLoader::TempLoad(Path::ModelRelativePath("Cube.fbx"), nullptr);
+
 	Application::Init();	
 
 	SkyMesh = new Durna::StaticMesh;

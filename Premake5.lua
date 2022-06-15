@@ -54,7 +54,8 @@ project "Engine"
 	links
 	{
 		"glfw3_mt.lib",
-		"opengl32.lib"
+		"opengl32.lib",
+		"assimp-vc142-mt.lib"
 	}
 	
 	filter "files:**.c"
@@ -125,6 +126,12 @@ project "Game"
 	
 	links "Engine"
 	links "ImGui"
+	
+	postbuildcommands 
+	{
+		"{COPY} ../ThirdParty/Library/assimp/assimp-vc142-mt.dll ../Bin/" .. outputdir .. "/%{prj.name}",
+		"{COPY} ../ThirdParty/Library/assimp/assimp-vc142-mt.pdb ../Bin/" .. outputdir .. "/%{prj.name}"
+	}
 	
 	filter "configurations:DebugEditor"
 		defines
