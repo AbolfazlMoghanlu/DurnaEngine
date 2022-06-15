@@ -8,6 +8,7 @@
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Editor/Settings/Settings.h"
 #include "imgui.h"
+#include "Editor/Editor.h"
 
 LOG_DEFINE_CATEGORY(LogViewport, "Viewport");
 
@@ -21,6 +22,10 @@ namespace Durna
 		{
 			ShowDisplayBufferMenuItem();
 			ShowResolutionOption();
+
+			ImGui::PushItemWidth(200);
+			ImGui::SliderFloat("##MoveSpeed", &Editor::Get()->CameraMoveSpeed, 0.5f, 20.0f);
+			ImGui::PopItemWidth();
 
 			ImGui::EndMenuBar();
 		}

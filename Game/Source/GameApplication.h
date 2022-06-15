@@ -29,6 +29,7 @@ private:
 	Actor* Actor1 = nullptr;
  	PrimitiveComponent* pr1 = nullptr;
  	PrimitiveComponent* pr2 = nullptr;
+ 	PrimitiveComponent* pr3 = nullptr;
 
 	Durna::StaticMesh* SkyMesh = nullptr;
 	Durna::StaticMesh* CubeMesh = nullptr;

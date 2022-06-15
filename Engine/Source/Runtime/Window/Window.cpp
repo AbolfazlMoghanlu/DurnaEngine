@@ -12,6 +12,8 @@
 #include "Runtime/Engine/Camera/CameraManager.h"
 #include "Runtime/Engine/Camera/CameraComponent.h"
 
+#include "Editor/Editor.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
@@ -150,6 +152,10 @@ namespace Durna
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetRightVector() * 1.0f * DeltaTime;
 
+#if WITH_EDITOR 
+				MoveOffset *= Editor::Get()->CameraMoveSpeed;
+#endif
+
 				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
 			}
 		}
@@ -162,6 +168,10 @@ namespace Durna
 				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetRightVector() * -1.0f * DeltaTime;
+
+#if WITH_EDITOR 
+				MoveOffset *= Editor::Get()->CameraMoveSpeed;
+#endif
 
 				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
 			}
@@ -176,6 +186,10 @@ namespace Durna
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetForwardVector() * 1.0f * DeltaTime;
 
+#if WITH_EDITOR 
+				MoveOffset *= Editor::Get()->CameraMoveSpeed;
+#endif
+
 				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
 			}
 		}
@@ -188,6 +202,10 @@ namespace Durna
 				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetForwardVector() * -1.0f * DeltaTime;
+
+#if WITH_EDITOR 
+				MoveOffset *= Editor::Get()->CameraMoveSpeed;
+#endif
 
 				ActiveCamera->SetRelativeLocation(CameraLcoation + MoveOffset);
 			}

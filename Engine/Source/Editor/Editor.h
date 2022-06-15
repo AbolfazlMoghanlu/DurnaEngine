@@ -32,6 +32,8 @@ namespace Durna
 		bool bIsAnyActorSelected() const;
 		bool bIsAnyComponentSelected() const;
 
+		float CameraMoveSpeed = 1.0f;
+
 	protected:
 
 	private:
@@ -43,4 +45,3 @@ namespace Durna
 
 #endif
 }
-

@@ -2,6 +2,7 @@
 #include "DirectionalLightComponent.h"
 #include "Runtime/Math/ViewMatrix.h"
 #include "Runtime/Math/OrthoMatrix.h"
+#include "Runtime/Engine/Camera/CameraManager.h"
 
 #if WITH_EDITOR
 #include "Editor/DetailsPanel/DirectionalLightComponentPanel.h"
@@ -40,17 +41,14 @@ namespace Durna
 		Vector3f RightVector = Vector3f::CrossProduct(Vector3f::UpVector, ForwardVector).Normalize();
 		Vector3f UpVector = Vector3f::CrossProduct(ForwardVector, RightVector).Normalize();
 
-		LightViewMatrix = ViewMatrix<float>(ComponentWorldLocation,
-			ForwardVector, RightVector, UpVector);
+ 		LightViewMatrix = ViewMatrix<float>(CameraManager::Get()->GetViewLocation(),
+ 			ForwardVector, RightVector, UpVector);
 	}
 
 	void DirectionalLightComponent::UpdateProjectionMatrix()
 	{
 		float MaxDistance = MaxDrawDistance + MaxFadeRange;
-		//LightProjectionMatrix = OrthoMatrix<float>(MaxDistance, -MaxDistance, MaxDistance, -MaxDistance,
-		//	0.2f, 2.5f);
 
-		LightProjectionMatrix = OrthoMatrix<float>(2.0f, -2.0f, 2.0f, -2.0f,
-			0.02f, 2.5f);
+		LightProjectionMatrix = OrthoMatrix<float>(4.0f, 4.0f, 10.0f, 0.1f);
 	}
 }
