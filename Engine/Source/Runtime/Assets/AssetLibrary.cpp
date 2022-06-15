@@ -14,6 +14,8 @@ namespace Durna
 {
 	StaticMesh* AssetLibrary::GizmoMesh;
 	StaticMesh* AssetLibrary::RockMesh;
+	StaticMesh* AssetLibrary::RockMeshTemp;
+
 	StaticMesh* AssetLibrary::PlaneMesh;
 	StaticMesh* AssetLibrary::ArrowMesh;
 
@@ -68,6 +70,9 @@ namespace Durna
 
 		RockMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.obj"), RockMesh);
+
+		RockMeshTemp = new StaticMesh;
+		ModelLoader::TempLoad(Path::ModelRelativePath("SM_Rock.fbx"), RockMeshTemp);
 
 		PlaneMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("SM_Plane.obj"), PlaneMesh); 

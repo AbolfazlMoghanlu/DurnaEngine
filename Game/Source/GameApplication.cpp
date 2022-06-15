@@ -30,8 +30,6 @@ LOG_DEFINE_CATEGORY(LogTest, "Test");
 
 void GameApplication::Init()
 {
-	ModelLoader::TempLoad(Path::ModelRelativePath("Cube.fbx"), nullptr);
-
 	Application::Init();	
 
 	SkyMesh = new Durna::StaticMesh;
@@ -149,6 +147,33 @@ void GameApplication::Init()
 #endif
 	
 	World::Get()->AddActor(RockActor);
+
+
+	RockActorTemp = new StaticMeshActor();
+	//RockActorTemp->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMeshTemp, 1, 1, 0, 1, 1);
+	RockActorTemp->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMeshTemp, 1, 1, 0, 1, 1);
+	RockActorTemp->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::RockShader);
+	RockActorTemp->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureAlbedo", AssetLibrary::Rock_Al_Texture));
+	RockActorTemp->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureNormal", AssetLibrary::Rock_N_Texture));
+	RockActorTemp->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureMasks", AssetLibrary::Rock_S_R_M_AO_Texture));
+	RockActorTemp->GetMeshComponent()->StencilValue = 16;
+	RockActorTemp->GetMeshComponent()->StencilMask = StencilMaskBitfield::Bit_5;
+
+	RockActorTemp->GetMeshComponent()->BindPreDraw(
+		[](PrimitiveComponent* InComponent, Shader* InShader)
+		{
+			InShader->SetUniform2f("UVScale", Vector2f(1.0f));
+		});
+
+	RockActorTemp->SetActorLocation(Vector3f(1.0f, 0.0f, -0.2f));
+	RockActorTemp->SetActorRotation(Rotatorf(0.0f, 00.0f, 180.0f));
+	RockActorTemp->SetActorScale(Vector3f(0.001f));
+
+#if WITH_EDITOR
+	RockActorTemp->SetActorLabel("RockTemp");
+#endif
+
+	World::Get()->AddActor(RockActorTemp);
 	
 
 	FloorActor = new StaticMeshActor();

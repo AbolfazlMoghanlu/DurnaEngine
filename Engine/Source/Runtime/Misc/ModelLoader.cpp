@@ -151,7 +151,10 @@ namespace Durna
 	void ModelLoader::TempLoad(const std::string& InPath, StaticMesh* Target)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		//const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+		//const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate);
+		//const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate | aiProcessPreset_TargetRealtime_MaxQuality);
+		const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -167,9 +170,60 @@ namespace Durna
 
 			aiMesh* M = scene->mMeshes[Child->mMeshes[0]];
 
-			if (M)
+			if (M && Target)
 			{
 				std::cout << M->mNumVertices << std::endl;
+				Target->VertexCount = M->mNumVertices;
+
+				for (uint32 i = 0; i < M->mNumVertices; i++)
+				{
+					// position
+					Target->VertexPositions.push_back(M->mVertices[i].x);
+					Target->VertexPositions.push_back(M->mVertices[i].y);
+					Target->VertexPositions.push_back(M->mVertices[i].z);
+
+					// UVs
+					Target->VertexUVs.push_back(M->mTextureCoords[0][i].x);
+					Target->VertexUVs.push_back(M->mTextureCoords[0][i].y);
+
+					// color
+					uint32 ColorChannelNumber = M->GetNumColorChannels();
+
+					if (ColorChannelNumber > 0)
+						Target->VertexColors.push_back(M->mColors[0][i].r);
+					if (ColorChannelNumber > 1)
+						Target->VertexColors.push_back(M->mColors[0][i].g);
+					if (ColorChannelNumber > 2)
+						Target->VertexColors.push_back(M->mColors[0][i].b);
+					if (ColorChannelNumber > 3)
+						Target->VertexColors.push_back(M->mColors[0][i].a);
+
+					// normal
+					Target->VertexNormals.push_back(M->mNormals[i].x);
+					Target->VertexNormals.push_back(M->mNormals[i].y);
+					Target->VertexNormals.push_back(M->mNormals[i].z);
+
+					// tangent
+					Target->VertexTangents.push_back(M->mTangents[i].x);
+					Target->VertexTangents.push_back(M->mTangents[i].y);
+					Target->VertexTangents.push_back(M->mTangents[i].z);
+
+					// biotanget
+					Target->VertexBionormals.push_back(M->mBitangents[i].x);
+					Target->VertexBionormals.push_back(M->mBitangents[i].y);
+					Target->VertexBionormals.push_back(M->mBitangents[i].z);
+				}
+
+				// vertex indices
+				for (uint32 i = 0; i < M->mNumFaces; i++)
+				{
+					aiFace f = M->mFaces[i];
+					
+					for(uint32 j = 0; j < f.mNumIndices; j++)
+					{
+						Target->VertexIndices.push_back(f.mIndices[j]);
+					}
+				}
 			}
 
 			else

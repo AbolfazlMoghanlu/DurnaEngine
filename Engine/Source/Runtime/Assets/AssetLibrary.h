@@ -16,6 +16,7 @@ namespace Durna
 
 		static StaticMesh* GizmoMesh;
 		static StaticMesh* RockMesh;
+		static StaticMesh* RockMeshTemp;
 		static StaticMesh* PlaneMesh;
 		static StaticMesh* ArrowMesh;
 

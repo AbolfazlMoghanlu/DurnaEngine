@@ -22,7 +22,6 @@ out vec4 V_Color;
 out vec3 WorldPosition;
 out vec2 TexCoord;
 out mat3 TBN;
-out vec3 Bn;
 
 void main()
 {
@@ -36,7 +35,6 @@ void main()
 	vec3 WorldNormal = normalize(Transform * vec4(vNormal, 0.0f)).xyz;
 
 	TBN = mat3(WorldTangent, WorldBionormal, WorldNormal);
-	Bn = WorldBionormal;
 }
 
 
@@ -52,7 +50,6 @@ layout(location = 4) out uint FragShadingModel;
 in vec3 WorldPosition;
 in vec2 TexCoord;
 in mat3 TBN;
-in vec3 Bn;
 
 uniform sampler2D TextureAlbedo;
 uniform sampler2D TextureNormal;
@@ -77,7 +74,6 @@ void main()
 	FragColor = Color;
 	FragPosition = WorldPosition;
 	Normal = normalize(TBN * NormalMap);
-	//Normal = normalize(Bn);
 	S_R_M_AO = Masks;
 	FragShadingModel = ShadingModel;
 }
