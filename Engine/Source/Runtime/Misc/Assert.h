@@ -2,12 +2,9 @@
 
 LOG_DECLARE_CATEGORY(LogAssert);
 
-#define ensure(x, ...)										\
-if (!(x))														\
+#define ensure(x, Format , ...)					\
+if (!(x))													\
 {															\
-LOG(LogAssert, Error, "Assertion failed: %s. "#__VA_ARGS__	\
-"\nFile: %s, Line: %i."										\
-, #x, FILE_NAME, __LINE__);									\
-															\
+LOG(LogAssert, Error, Format, __VA_ARGS__);					\
 std::abort();												\
 }										

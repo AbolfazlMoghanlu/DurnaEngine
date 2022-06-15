@@ -33,10 +33,10 @@ void GameApplication::Init()
 	Application::Init();	
 
 	SkyMesh = new Durna::StaticMesh;
-	ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), SkyMesh);
+	ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), SkyMesh, 0, 1, 1);
 
 	CubeMesh = new Durna::StaticMesh;
-	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh);
+	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh, 0, 0, 1);
 
 	SkyComponent = new PrimitiveComponent("SkyMesh");
 	SkyComponent->SetStaticMesh(SkyMesh, 1, 1);
@@ -139,7 +139,7 @@ void GameApplication::Init()
 		});
 
 	RockActor->SetActorLocation(Vector3f(0.5f, 0.0f, -0.2f));
-	RockActor->SetActorRotation(Rotatorf(0.0f, 00.0f, 270.0f));
+	RockActor->SetActorRotation(Rotatorf(0.0f, 00.0f, 180.0f));
 	RockActor->SetActorScale(Vector3f(0.1f));
 
 #if WITH_EDITOR
@@ -147,33 +147,6 @@ void GameApplication::Init()
 #endif
 	
 	World::Get()->AddActor(RockActor);
-
-
-	RockActorTemp = new StaticMeshActor();
-	//RockActorTemp->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMeshTemp, 1, 1, 0, 1, 1);
-	RockActorTemp->GetMeshComponent()->SetStaticMesh(AssetLibrary::RockMeshTemp, 1, 1, 0, 1, 1);
-	RockActorTemp->GetMeshComponent()->GetMaterial()->SetShader(AssetLibrary::RockShader);
-	RockActorTemp->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureAlbedo", AssetLibrary::Rock_Al_Texture));
-	RockActorTemp->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureNormal", AssetLibrary::Rock_N_Texture));
-	RockActorTemp->GetMeshComponent()->GetMaterial()->AddTextureElement(TextureElement("TextureMasks", AssetLibrary::Rock_S_R_M_AO_Texture));
-	RockActorTemp->GetMeshComponent()->StencilValue = 16;
-	RockActorTemp->GetMeshComponent()->StencilMask = StencilMaskBitfield::Bit_5;
-
-	RockActorTemp->GetMeshComponent()->BindPreDraw(
-		[](PrimitiveComponent* InComponent, Shader* InShader)
-		{
-			InShader->SetUniform2f("UVScale", Vector2f(1.0f));
-		});
-
-	RockActorTemp->SetActorLocation(Vector3f(1.0f, 0.0f, -0.2f));
-	RockActorTemp->SetActorRotation(Rotatorf(0.0f, 00.0f, 180.0f));
-	RockActorTemp->SetActorScale(Vector3f(0.001f));
-
-#if WITH_EDITOR
-	RockActorTemp->SetActorLabel("RockTemp");
-#endif
-
-	World::Get()->AddActor(RockActorTemp);
 	
 
 	FloorActor = new StaticMeshActor();

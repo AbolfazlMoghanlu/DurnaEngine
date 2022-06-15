@@ -14,7 +14,6 @@ namespace Durna
 {
 	StaticMesh* AssetLibrary::GizmoMesh;
 	StaticMesh* AssetLibrary::RockMesh;
-	StaticMesh* AssetLibrary::RockMeshTemp;
 
 	StaticMesh* AssetLibrary::PlaneMesh;
 	StaticMesh* AssetLibrary::ArrowMesh;
@@ -66,19 +65,16 @@ namespace Durna
 	void AssetLibrary::Init()
 	{
 		GizmoMesh = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh);
+		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh, 0, 0, 1);
 
 		RockMesh = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.obj"), RockMesh);
-
-		RockMeshTemp = new StaticMesh;
-		ModelLoader::TempLoad(Path::ModelRelativePath("SM_Rock.fbx"), RockMeshTemp);
+		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.fbx"), RockMesh, 0, 0, 1, 0.01);
 
 		PlaneMesh = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("SM_Plane.obj"), PlaneMesh); 
+		ModelLoader::Load(Path::ModelRelativePath("SM_Plane.obj"), PlaneMesh, 0, 0, 1);	 
 		
 		ArrowMesh = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("Arrow.obj"), ArrowMesh);
+		ModelLoader::Load(Path::ModelRelativePath("Arrow.obj"), ArrowMesh, 0, 0, 1);
 
 		ScreenQuad = new PrimitiveComponent("ScreenQuad");
 		ScreenQuad->SetStaticMesh(&BaseShapes::Plane, 1);
