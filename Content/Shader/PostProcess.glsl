@@ -17,8 +17,11 @@ void main()
 #version 460 core
 
 layout(location = 0) out vec4 FragColor;
+layout(location = 5) out vec4 Buffer_FinalColor;
+
   
 in vec2 TexCoords;
+
 
 uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
@@ -161,48 +164,43 @@ void main()
     {
         // final color
         case 0:
-           FragColor = Color; 
-           //FragColor = vec4(Shadow); 
-           //FragColor = vec4(Uv, 0, 1.0);
-           //FragColor = vec4(C.z);
-           //FragColor = vec4(LightSpacePoition.w);
-           //FragColor = vec4(D);
-           //FragColor = vec4(CameraFacing);
+           Buffer_FinalColor = Color; 
+           
         break;
 
         // base color
         case 1:
-           FragColor = SceneColor; 
+           Buffer_FinalColor = SceneColor; 
         break;
 
         // world normal
         case 2:
-           FragColor = vec4(Normal, 1); 
+           Buffer_FinalColor = vec4(Normal, 1); 
         break;
 
         // scene depth
         case 3:
-           FragColor = vec4(SceneDepth);
+           Buffer_FinalColor = vec4(SceneDepth);
         break;
 
         // stencil
         case 4:
-           FragColor = vec4(StencilMask / 255.0f);
+           Buffer_FinalColor = vec4(StencilMask / 255.0f);
         break;
         
         // specular
         case 5:
-           FragColor = vec4(Specular);
+           Buffer_FinalColor = vec4(Specular);
         break;
 
         // roughness
         case 6:
-           FragColor = vec4(Roughness);
+           Buffer_FinalColor = vec4(Roughness);
         break;
 
         // metallic
         case 7:
-           FragColor = vec4(Metallic);
+           Buffer_FinalColor = vec4(Metallic);
         break;
 
         // ao
@@ -214,22 +212,22 @@ void main()
         case 9:
            if(FragShadingModel == 0)
            {
-               FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+               Buffer_FinalColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
            }
            else if(FragShadingModel == 1)
            {
-               FragColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+               Buffer_FinalColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
            }
            else
            {
-               FragColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+               Buffer_FinalColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
            }
         break;
 
 
 
         default:
-           FragColor = Color; 
+           Buffer_FinalColor = Color; 
         break;
     }
 }

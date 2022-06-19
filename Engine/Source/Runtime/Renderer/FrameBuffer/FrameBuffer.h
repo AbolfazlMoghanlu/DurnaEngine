@@ -9,6 +9,7 @@ namespace Durna
 		Color_2				= 0x8CE2, //GL_COLOR_ATTACHMENT2
 		Color_3				= 0x8CE3, //GL_COLOR_ATTACHMENT3
 		Color_4				= 0x8CE4, //GL_COLOR_ATTACHMENT4
+		Color_5				= 0x8CE5, //GL_COLOR_ATTACHMENT5
 		Depth				= 0x8D00, //GL_DEPTH_ATTACHMENT
 		Stencil				= 0x8D20, //GL_STENCIL_ATTACHMENT
 		Depth_Stencil		= 0x821A  //GL_DEPTH_STENCIL_ATTACHMENT

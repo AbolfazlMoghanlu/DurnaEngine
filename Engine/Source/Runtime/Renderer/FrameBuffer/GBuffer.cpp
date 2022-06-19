@@ -33,6 +33,11 @@ namespace Durna
 			FrameBufferAttachmentFormat::Red_Int, FrameBufferAttachmentFormat::R8UI,
 			FrameBufferAttachmentDataType::uByte);
 		
+		AddAttachment("Buffer_FinalColor", FrameBufferAttachmentType::Color_5,
+			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
+			FrameBufferAttachmentDataType::uByte);
+
+
 		RebuildBuffer();
 	}
 

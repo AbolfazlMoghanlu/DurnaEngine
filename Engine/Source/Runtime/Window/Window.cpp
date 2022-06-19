@@ -148,7 +148,7 @@ namespace Durna
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
 			{
-				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Vector3f CameraLcoation = ActiveCamera->GetRelativeLocation();
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetRightVector() * 1.0f * DeltaTime;
 
@@ -165,7 +165,7 @@ namespace Durna
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
 			{
-				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Vector3f CameraLcoation = ActiveCamera->GetRelativeLocation();
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetRightVector() * -1.0f * DeltaTime;
 
@@ -182,7 +182,7 @@ namespace Durna
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
 			{
-				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Vector3f CameraLcoation = ActiveCamera->GetRelativeLocation();
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetForwardVector() * 1.0f * DeltaTime;
 
@@ -199,7 +199,7 @@ namespace Durna
 			CameraComponent* ActiveCamera = CameraManager::Get()->GetActiveCamera();
 			if (ActiveCamera)
 			{
-				Vector3f CameraLcoation = ActiveCamera->GetWorldLocation();
+				Vector3f CameraLcoation = ActiveCamera->GetRelativeLocation();
 				Rotatorf CameraRotation = ActiveCamera->GetWorldRotation();
 				Vector3f MoveOffset = CameraRotation.GetForwardVector() * -1.0f * DeltaTime;
 

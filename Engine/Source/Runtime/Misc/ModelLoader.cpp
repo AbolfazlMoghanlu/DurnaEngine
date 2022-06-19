@@ -24,9 +24,6 @@ namespace Durna
 		}
 
 		Assimp::Importer importer;
-		//const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate | aiProcess_FlipUVs);
-		//const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate);
-		//const aiScene* scene = importer.ReadFile(InPath, aiProcess_Triangulate | aiProcessPreset_TargetRealtime_MaxQuality);
 
 		uint32 ImportFlags = aiProcess_Triangulate | aiProcessPreset_TargetRealtime_MaxQuality;
 
@@ -60,11 +57,10 @@ namespace Durna
 
 			if (M)
 			{
-				std::cout << M->mNumVertices << std::endl;
-				Target->VertexCount = M->mNumVertices;
-
 				ensure(M->HasTangentsAndBitangents(), 
 					"\"%s\" doesn't have tangents, please enable gentangent import option.", InPath.c_str());
+
+				Target->VertexCount = M->mNumVertices;
 
 				for (uint32 i = 0; i < M->mNumVertices; i++)
 				{

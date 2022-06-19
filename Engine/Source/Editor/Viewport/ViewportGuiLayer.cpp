@@ -9,6 +9,8 @@
 #include "Editor/Settings/Settings.h"
 #include "imgui.h"
 #include "Editor/Editor.h"
+#include "Runtime/Renderer/FrameBuffer/FrameBuffer.h"
+#include "Runtime/Renderer/FrameBuffer/GBuffer.h"
 
 LOG_DEFINE_CATEGORY(LogViewport, "Viewport");
 
@@ -24,7 +26,7 @@ namespace Durna
 			ShowResolutionOption();
 
 			ImGui::PushItemWidth(200);
-			ImGui::SliderFloat("##MoveSpeed", &Editor::Get()->CameraMoveSpeed, 0.5f, 20.0f);
+			ImGui::SliderFloat("Camera Speed", &Editor::Get()->CameraMoveSpeed, 0.5f, 20.0f);
 			ImGui::PopItemWidth();
 
 			ImGui::EndMenuBar();
@@ -39,7 +41,8 @@ namespace Durna
 			ViewportImageSize = ImageSize;
 		}
 
-		ImGui::Image((void*)(size_t)(Renderer::ResolvedBuffer->GetTextureID()), AvaliableSize);
+		//ImGui::Image((void*)(size_t)(Renderer::ResolvedBuffer->GetTextureID()), AvaliableSize);
+		ImGui::Image((void*)(size_t)(Renderer::Gbuffer->Attachments[5]->TextureID), AvaliableSize);
 
 		ImGui::End();
 	}

@@ -55,7 +55,6 @@ namespace Durna
 	float Renderer::Time = 0.0f;
 
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
-	std::shared_ptr<ResolveDefferedBuffer> Renderer::ResolvedBuffer = nullptr;
 
 	RenderQueue Renderer::RenderQue;
 
@@ -144,7 +143,6 @@ namespace Durna
 		RenderCommands::SetStencilOperationReplace();
 
 		Gbuffer = GBuffer::Create();
-		ResolvedBuffer = ResolveDefferedBuffer::Create();
 
 		PostProccessMaterial.SetShader(AssetLibrary::PostProcessShader);
 		UpdatePostProcessUniforms();
@@ -163,10 +161,6 @@ namespace Durna
 		RenderCommands::DisableDepthTest();
 		RenderCommands::DisableStencilTest();
 
-		ResolvedBuffer->Bind();
-		ResolvedBuffer->BindDrawBuffers();
-		RenderCommands::ClearColorBuffer();
-
 
 		PostProccessMaterial.GetShader()->Use();
 #if WITH_EDITOR
@@ -182,13 +176,13 @@ namespace Durna
 			if (DirectionalLightFBO.get())
 			{
 				PostProccessMaterial.GetShader()->Use();
-				Texture::ActivateTexture(7);
+				Texture::ActivateTexture(8);
 
 
 				glBindTexture(GL_TEXTURE_2D, DirectionalLightFBO->GetTextureID());
 
 				int UniformLocation = glGetUniformLocation(PostProccessMaterial.GetShader()->ID, "ShadowMap");
-				glUniform1i(UniformLocation, 7);
+				glUniform1i(UniformLocation, 8);
 
 				Matrix<float> V = DirectionalLightSource->GetViewMatrix();
 				Matrix<float> P = DirectionalLightSource->GetProjectionMatrix();
@@ -204,20 +198,18 @@ namespace Durna
 			}
 		}
 
-		
-
  		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
-
-		ResolvedBuffer->Unbind();
-		ResolvedBuffer->Unbind();
-		RenderCommands::ClearColorBuffer();
 
 #if !WITH_EDITOR	
 		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
 
-		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
-		RenderCommands::DrawFrameBufferToScreen(ResolvedBuffer.get(), &ResolvedMaterial);
 #endif
+	
+		Gbuffer->Unbind();
+		Gbuffer->UnbindDrawBuffers();
+
+		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
+		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &ResolvedMaterial);
 
 #if WITH_EDITOR
 		ImGuiRenderer::Get()->Tick(DeltaTime);
@@ -263,15 +255,14 @@ namespace Durna
 			if (Pr)
 			{
 				RenderCommands::DrawPrimitive(Pr);
-				//RenderCommands::DrawPrimitive(Pr, LightViewMatrix, LightProjectionMatrix);
 			}
 		}
 	}
 
 	void Renderer::FinishRenderGBuffer()
 	{
-		Gbuffer->Unbind();
-		Gbuffer->UnbindDrawBuffers();
+		//Gbuffer->Unbind();
+		//Gbuffer->UnbindDrawBuffers();
 	}
 
 	void Renderer::RenderShadowBuffers()
@@ -333,10 +324,10 @@ namespace Durna
 		{
 			Gbuffer->SetSize(InResolution.X, InResolution.Y);
 		}
-		if (ResolvedBuffer.get())
-		{
-			ResolvedBuffer->SetSize(InResolution.X, InResolution.Y);
-		}
+// 		if (ResolvedBuffer.get())
+// 		{
+// 			ResolvedBuffer->SetSize(InResolution.X, InResolution.Y);
+// 		}
 	}
 
 	void Renderer::RegisterToRenderQueue(PrimitiveComponent* Pr)
