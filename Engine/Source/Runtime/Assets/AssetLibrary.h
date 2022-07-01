@@ -15,6 +15,7 @@ namespace Durna
 	{
 		static void Init();
 
+		static StaticMesh* FlipedSphere;
 		static StaticMesh* GizmoMesh;
 		static StaticMesh* RockMesh;
 		static StaticMesh* PlaneMesh;

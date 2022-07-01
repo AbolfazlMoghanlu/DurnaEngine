@@ -23,8 +23,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	Actor* SkySphere = nullptr;
-	PrimitiveComponent* SkyComponent = nullptr;
 
 	StaticMeshActor* WorldGizmo = nullptr;
 
@@ -33,7 +31,6 @@ private:
  	PrimitiveComponent* pr2 = nullptr;
  	PrimitiveComponent* pr3 = nullptr;
 
-	Durna::StaticMesh* SkyMesh = nullptr;
 	Durna::StaticMesh* CubeMesh = nullptr;
 
 	StaticMeshActor* RockActor = nullptr;

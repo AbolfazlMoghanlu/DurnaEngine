@@ -35,37 +35,9 @@ void GameApplication::Init()
 {
 	Application::Init();	
 
-	SkyMesh = new Durna::StaticMesh;
-	ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), SkyMesh, 0, 1, 1);
-
 	CubeMesh = new Durna::StaticMesh;
 	ModelLoader::Load(Path::ModelRelativePath("SphereSmooth.obj"), CubeMesh, 0, 0, 1);
 
-	SkyComponent = new PrimitiveComponent("SkyMesh");
-	SkyComponent->SetStaticMesh(SkyMesh, 1, 1);
-	SkyComponent->GetMaterial()->SetShader(AssetLibrary::SkyShader);
-	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyCubemap", AssetLibrary::SkyCubemapTexture));
-	SkyComponent->BindPreDraw(
-		[](PrimitiveComponent* InComponent, Shader* InShader)
-		{
-			InShader->SetUniform1f("SkyLightIntensity", Durna::ImGuiRenderer::Get()->SkyLightIntensity);
-		});
-
-	SkyComponent->StencilValue = 64;
-	SkyComponent->StencilMask = StencilMaskBitfield::Bit_7;
-	SkyComponent->SetCastShadow(false);
-	SkyComponent->GetMaterial()->SetShadingModel(EShadingModel::Unlit);
-
-	SkySphere = new Actor();
-	SkySphere->AttachSceneComponent(SkyComponent, SkySphere->GetRoot());
-	SkySphere->SetActorScale(Vector3f(500.0f));
-	SkySphere->SetActorRotation(Rotatorf(00.0f, 00.0f, 90.0f));
-
-#if WITH_EDITOR
-	SkySphere->SetActorLabel("SkySphere");
-#endif
-
-	World::Get()->AddActor(SkySphere);
 
 	WorldGizmo = new StaticMeshActor();
 	WorldGizmo->GetMeshComponent()->SetStaticMesh(AssetLibrary::GizmoMesh, 1, 1);

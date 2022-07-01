@@ -7,6 +7,7 @@ namespace Durna
 	class Actor;
 	class DirectionalLightActor;
 	class SkyLightActor;
+	class SkySphereActor;
 
 	class World
 	{
@@ -21,6 +22,7 @@ namespace Durna
 
 		DirectionalLightActor* GetDirectionalLight() const;
 		SkyLightActor* GetSkyLight() const;
+		SkySphereActor* GetSkySphere() const;
 
 	private:
 		static std::unique_ptr<World> MainWorld;
@@ -31,6 +33,7 @@ namespace Durna
 
 		DirectionalLightActor* DirectionalLightSource;
 		SkyLightActor* SkyLightSource;
+		SkySphereActor* SkySphereSource;
 
 		friend class WorldOutliner;
 		friend class WorldOutlinerGuiLayer;

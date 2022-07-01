@@ -7,17 +7,17 @@
 
 namespace Durna
 {
-	class SkyLightComponent;
+	class SkySphereComponent;
 
-	class SkyLightComponentPanel : public DetailPanelInterface
+	class SkySphereComponentPanel : public DetailPanelInterface
 	{
 	public:
-		SkyLightComponentPanel(SkyLightComponent* InTarget);
+		SkySphereComponentPanel(SkySphereComponent* InTarget);
 
 		virtual void DrawPanel() override;
 
 	protected:
-		SkyLightComponent* Target;
+		SkySphereComponent* Target;
 	};
 }
 

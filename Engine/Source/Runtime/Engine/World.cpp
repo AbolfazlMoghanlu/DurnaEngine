@@ -5,6 +5,7 @@
 #include "Runtime/Engine/GameFramwork/DirectionalLightActor.h"
 #include "Runtime/Components/DirectionalLightComponent.h"
 #include "Runtime/Engine/GameFramwork/SkyLightActor.h"
+#include "Runtime/Engine/GameFramwork/SkySphereActor.h"
 
 namespace Durna
 {
@@ -69,6 +70,11 @@ namespace Durna
 		return SkyLightSource;
 	}
 
+	SkySphereActor* World::GetSkySphere() const
+	{
+		return SkySphereSource;
+	}
+
 	void World::InitPrimitiveActors()
 	{
 		DirectionalLightSource = new DirectionalLightActor();
@@ -87,6 +93,14 @@ namespace Durna
 
 #if WITH_EDITOR
 		SkyLightSource->SetActorLabel("Sky Light");
+#endif
+
+		SkySphereSource = new SkySphereActor();
+		SkySphereSource->SetActorLocation(Vector3f(0.0f, 0.0f, 0.2f));
+		AddActor(SkySphereSource);
+
+#if WITH_EDITOR
+		SkySphereSource->SetActorLabel("Sky Sphere");
 #endif
 	}
 }

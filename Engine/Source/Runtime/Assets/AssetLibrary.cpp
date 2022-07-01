@@ -14,6 +14,8 @@
 
 namespace Durna
 {
+	StaticMesh* AssetLibrary::FlipedSphere;
+
 	StaticMesh* AssetLibrary::GizmoMesh;
 	StaticMesh* AssetLibrary::RockMesh;
 
@@ -77,6 +79,9 @@ namespace Durna
 
 	void AssetLibrary::Init()
 	{
+		FlipedSphere = new StaticMesh;
+		ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), FlipedSphere, 0, 0, 1);
+
 		GizmoMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh, 0, 0, 1);
 
