@@ -127,8 +127,13 @@ namespace Durna
 
 		Render();
 
+#if !WITH_EDITOR
+		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
+		
 		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &ResolvedMaterial);
+#endif
+
 
 #if WITH_EDITOR
 		ImGuiRenderer::Get()->Tick(DeltaTime);
@@ -275,9 +280,9 @@ namespace Durna
 
 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), BasepassShader);
 
-#if !WITH_EDITOR
-		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
-#endif
+// #if !WITH_EDITOR
+// 		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
+// #endif
 	}
 
 	void Renderer::ResolvePostproccess()
@@ -289,11 +294,6 @@ namespace Durna
 #endif
 
 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
-
-#if !WITH_EDITOR
-		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
-
-#endif
 
 		Gbuffer->Unbind();
 		Gbuffer->UnbindDrawBuffers();
@@ -326,10 +326,6 @@ namespace Durna
 		{
 			Gbuffer->SetSize(InResolution.X, InResolution.Y);
 		}
-// 		if (ResolvedBuffer.get())
-// 		{
-// 			ResolvedBuffer->SetSize(InResolution.X, InResolution.Y);
-// 		}
 	}
 
 	void Renderer::RegisterToRenderQueue(PrimitiveComponent* Pr)

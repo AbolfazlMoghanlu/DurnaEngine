@@ -54,12 +54,13 @@ namespace Durna
 		{
 			Resolution = NewSize;
 		}
-		UpdateViewport();
+		//UpdateViewport();
 	}
 
 	void Viewport::UpdateViewport()
 	{
 		Renderer::GetWindow()->SetWindowResolution(Resolution);
+
 		Renderer::OnResolutionChanged(Resolution);
 	}
 }
