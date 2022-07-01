@@ -2,7 +2,6 @@
 
 #include <Runtime/Core/Application.h>
 
-
 using namespace Durna;
 
 namespace Durna
@@ -11,6 +10,9 @@ namespace Durna
 	class StaticMeshActor;
 	class PrimitiveComponent;
 	class StaticMesh;
+	class Texture;
+	class Texture2D;
+	class TextureCube;
 }
 
 

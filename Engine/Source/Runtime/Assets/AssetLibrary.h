@@ -5,7 +5,8 @@ namespace Durna
 	class StaticMesh;
 	class PrimitiveComponent;
 	class Image;
-	class Texture;
+	class Texture2D;
+	class TextureCube;
 	class Shader;
 	class Material;
 
@@ -33,25 +34,35 @@ namespace Durna
 		static Image* WoodenFloor_Al_Image;
 		static Image* WoodenFloor_N_Image;
 		static Image* WoodenFloor_S_R_M_AO_Image;
+		
+		static Image* SkyCubemap_Top;
+		static Image* SkyCubemap_Bottom;
+		static Image* SkyCubemap_Right;
+		static Image* SkyCubemap_Left;
+		static Image* SkyCubemap_Front;
+		static Image* SkyCubemap_Back;
 
 		static Image* DirectionalLightIconImage;
 		static Image* SkyLightIconImage;
 
-		static Texture* Rock_Al_Texture;
-		static Texture* Rock_N_Texture;
-		static Texture* Rock_S_R_M_AO_Texture;
-		
-		static Texture* WoodenFloor_Al_Texture;
-		static Texture* WoodenFloor_N_Texture;
-		static Texture* WoodenFloor_S_R_M_AO_Texture;
 
-		static Texture* TileTexture;
-		static Texture* WallTexture;
-		static Texture* SkyTexture;
-		static Texture* RgbTexture;
+		static Texture2D* Rock_Al_Texture;
+		static Texture2D* Rock_N_Texture;
+		static Texture2D* Rock_S_R_M_AO_Texture;
+					  
+		static Texture2D* WoodenFloor_Al_Texture;
+		static Texture2D* WoodenFloor_N_Texture;
+		static Texture2D* WoodenFloor_S_R_M_AO_Texture;
+					  
+		static Texture2D* TileTexture;
+		static Texture2D* WallTexture;
+		static Texture2D* SkyTexture;
+		static Texture2D* RgbTexture;
 
-		static Texture* DirectionalLightIconTexture;
-		static Texture* SkyLightIconTexture;
+		static TextureCube* SkyCubemapTexture;
+
+		static Texture2D* DirectionalLightIconTexture;
+		static Texture2D* SkyLightIconTexture;
 		
 		static Shader* BaseShader;
 		static Shader* SkyShader;

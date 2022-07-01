@@ -15,7 +15,7 @@ layout (location = 3) in vec3 vTangent;
 layout (location = 4) in vec3 vBionormal;
 
 out vec3 WorldPosition;
-out vec2 TexCoord;
+out vec3 TexCoord;
 out vec3 WorldNormal;
 
 void main()
@@ -23,7 +23,7 @@ void main()
 	WorldPosition = (Transform * vec4(aPos, 1)).xyz;
 	gl_Position =  Projection * View * vec4(WorldPosition, 1);
 
-	TexCoord = aTexCoord;
+	TexCoord = aPos * -1;
 
 	WorldNormal = normalize((Transform * vec4(VNormal, 0)).xyz);
 }
@@ -39,20 +39,21 @@ layout(location = 3) out vec4 S_R_M_AO;
 layout(location = 4) out uint FragShadingModel;
 
 in vec3 WorldPosition;
-in vec2 TexCoord;
+in vec3 TexCoord;
 in vec3 WorldNormal;
 
 uniform int ShadingModel;
 
-uniform sampler2D SkyTexture;
+uniform samplerCube SkyCubemap;
+
 uniform float time;
 uniform float SkyLightIntensity;
 uniform mat4 Transform;
 
 void main()
 {
-	vec4 SkySampled = pow(texture(SkyTexture, TexCoord), vec4(2.2));
-	FragColor = SkySampled * SkyLightIntensity;
+	vec4 SkySampled = texture(SkyCubemap, TexCoord);
+	FragColor = pow(SkySampled, vec4(2.2f)) * SkyLightIntensity;
 	FragPosition = WorldPosition;
 
 	Normal = WorldNormal;

@@ -22,6 +22,9 @@
 #include "Runtime/Engine/Camera/CameraComponent.h"
 #include "Runtime/Renderer/RenderCommands.h"
 
+#include "Runtime/Renderer/Texture.h"
+#include "Runtime/Renderer/Texture2D.h"
+#include "Runtime/Renderer/TextureCube.h"
 
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
@@ -41,7 +44,7 @@ void GameApplication::Init()
 	SkyComponent = new PrimitiveComponent("SkyMesh");
 	SkyComponent->SetStaticMesh(SkyMesh, 1, 1);
 	SkyComponent->GetMaterial()->SetShader(AssetLibrary::SkyShader);
-	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyTexture", AssetLibrary::SkyTexture));
+	SkyComponent->GetMaterial()->AddTextureElement(TextureElement("SkyCubemap", AssetLibrary::SkyCubemapTexture));
 	SkyComponent->BindPreDraw(
 		[](PrimitiveComponent* InComponent, Shader* InShader)
 		{

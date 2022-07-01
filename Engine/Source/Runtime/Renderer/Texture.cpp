@@ -8,14 +8,10 @@ LOG_DEFINE_CATEGORY(LogTexture, "Texture")
 
 namespace Durna
 {
-	Texture::Texture(Image* Img) 
+	Texture::Texture()
 	{
 		glGenTextures(1, &ID);
-		SetSource(Img);
 	}
-
-	Texture::Texture() : Texture(nullptr)
-	{}
 
 	Texture::~Texture()
 	{
@@ -32,49 +28,9 @@ namespace Durna
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void Texture::UpdateTexture()
-	{
-		if (IsDirty() && SourceImage && SourceImage->Load())
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, static_cast<uint32>(InternalFormat)
-				, SourceImage->GetWidth(), SourceImage->GetHeight(), 0, SourceImage->GetFormat(), GL_UNSIGNED_BYTE, SourceImage->Data);
-
-			glGenerateMipmap(GL_TEXTURE_2D);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, static_cast<uint32>(SourceImage->X_Wrap));
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, static_cast<uint32>(SourceImage->Y_Wrap));
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<uint32>(SourceImage->X_Filter));
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<uint32>(SourceImage->Y_Filter));
-
-			bDirtyFlag = false;
-		}
-	}
-
 	void Texture::ActivateTexture(uint8 Index)
 	{
 		glActiveTexture(GetGLTextureSlot(Index));
-	}
-
-	void Texture::SetSource(Image* Img)
-	{
-		SourceImage = Img;
-		MarkDirty();
-	}
-
-	Image* Texture::GetSource() const
-	{
-		return SourceImage;
-	}
-
-	bool Texture::IsDirty() const
-	{
-		return bDirtyFlag;
-	}
-
-	void Texture::MarkDirty()
-	{
-		bDirtyFlag = true;
 	}
 
 	uint32 Texture::GetGLTextureSlot(uint8 Index)

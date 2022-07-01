@@ -7,6 +7,8 @@
 #include "Runtime/Misc/ModelLoader.h"
 #include "Runtime/Engine/Image/Image.h"
 #include "Runtime/Renderer/Texture.h"
+#include "Runtime/Renderer/Texture2D.h"
+#include "Runtime/Renderer/TextureCube.h"
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/Material.h"
 
@@ -32,25 +34,35 @@ namespace Durna
 	Image* AssetLibrary::WoodenFloor_Al_Image;
 	Image* AssetLibrary::WoodenFloor_N_Image;
 	Image* AssetLibrary::WoodenFloor_S_R_M_AO_Image;
+
+	Image* AssetLibrary::SkyCubemap_Top;
+	Image* AssetLibrary::SkyCubemap_Bottom;
+	Image* AssetLibrary::SkyCubemap_Right;
+	Image* AssetLibrary::SkyCubemap_Left;
+	Image* AssetLibrary::SkyCubemap_Front;
+	Image* AssetLibrary::SkyCubemap_Back;
+
 	Image* AssetLibrary::DirectionalLightIconImage;
 	Image* AssetLibrary::SkyLightIconImage;
 
-	Texture* AssetLibrary::Rock_Al_Texture;
-	Texture* AssetLibrary::Rock_N_Texture;
-	Texture* AssetLibrary::Rock_S_R_M_AO_Texture;
+	Texture2D* AssetLibrary::Rock_Al_Texture;
+	Texture2D* AssetLibrary::Rock_N_Texture;
+	Texture2D* AssetLibrary::Rock_S_R_M_AO_Texture;
+		   
+	Texture2D* AssetLibrary::WoodenFloor_Al_Texture;
+	Texture2D* AssetLibrary::WoodenFloor_N_Texture;
+	Texture2D* AssetLibrary::WoodenFloor_S_R_M_AO_Texture;
+		   
+	Texture2D* AssetLibrary::TileTexture;
+	Texture2D* AssetLibrary::WallTexture;
+	Texture2D* AssetLibrary::SkyTexture;
+		   
+	Texture2D* AssetLibrary::RgbTexture;
 
-	Texture* AssetLibrary::WoodenFloor_Al_Texture;
-	Texture* AssetLibrary::WoodenFloor_N_Texture;
-	Texture* AssetLibrary::WoodenFloor_S_R_M_AO_Texture;
+	TextureCube* AssetLibrary::SkyCubemapTexture;
 
-	Texture* AssetLibrary::TileTexture;
-	Texture* AssetLibrary::WallTexture;
-	Texture* AssetLibrary::SkyTexture;
-
-	Texture* AssetLibrary::RgbTexture;
-
-	Texture* AssetLibrary::DirectionalLightIconTexture;
-	Texture* AssetLibrary::SkyLightIconTexture;
+	Texture2D* AssetLibrary::DirectionalLightIconTexture;
+	Texture2D* AssetLibrary::SkyLightIconTexture;
 
 	Shader* AssetLibrary::BaseShader;
 	Shader* AssetLibrary::SkyShader;
@@ -93,25 +105,35 @@ namespace Durna
 		WoodenFloor_N_Image = new Image(Path::TextureRelativePath("T_WoodenFloor_N.jpg").c_str());
 		WoodenFloor_S_R_M_AO_Image = new Image(Path::TextureRelativePath("T_WoodenFloor_S_R_M_A.png").c_str());
 
+		SkyCubemap_Top = new Image(Path::TextureRelativePath("SkyCube/T_SkyCubemap_Top.jpg").c_str());
+		SkyCubemap_Bottom = new Image(Path::TextureRelativePath("SkyCube/T_SkyCubemap_Bottom.jpg").c_str());
+		SkyCubemap_Right = new Image(Path::TextureRelativePath("SkyCube/T_SkyCubemap_Right.jpg").c_str());
+		SkyCubemap_Left = new Image(Path::TextureRelativePath("SkyCube/T_SkyCubemap_Left.jpg").c_str());
+		SkyCubemap_Front = new Image(Path::TextureRelativePath("SkyCube/T_SkyCubemap_Front.jpg").c_str());
+		SkyCubemap_Back = new Image(Path::TextureRelativePath("SkyCube/T_SkyCubemap_Back.jpg").c_str());
+
 		DirectionalLightIconImage = new Image(Path::TextureRelativePath("Icons/T_DirectionalLight_Icon_196x196.jpg").c_str());
 		SkyLightIconImage = new Image(Path::TextureRelativePath("Icons/T_SkyLight_Icon_176x176.jpg").c_str());
 			
 
-		TileTexture = new Texture(TileImage);
-		WallTexture = new Texture(WallImage);
-		SkyTexture = new Texture(SkyImage);
-		RgbTexture = new Texture(RgbImage);
+		TileTexture = new Texture2D(TileImage);
+		WallTexture = new Texture2D(WallImage);
+		SkyTexture = new Texture2D(SkyImage);
+		RgbTexture = new Texture2D(RgbImage);
 
-		Rock_Al_Texture = new Texture(Rock_Al_Image);
-		Rock_N_Texture = new Texture(Rock_N_Image);
-		Rock_S_R_M_AO_Texture = new Texture(Rock_S_R_M_AO_Image);
+		Rock_Al_Texture = new Texture2D(Rock_Al_Image);
+		Rock_N_Texture = new Texture2D(Rock_N_Image);
+		Rock_S_R_M_AO_Texture = new Texture2D(Rock_S_R_M_AO_Image);
 
-		WoodenFloor_Al_Texture = new Texture(WoodenFloor_Al_Image);
-		WoodenFloor_N_Texture = new Texture(WoodenFloor_N_Image);
-		WoodenFloor_S_R_M_AO_Texture = new Texture(WoodenFloor_S_R_M_AO_Image);
+		WoodenFloor_Al_Texture = new Texture2D(WoodenFloor_Al_Image);
+		WoodenFloor_N_Texture = new Texture2D(WoodenFloor_N_Image);
+		WoodenFloor_S_R_M_AO_Texture = new Texture2D(WoodenFloor_S_R_M_AO_Image);
 
-		DirectionalLightIconTexture = new Texture(DirectionalLightIconImage);
-		SkyLightIconTexture = new Texture(SkyLightIconImage);
+		SkyCubemapTexture = new TextureCube(SkyCubemap_Top, SkyCubemap_Bottom, SkyCubemap_Right, SkyCubemap_Left,
+			SkyCubemap_Front, SkyCubemap_Back);
+
+		DirectionalLightIconTexture = new Texture2D(DirectionalLightIconImage);
+		SkyLightIconTexture = new Texture2D(SkyLightIconImage);
 
 		BaseShader = new Shader(Path::ShaderRelativePath("BaseShader.glsl"));
 		SkyShader = new Shader(Path::ShaderRelativePath("SkySphere.glsl"));
