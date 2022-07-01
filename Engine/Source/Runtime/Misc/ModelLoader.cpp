@@ -19,7 +19,7 @@ namespace Durna
 	{
 		if (!Target)
 		{
-			LOG(LogModelLoader, Error, "Please specify target for loading \"%s\".", InPath);
+			LOG(LogModelLoader, Error, "Please specify target for loading \"%s\".", InPath.c_str());
 			return;
 		}
 
@@ -43,7 +43,7 @@ namespace Durna
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			LOG(LogModelLoader, Error, "Failed to load \"%s\", do to bad scene.", InPath);
+			LOG(LogModelLoader, Error, "Failed to load \"%s\", do to bad scene.", InPath.c_str());
 			return;
 		}
 
@@ -115,14 +115,14 @@ namespace Durna
 
 			else
 			{
-				LOG(LogModelLoader, Error, "Couldn't find mesh in \"%s\".", InPath);
+				LOG(LogModelLoader, Error, "Couldn't find mesh in \"%s\".", InPath.c_str());
 				return;
 			}
 		}
 
 		else
 		{
-			LOG(LogModelLoader, Error, "Couldn't find root node in \"%s\".", InPath);
+			LOG(LogModelLoader, Error, "Couldn't find root node in \"%s\".", InPath.c_str());
 			return;
 		}
 	}

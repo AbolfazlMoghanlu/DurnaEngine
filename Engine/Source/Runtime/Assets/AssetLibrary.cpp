@@ -69,7 +69,7 @@ namespace Durna
 		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh, 0, 0, 1);
 
 		RockMesh = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.fbx"), RockMesh, 0, 0, 1, 0.01);
+		ModelLoader::Load(Path::ModelRelativePath("SM_Rock.fbx"), RockMesh, 0, 0, 1, 0.01f);
 
 		PlaneMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("SM_Plane.obj"), PlaneMesh, 0, 0, 1);	 

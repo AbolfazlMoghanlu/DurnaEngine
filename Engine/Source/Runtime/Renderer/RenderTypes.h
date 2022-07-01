@@ -18,7 +18,8 @@ namespace Durna
 
 	enum class DisplayBuffer : int32
 	{
-		FinalColor		= 0,
+		FinalColor		 = 0,
+		SceneColor			,
 		BaseColor			,
 		WorldNormal			,
 		SceneDepth			,

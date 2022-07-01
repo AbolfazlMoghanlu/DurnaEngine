@@ -68,7 +68,7 @@ void main()
         {
             for(int j = -1; j <= 1; j++)
             {
-                PostproccessColor += texture(Buffer_Color, TexCoords + (vec2(i, j) * BlurStepSize) * k);
+                PostproccessColor += texture(Buffer_FinalColor, TexCoords + (vec2(i, j) * BlurStepSize) * k);
             }
         }
     }
@@ -107,49 +107,54 @@ void main()
         case 0:
            Buffer_Postproccess = PostproccessColor; 
         break;
+        
+        // scene color
+        case 1:
+           Buffer_Postproccess = FinalColor; 
+        break;
 
         // base color
-        case 1:
+        case 2:
            Buffer_Postproccess = SceneColor; 
         break;
 
         // world normal
-        case 2:
+        case 3:
            Buffer_Postproccess = vec4(Normal, 1); 
         break;
 
         // scene depth
-        case 3:
+        case 4:
            Buffer_Postproccess = vec4(SceneDepth);
         break;
 
         // stencil
-        case 4:
+        case 5:
            Buffer_Postproccess = vec4(StencilMask / 255.0f);
         break;
         
         // specular
-        case 5:
+        case 6:
            Buffer_Postproccess = vec4(Specular);
         break;
 
         // roughness
-        case 6:
+        case 7:
            Buffer_Postproccess = vec4(Roughness);
         break;
 
         // metallic
-        case 7:
+        case 8:
            Buffer_Postproccess = vec4(Metallic);
         break;
 
         // ao
-        case 8:
+        case 9:
            Buffer_Postproccess = vec4(AO);
         break;
         
         // shading model
-        case 9:
+        case 10:
            if(FragShadingModel == 0)
            {
                Buffer_Postproccess = vec4(1.0f, 0.0f, 0.0f, 1.0f);
