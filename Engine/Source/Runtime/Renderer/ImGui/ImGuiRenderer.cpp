@@ -18,19 +18,6 @@
 
 namespace Durna
 {
-	class TempLayer : public ImGuiLayer
-	{
-	public:
-		void Draw() override
-		{
-#if WITH_EDITOR
-			ImGui::Begin("Demo window");
-			ImGui::SliderFloat("Sky light Intensity ", &ImGuiRenderer::Get()->SkyLightIntensity, 0.0f, 1.0f, NULL, ImGuiSliderFlags_::ImGuiSliderFlags_AlwaysClamp);
-			ImGui::End();
-#endif
-		}
-	};
-
 	std::unique_ptr<ImGuiRenderer> ImGuiRenderer::SingletonInstance = nullptr;
 
 	ImGuiRenderer::ImGuiRenderer()
@@ -59,8 +46,6 @@ namespace Durna
 
 		ImGui_ImplGlfw_InitForOpenGL(Renderer::GetWindow()->GetGLFWWindow(), true);
 		ImGui_ImplOpenGL3_Init("#version 460");
-
-		AttachLayer(new TempLayer);
 	}
 
 	void ImGuiRenderer::Tick(float DeltaTime)

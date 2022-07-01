@@ -1,29 +1,22 @@
 #include "DurnaPCH.h"
 #include "RenderCommands.h"
 
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
+
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/Buffer.h"
-#include "Runtime/Engine/BaseShapes.h"
-#include "Runtime/Math/TranslationMatrix.h"
-#include "Runtime/Math/RotationMatrix.h"
-#include "Runtime/Math/ScaleMatrix.h"
 #include "Runtime/Math/ScaleRotationTranslationMatrix.h"
 #include "Runtime/Math/PrespectiveMatrix.h"
 #include "Runtime/Math/OrthoMatrix.h"
-#include "Runtime/Renderer/Renderer.h"
 #include "Runtime/Engine/Camera/CameraManager.h"
 #include "Runtime/Renderer/FrameBuffer/FrameBuffer.h"
 #include "Runtime/Assets/AssetLibrary.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
-#include "Runtime/Window/Window.h"
-
-#include "Runtime/Engine/Actor.h"
 
 #include "Editor/Editor.h"
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
 
 namespace Durna
 {

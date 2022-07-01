@@ -1,34 +1,26 @@
 #include "DurnaPCH.h"
 #include "Renderer.h"
 
-#include "Runtime/Window/Window.h"
-#include "Runtime/Engine/Camera/CameraManager.h"
-#include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
-#include "Runtime/Renderer/ImGui/ImGuiLayer.h"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Runtime/Window/Window.h"
+#include "Runtime/Engine/Camera/CameraManager.h"
+#include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 
 #include "Runtime/Assets/AssetLibrary.h"
 #include "Runtime/Engine/BaseShapes.h"
 
-#include "runtime/Engine/GameFramwork/StaticMeshActor.h"
 #include "Runtime/renderer/RenderCommands.h"
 #include "runtime/Components/PrimitiveComponent.h"
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/Material.h"
 
-#include "Runtime/Math/LinearColor.h"
-
 #include "Runtime/renderer/FrameBuffer/FrameBuffer.h"
 #include "Runtime/Renderer/RenderQueue.h"
 
-#include "Runtime/Renderer/Buffer.h"
 #include "Runtime/Renderer/FrameBuffer/GBuffer.h"
 #include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
-#include "Runtime/Engine/Camera/CameraComponent.h"
-
 #include "Runtime/Renderer/FrameBuffer/ShadowFrameBuffer.h"
 
 #include "Runtime/Engine/GameFramwork/GameSettings.h"
@@ -62,10 +54,6 @@ namespace Durna
 	Material Renderer::ResolvedMaterial;
 
 	PostProcessSetting Renderer::PPSetting;
-
-	
-	LinearColor Renderer::AmbientLightColor = LinearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	float Renderer::AmbientLightIntensity = 1.0f;
 
 	void Renderer::UpdatePostProcessUniforms()
 	{
