@@ -22,6 +22,7 @@ namespace Durna
 
 
 		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial);
+		static void DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Shader* InShader);
 
 		static void EnableDepthTest();
 		static void DisableDepthTest();

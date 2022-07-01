@@ -46,10 +46,6 @@ namespace Durna
 		static LinearColor AmbientLightColor;
 		static float AmbientLightIntensity;
 
-		// TODO: make private
-		static std::shared_ptr<GBuffer> Gbuffer;
-
-
 	private:
 		static void Render();
 		
@@ -59,11 +55,19 @@ namespace Durna
 
 		static void RenderShadowBuffers();
 
+		static void ResolveFinalColor();
+
+		static void ResolvePostproccess();
+
 		static std::shared_ptr<Window> MainWindow;
+		static std::shared_ptr<GBuffer> Gbuffer;
 		static float Time;
 
 		static RenderQueue RenderQue;
 
 		static void UpdatePostProcessUniforms();
+
+	private:
+		friend class ViewportGuiLayer;
 	};
 }

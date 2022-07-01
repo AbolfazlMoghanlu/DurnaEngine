@@ -13,9 +13,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-// TODO: remove
-#include "Runtime/Renderer/FrameBuffer/ResolveDefferedBuffer.h"
-
 namespace Durna
 {
 	std::unique_ptr<ImGuiRenderer> ImGuiRenderer::SingletonInstance = nullptr;

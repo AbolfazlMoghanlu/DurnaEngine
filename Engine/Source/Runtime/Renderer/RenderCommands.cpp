@@ -114,12 +114,17 @@ namespace Durna
 
 	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Material* InMaterial)
 	{
-		if (InFrameBuffer && InMaterial && InMaterial->GetShader())
-		{
-			InMaterial->GetShader()->Use();
-			InFrameBuffer->BindTextures(InMaterial->GetShader()->ID);
+		DrawFrameBufferToScreen(InFrameBuffer, InMaterial->GetShader());
+	}
 
-			CommonRenderUniforms::UploadCameraLocation(InMaterial->GetShader());
+	void RenderCommands::DrawFrameBufferToScreen(FrameBuffer* InFrameBuffer, Shader* InShader)
+	{
+		if (InFrameBuffer && InShader)
+		{
+			InShader->Use();
+			InFrameBuffer->BindTextures(InShader->ID);
+
+			CommonRenderUniforms::UploadCameraLocation(InShader);
 
 			AssetLibrary::ScreenQuad->VA->Bind();
 			glDrawElements(GL_TRIANGLES, AssetLibrary::ScreenQuad->EB->GetCount(), GL_UNSIGNED_INT, 0);

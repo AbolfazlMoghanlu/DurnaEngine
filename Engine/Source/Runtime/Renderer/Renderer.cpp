@@ -77,24 +77,6 @@ namespace Durna
 			//Blur
 			PostProccessMaterial.GetShader()->SetUniform1f("BlurStepSize", PPSetting.BlurStepSize);
 			PostProccessMaterial.GetShader()->SetUniform1i("BlurStepNumber", PPSetting.BlurStepNumber);
-
-			// Light
-			PostProccessMaterial.GetShader()->SetUniform1f("AmbientLightIntensity", World::Get()->GetSkyLight() ?
-				World::Get()->GetSkyLight()->GetLightComponent()->GetIntensity() : 1.0f);
-
-			PostProccessMaterial.GetShader()->SetUniformVec3f("AmbientLightColor", World::Get()->GetSkyLight() ?
-				World::Get()->GetSkyLight()->GetLightComponent()->GetLightColor() : LinearColor::White);
-
-			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightColor", World::Get()->GetDirectionalLight() ? 
-				World::Get()->GetDirectionalLight()->GetLightComponent()->GetLightColor() : LinearColor::White);
-
-			PostProccessMaterial.GetShader()->SetUniform1f("DiffuseLightIntensity", World::Get()->GetDirectionalLight() ? 
-				World::Get()->GetDirectionalLight()->GetLightComponent()->GetIntensity() : 1.0f);
-
-			Rotatorf DiffuseLightRotation = World::Get()->GetDirectionalLight() ?
-				World::Get()->GetDirectionalLight()->GetLightComponent()->GetWorldRotation() : Rotatorf(0.0f);
-
-			PostProccessMaterial.GetShader()->SetUniformVec3f("DiffuseLightDirection", DiffuseLightRotation.GetForwardVector());
 		}
 	}
 
@@ -144,57 +126,6 @@ namespace Durna
 		Time += DeltaTime;
 
 		Render();
-		
-
-		RenderCommands::DisableDepthTest();
-		RenderCommands::DisableStencilTest();
-
-
-		PostProccessMaterial.GetShader()->Use();
-#if WITH_EDITOR
-		// if there is editor keep uniforms in update with parameters in ui
-		UpdatePostProcessUniforms();
-#endif
-
-		DirectionalLightComponent* DirectionalLightSource = World::Get()->GetDirectionalLight()->GetLightComponent();
-		if (DirectionalLightSource && DirectionalLightSource->IsVisible() && DirectionalLightSource->GetCastShadow())
-		{
-			std::shared_ptr<ShadowFrameBuffer> DirectionalLightFBO = DirectionalLightSource->GetShadowFrameBuffer();
-
-			if (DirectionalLightFBO.get())
-			{
-				PostProccessMaterial.GetShader()->Use();
-				Texture::ActivateTexture(8);
-
-
-				glBindTexture(GL_TEXTURE_2D, DirectionalLightFBO->GetTextureID());
-
-				int UniformLocation = glGetUniformLocation(PostProccessMaterial.GetShader()->ID, "ShadowMap");
-				glUniform1i(UniformLocation, 8);
-
-				Matrix<float> V = DirectionalLightSource->GetViewMatrix();
-				Matrix<float> P = DirectionalLightSource->GetProjectionMatrix();
-
-				PostProccessMaterial.GetShader()->SetUniformMatrix4f("LightMatrix", V.M[0]);
-
-				PostProccessMaterial.GetShader()->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
-				PostProccessMaterial.GetShader()->SetUniformMatrix4f("Projection", P.M[0]);
-
-				PostProccessMaterial.GetShader()->SetUniformVec3f("LightLocation", DirectionalLightSource->GetWorldLocation());
-				Rotatorf DirectionalLightRotation = DirectionalLightSource->GetWorldRotation();
-				PostProccessMaterial.GetShader()->SetUniformVec3f("LightDirection", DirectionalLightRotation.GetForwardVector());
-			}
-		}
-
- 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
-
-#if !WITH_EDITOR	
-		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
-
-#endif
-	
-		Gbuffer->Unbind();
-		Gbuffer->UnbindDrawBuffers();
 
 		// if editor is present, we draw resolved buffer to viewport so there is no need to draw resolved buffer to glfw window
 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &ResolvedMaterial);
@@ -217,6 +148,10 @@ namespace Durna
 		BeginRenderGBuffer();
 		RenderGBuffer();
 		FinishRenderGBuffer();
+
+		ResolveFinalColor();
+
+		ResolvePostproccess();
 	}
 
 
@@ -283,6 +218,85 @@ namespace Durna
 
 		}
 
+	}
+
+	void Renderer::ResolveFinalColor()
+	{
+		RenderCommands::DisableDepthTest();
+		RenderCommands::DisableStencilTest();
+
+		Shader* BasepassShader = AssetLibrary::BasepassShader;
+		BasepassShader->Use();
+
+		// Light
+		BasepassShader->SetUniform1f("AmbientLightIntensity", World::Get()->GetSkyLight() ?
+			World::Get()->GetSkyLight()->GetLightComponent()->GetIntensity() : 1.0f);
+
+		BasepassShader->SetUniformVec3f("AmbientLightColor", World::Get()->GetSkyLight() ?
+			World::Get()->GetSkyLight()->GetLightComponent()->GetLightColor() : LinearColor::White);
+
+		BasepassShader->SetUniformVec3f("DiffuseLightColor", World::Get()->GetDirectionalLight() ?
+			World::Get()->GetDirectionalLight()->GetLightComponent()->GetLightColor() : LinearColor::White);
+
+		BasepassShader->SetUniform1f("DiffuseLightIntensity", World::Get()->GetDirectionalLight() ?
+			World::Get()->GetDirectionalLight()->GetLightComponent()->GetIntensity() : 1.0f);
+
+		Rotatorf DiffuseLightRotation = World::Get()->GetDirectionalLight() ?
+			World::Get()->GetDirectionalLight()->GetLightComponent()->GetWorldRotation() : Rotatorf(0.0f);
+
+		BasepassShader->SetUniformVec3f("DiffuseLightDirection", DiffuseLightRotation.GetForwardVector());
+
+		DirectionalLightComponent* DirectionalLightSource = World::Get()->GetDirectionalLight()->GetLightComponent();
+		if (DirectionalLightSource && DirectionalLightSource->IsVisible() && DirectionalLightSource->GetCastShadow())
+		{
+			std::shared_ptr<ShadowFrameBuffer> DirectionalLightFBO = DirectionalLightSource->GetShadowFrameBuffer();
+
+			if (DirectionalLightFBO.get())
+			{
+				BasepassShader->Use();
+				Texture::ActivateTexture(9);
+
+				glBindTexture(GL_TEXTURE_2D, DirectionalLightFBO->GetTextureID());
+
+				int UniformLocation = glGetUniformLocation(BasepassShader->ID, "ShadowMap");
+				glUniform1i(UniformLocation, 9);
+
+				Matrix<float> V = DirectionalLightSource->GetViewMatrix();
+				Matrix<float> P = DirectionalLightSource->GetProjectionMatrix();
+
+				BasepassShader->SetUniformMatrix4f("LightMatrix", V.M[0]);
+				BasepassShader->SetUniformMatrix4f("Projection", P.M[0]);
+
+				BasepassShader->SetUniformVec3f("LightLocation", DirectionalLightSource->GetWorldLocation());
+				Rotatorf DirectionalLightRotation = DirectionalLightSource->GetWorldRotation();
+				BasepassShader->SetUniformVec3f("LightDirection", DirectionalLightRotation.GetForwardVector());
+			}
+		}
+
+		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), BasepassShader);
+
+#if !WITH_EDITOR
+		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
+#endif
+	}
+
+	void Renderer::ResolvePostproccess()
+	{	
+		PostProccessMaterial.GetShader()->Use();
+#if WITH_EDITOR
+		// if there is editor keep uniforms in update with parameters in ui
+		UpdatePostProcessUniforms();
+#endif
+
+		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), &PostProccessMaterial);
+
+#if !WITH_EDITOR
+		RenderCommands::SetViewportSize(MainWindow->ConstraintedResolution, MainWindow->ConstraintedOffset);
+
+#endif
+
+		Gbuffer->Unbind();
+		Gbuffer->UnbindDrawBuffers();
 	}
 
 	void Renderer::Shutdown()

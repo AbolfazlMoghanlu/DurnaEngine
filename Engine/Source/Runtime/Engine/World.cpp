@@ -6,10 +6,6 @@
 #include "Runtime/Components/DirectionalLightComponent.h"
 #include "Runtime/Engine/GameFramwork/SkyLightActor.h"
 
-// TODO: Remove
-#include "Runtime/Renderer/Renderer.h"
-#include "Runtime/Math/Math.h"
-
 namespace Durna
 {
 	std::unique_ptr<World> World::MainWorld;

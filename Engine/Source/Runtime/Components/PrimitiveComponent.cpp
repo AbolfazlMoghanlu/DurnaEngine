@@ -1,6 +1,9 @@
 #include "DurnaPCH.h"
 #include "PrimitiveComponent.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Runtime/Engine/StaticMesh.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/Shader.h"
@@ -9,8 +12,6 @@
 #include "Runtime/Renderer/RenderCommands.h"
 #include "Runtime/Renderer/Renderer.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 namespace Durna
 {

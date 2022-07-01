@@ -20,12 +20,10 @@ out vec4 FragColor;
   
 in vec2 TexCoords;
 
-uniform sampler2D Buffer_FinalColor;
-
+uniform sampler2D Buffer_Postproccess;
 
 void main()
 {
-    vec4 FinalColor = texture(Buffer_FinalColor, TexCoords); 
-
+    vec4 FinalColor = texture(Buffer_Postproccess, TexCoords); 
     FragColor = FinalColor;
 }

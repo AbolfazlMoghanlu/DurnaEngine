@@ -62,5 +62,6 @@ namespace Durna
 		static Shader* ShadowmapShader;
 		static Shader* ArrowShader;
 		static Shader* BillboardShader;
+		static Shader* BasepassShader;
 	};
 }

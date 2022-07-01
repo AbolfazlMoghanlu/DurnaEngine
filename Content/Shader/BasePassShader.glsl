@@ -16,12 +16,9 @@ void main()
 #type fragment
 #version 460 core
 
-layout(location = 0) out vec4 FragColor;
 layout(location = 5) out vec4 Buffer_FinalColor;
-
   
 in vec2 TexCoords;
-
 
 uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
@@ -33,14 +30,11 @@ uniform sampler2D Buffer_Depth;
 uniform sampler2D ShadowMap;
 
 uniform mat4 LightMatrix;
-uniform mat4 View;
 uniform mat4 Projection;
 
 uniform vec3 CameraLocation;
 uniform vec3 LightDirection;
 uniform vec3 LightLocation;
-
-uniform int DisplayBufer;
 
 // -------------------- Light -------------------
 uniform vec3 AmbientLightColor;
@@ -50,22 +44,11 @@ uniform vec3 DiffuseLightColor;
 uniform float DiffuseLightIntensity;
 uniform vec3 DiffuseLightDirection;
 
-// -------------------- Fog ---------------------
-uniform vec3 FogColor;
-uniform float FogAmount;
-uniform float FogOffset;
-uniform float FogLength;
-
-// -------------------- Blur --------------------
-uniform float BlurStepSize;
-uniform int BlurStepNumber;
-
 void main()
 {
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
     vec3 Normal = texture(Buffer_Normal, TexCoords).xyz;
     vec3 WorldPosition = texture(Buffer_Position, TexCoords).xyz;
-
     vec4 S_R_M_AO = texture(Buffer_Specular_Roughness_Metalic_AO, TexCoords);
 
     float Specular   = S_R_M_AO.x;
@@ -81,7 +64,6 @@ void main()
     
     float w = LightSpacePoition.w != 0 ? LightSpacePoition.w : 1.0f;
     vec3 C = LightSpacePoition.xyz / w;
-    //vec3 C = LightSpacePoition.xyz;
     C = C * 0.5f + 0.5f;
 
     vec2 Uv = C.xy;
@@ -96,12 +78,9 @@ void main()
     if(Uv.x < 0.01 || Uv.x > 0.99 || Uv.y < 0.01 || Uv.y > 0.99 || CameraFacing < 0)
     {
         Shadow = 0;
-        //Uv = vec2(0);
     }
 
-
-    vec4 Color = SceneColor;
-    
+    vec4 FinalColor = SceneColor;
 
     // light
     if(FragShadingModel == 0)
@@ -116,118 +95,8 @@ void main()
    
        DiffuseLight *= (1 + SpecularLightFactor);
 
-       Color = Color * vec4((AmbientLight + DiffuseLight * (1 - Shadow)), 1);
+       FinalColor = FinalColor * vec4((AmbientLight + DiffuseLight * (1 - Shadow)), 1);
     }
 
-
-    // blur
-    for(int k = 1; k <= BlurStepNumber; k++)
-    {
-        for(int i = -1; i <= 1; i++)
-        {
-            for(int j = -1; j <= 1; j++)
-            {
-                Color += texture(Buffer_Color, TexCoords + (vec2(i, j) * BlurStepSize) * k);
-            }
-        }
-    }
-    Color /= BlurStepNumber * 8 + 1;
-
-
-    // fog
-    float FogAlpha = clamp((SceneDepth - FogOffset) / FogLength , 0, 1);
-    Color = mix(Color, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
-    
-
-    // is selected in editor
-    if(StencilMask >= 128)
-    {
-        float StepSize = 0.01f;
-        StepSize *= SceneDepth * 0.2f;
-
-        uint SelectedNeighborFragmentNumber = 0;
-
-        for(int i = -1; i <= 1; i++)
-        {
-            for(int j = -1; j <= 1; j++)
-            {
-                if(texture(Buffer_Stencil, TexCoords + (vec2(i, j) * StepSize)).x >= 128)
-                    SelectedNeighborFragmentNumber++;
-            }
-        }
-
-        if(SelectedNeighborFragmentNumber < 7)
-            Color = vec4(1.0f, 0.75f, 0.4f, 1.0f);
-    }
-
-    switch(DisplayBufer)
-    {
-        // final color
-        case 0:
-           Buffer_FinalColor = Color; 
-           
-        break;
-
-        // base color
-        case 1:
-           Buffer_FinalColor = SceneColor; 
-        break;
-
-        // world normal
-        case 2:
-           Buffer_FinalColor = vec4(Normal, 1); 
-        break;
-
-        // scene depth
-        case 3:
-           Buffer_FinalColor = vec4(SceneDepth);
-        break;
-
-        // stencil
-        case 4:
-           Buffer_FinalColor = vec4(StencilMask / 255.0f);
-        break;
-        
-        // specular
-        case 5:
-           Buffer_FinalColor = vec4(Specular);
-        break;
-
-        // roughness
-        case 6:
-           Buffer_FinalColor = vec4(Roughness);
-        break;
-
-        // metallic
-        case 7:
-           Buffer_FinalColor = vec4(Metallic);
-        break;
-
-        // ao
-        case 8:
-           FragColor = vec4(AO);
-        break;
-        
-        // shading model
-        case 9:
-           if(FragShadingModel == 0)
-           {
-               Buffer_FinalColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-           }
-           else if(FragShadingModel == 1)
-           {
-               Buffer_FinalColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
-           }
-           else
-           {
-               Buffer_FinalColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
-           }
-        break;
-
-
-
-        default:
-           Buffer_FinalColor = Color; 
-        break;
-    }
+    Buffer_FinalColor = FinalColor;
 }

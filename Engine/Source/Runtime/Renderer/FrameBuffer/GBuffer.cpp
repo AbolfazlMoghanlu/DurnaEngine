@@ -37,6 +37,9 @@ namespace Durna
 			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
 			FrameBufferAttachmentDataType::uByte);
 
+		AddAttachment("Buffer_Postproccess", FrameBufferAttachmentType::Color_6,
+			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
+			FrameBufferAttachmentDataType::uByte);
 
 		RebuildBuffer();
 	}

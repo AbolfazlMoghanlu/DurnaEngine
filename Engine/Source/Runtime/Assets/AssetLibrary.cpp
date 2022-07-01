@@ -61,6 +61,7 @@ namespace Durna
 	Shader* AssetLibrary::ShadowmapShader;
 	Shader* AssetLibrary::ArrowShader;
 	Shader* AssetLibrary::BillboardShader;
+	Shader* AssetLibrary::BasepassShader;
 
 	void AssetLibrary::Init()
 	{
@@ -121,5 +122,6 @@ namespace Durna
 		ShadowmapShader = new Shader(Path::ShaderRelativePath("ShadowMapShader.glsl"));
 		ArrowShader = new Shader(Path::ShaderRelativePath("ArrowShader.glsl"));
 		BillboardShader = new Shader(Path::ShaderRelativePath("BillboardShader.glsl"));
+		BasepassShader = new Shader(Path::ShaderRelativePath("BasePassShader.glsl"));
 	}
 }

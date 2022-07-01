@@ -16,12 +16,9 @@ void main()
 #type fragment
 #version 460 core
 
-layout(location = 0) out vec4 FragColor;
-layout(location = 5) out vec4 Buffer_FinalColor;
-
+layout(location = 6) out vec4 Buffer_Postproccess;
   
 in vec2 TexCoords;
-
 
 uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
@@ -30,25 +27,10 @@ uniform sampler2D Buffer_Specular_Roughness_Metalic_AO;
 uniform usampler2D Buffer_ShadingModel;
 uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
+uniform sampler2D Buffer_FinalColor;
 uniform sampler2D ShadowMap;
 
-uniform mat4 LightMatrix;
-uniform mat4 View;
-uniform mat4 Projection;
-
-uniform vec3 CameraLocation;
-uniform vec3 LightDirection;
-uniform vec3 LightLocation;
-
 uniform int DisplayBufer;
-
-// -------------------- Light -------------------
-uniform vec3 AmbientLightColor;
-uniform float AmbientLightIntensity;
-
-uniform vec3 DiffuseLightColor;
-uniform float DiffuseLightIntensity;
-uniform vec3 DiffuseLightDirection;
 
 // -------------------- Fog ---------------------
 uniform vec3 FogColor;
@@ -65,8 +47,8 @@ void main()
     vec4 SceneColor = texture(Buffer_Color, TexCoords);
     vec3 Normal = texture(Buffer_Normal, TexCoords).xyz;
     vec3 WorldPosition = texture(Buffer_Position, TexCoords).xyz;
-
     vec4 S_R_M_AO = texture(Buffer_Specular_Roughness_Metalic_AO, TexCoords);
+    vec4 FinalColor = texture(Buffer_FinalColor, TexCoords);
 
     float Specular   = S_R_M_AO.x;
     float Roughness  = S_R_M_AO.y;
@@ -77,48 +59,7 @@ void main()
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
 
-    vec4 LightSpacePoition = Projection * LightMatrix * vec4(WorldPosition, 1);
-    
-    float w = LightSpacePoition.w != 0 ? LightSpacePoition.w : 1.0f;
-    vec3 C = LightSpacePoition.xyz / w;
-    //vec3 C = LightSpacePoition.xyz;
-    C = C * 0.5f + 0.5f;
-
-    vec2 Uv = C.xy;
-
-    float Shadow;;
-    float bias = 0.001;
-    float D = texture(ShadowMap, Uv).x;
-    Shadow = C.z - bias > D ? 1.0f : 0.0f;
-
-    float CameraFacing = dot(LightDirection, WorldPosition - LightLocation);
-
-    if(Uv.x < 0.01 || Uv.x > 0.99 || Uv.y < 0.01 || Uv.y > 0.99 || CameraFacing < 0)
-    {
-        Shadow = 0;
-        //Uv = vec2(0);
-    }
-
-
-    vec4 Color = SceneColor;
-    
-
-    // light
-    if(FragShadingModel == 0)
-    {
-       vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
-       vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, -DiffuseLightDirection), 0) * DiffuseLightIntensity;
-
-       vec3 ViewDirection = normalize(CameraLocation - WorldPosition);
-       vec3 ReflectionVector = reflect(-DiffuseLightDirection, Normal);
-    
-       float SpecularLightFactor = pow(max(dot(ViewDirection, ReflectionVector), 0), Specular * 32);
-   
-       DiffuseLight *= (1 + SpecularLightFactor);
-
-       Color = Color * vec4((AmbientLight + DiffuseLight * (1 - Shadow)), 1);
-    }
-
+    vec4 PostproccessColor = FinalColor;    
 
     // blur
     for(int k = 1; k <= BlurStepNumber; k++)
@@ -127,16 +68,16 @@ void main()
         {
             for(int j = -1; j <= 1; j++)
             {
-                Color += texture(Buffer_Color, TexCoords + (vec2(i, j) * BlurStepSize) * k);
+                PostproccessColor += texture(Buffer_Color, TexCoords + (vec2(i, j) * BlurStepSize) * k);
             }
         }
     }
-    Color /= BlurStepNumber * 8 + 1;
+    PostproccessColor /= BlurStepNumber * 8 + 1;
 
 
     // fog
     float FogAlpha = clamp((SceneDepth - FogOffset) / FogLength , 0, 1);
-    Color = mix(Color, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
+    PostproccessColor = mix(PostproccessColor, vec4(FogColor, 1.0f), FogAlpha * FogAmount);
     
 
     // is selected in editor
@@ -157,77 +98,74 @@ void main()
         }
 
         if(SelectedNeighborFragmentNumber < 7)
-            Color = vec4(1.0f, 0.75f, 0.4f, 1.0f);
+            PostproccessColor = vec4(1.0f, 0.75f, 0.4f, 1.0f);
     }
 
     switch(DisplayBufer)
     {
         // final color
         case 0:
-           Buffer_FinalColor = Color; 
-           
+           Buffer_Postproccess = PostproccessColor; 
         break;
 
         // base color
         case 1:
-           Buffer_FinalColor = SceneColor; 
+           Buffer_Postproccess = SceneColor; 
         break;
 
         // world normal
         case 2:
-           Buffer_FinalColor = vec4(Normal, 1); 
+           Buffer_Postproccess = vec4(Normal, 1); 
         break;
 
         // scene depth
         case 3:
-           Buffer_FinalColor = vec4(SceneDepth);
+           Buffer_Postproccess = vec4(SceneDepth);
         break;
 
         // stencil
         case 4:
-           Buffer_FinalColor = vec4(StencilMask / 255.0f);
+           Buffer_Postproccess = vec4(StencilMask / 255.0f);
         break;
         
         // specular
         case 5:
-           Buffer_FinalColor = vec4(Specular);
+           Buffer_Postproccess = vec4(Specular);
         break;
 
         // roughness
         case 6:
-           Buffer_FinalColor = vec4(Roughness);
+           Buffer_Postproccess = vec4(Roughness);
         break;
 
         // metallic
         case 7:
-           Buffer_FinalColor = vec4(Metallic);
+           Buffer_Postproccess = vec4(Metallic);
         break;
 
         // ao
         case 8:
-           FragColor = vec4(AO);
+           Buffer_Postproccess = vec4(AO);
         break;
         
         // shading model
         case 9:
            if(FragShadingModel == 0)
            {
-               Buffer_FinalColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+               Buffer_Postproccess = vec4(1.0f, 0.0f, 0.0f, 1.0f);
            }
            else if(FragShadingModel == 1)
            {
-               Buffer_FinalColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+               Buffer_Postproccess = vec4(0.0f, 1.0f, 0.0f, 1.0f);
            }
            else
            {
-               Buffer_FinalColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+               Buffer_Postproccess = vec4(0.0f, 0.0f, 1.0f, 1.0f);
            }
         break;
 
-
-
         default:
-           Buffer_FinalColor = Color; 
+           Buffer_Postproccess = PostproccessColor; 
         break;
     }
 }
