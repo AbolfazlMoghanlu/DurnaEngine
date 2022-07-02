@@ -6,6 +6,7 @@
 namespace Durna
 {
 	class Material;
+	class Texture;
 
 	class SkySphereComponent : public PrimitiveComponent
 	{
@@ -16,8 +17,12 @@ namespace Durna
 		LinearColor GetOverallColor() const;
 		void SetOverallColor(const LinearColor& InOverallColor);
 
+		Texture* GetCubemap() const;
+		void SetCubemap(Texture* InTexture);
+
 	protected:
 		LinearColor OverallColor = LinearColor::White;
+		Texture* Cubemap;
 
 		friend class SkySphereComponentPanel;
 	};

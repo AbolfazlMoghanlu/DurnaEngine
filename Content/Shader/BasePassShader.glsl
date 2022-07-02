@@ -29,6 +29,10 @@ uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
 uniform sampler2D ShadowMap;
 
+
+uniform samplerCube EnvironmentCubemap;
+
+
 uniform mat4 LightMatrix;
 uniform mat4 Projection;
 
@@ -60,6 +64,14 @@ void main()
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
 
+    // Environment reflection
+    vec3 CameraDirection = normalize(WorldPosition - CameraLocation);
+    vec3 ReflectionVector = reflect(CameraDirection, Normal);
+    ReflectionVector = ReflectionVector.xzy;
+
+    vec4 EnvironmentReflection = texture(EnvironmentCubemap, ReflectionVector);
+
+
     vec4 LightSpacePoition = Projection * LightMatrix * vec4(WorldPosition, 1);
     
     float w = LightSpacePoition.w != 0 ? LightSpacePoition.w : 1.0f;
@@ -82,9 +94,10 @@ void main()
 
     vec4 FinalColor = SceneColor;
 
-    // light
+    // Lit
     if(FragShadingModel == 0)
     {
+       // Light
        vec3 AmbientLight = AmbientLightColor * AmbientLightIntensity;
        vec3 DiffuseLight = DiffuseLightColor * max(dot(Normal, -DiffuseLightDirection), 0) * DiffuseLightIntensity;
 
@@ -96,7 +109,11 @@ void main()
        DiffuseLight *= (1 + SpecularLightFactor);
 
        FinalColor = FinalColor * vec4((AmbientLight + DiffuseLight * (1 - Shadow)), 1);
+
+       // Reflection
+       FinalColor = mix(EnvironmentReflection, FinalColor, Roughness);
     }
+
 
     Buffer_FinalColor = FinalColor;
 }

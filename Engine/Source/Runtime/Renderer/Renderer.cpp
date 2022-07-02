@@ -31,6 +31,8 @@
 #include "Runtime/Components/DirectionalLightComponent.h"
 #include "Runtime/Engine/GameFramwork/SkyLightActor.h"
 #include "Runtime/Components/SkyLightComponent.h"
+#include "Runtime/Engine/GameFramwork/SkySphereActor.h"
+#include "Runtime/Components/SkySphereComponent.h"
 #include "Runtime/Engine/World.h"
 
 
@@ -276,6 +278,19 @@ namespace Durna
 				Rotatorf DirectionalLightRotation = DirectionalLightSource->GetWorldRotation();
 				BasepassShader->SetUniformVec3f("LightDirection", DirectionalLightRotation.GetForwardVector());
 			}
+		}
+
+
+		SkySphereActor* SkySphere = World::Get()->GetSkySphere();
+		Texture* EnvironmentCubemap = SkySphere->GetSkyComponent()->GetCubemap();
+
+		if (EnvironmentCubemap)
+		{
+			Texture::ActivateTexture(10);
+			EnvironmentCubemap->Bind();
+
+			int UniformLocation = glGetUniformLocation(BasepassShader->ID, "EnvironmentCubemap");
+			glUniform1i(UniformLocation, 10);
 		}
 
 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), BasepassShader);

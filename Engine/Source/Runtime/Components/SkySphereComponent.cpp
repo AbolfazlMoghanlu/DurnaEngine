@@ -4,6 +4,7 @@
 #include "Runtime/Assets/AssetLibrary.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/Shader.h"
+#include "Runtime/Renderer/Texture.h"
 #include "Runtime/Renderer/TextureCube.h"
 
 #if WITH_EDITOR
@@ -16,7 +17,8 @@ namespace Durna
 	{
 		SetStaticMesh(AssetLibrary::FlipedSphere, 0);
 		GetMaterial()->SetShader(AssetLibrary::SkyShader);
-		GetMaterial()->AddTextureElement(TextureElement("SkyCubemap", AssetLibrary::SkyCubemapTexture));
+		//GetMaterial()->AddTextureElement(TextureElement("SkyCubemap", AssetLibrary::SkyCubemapTexture));
+		SetCubemap(AssetLibrary::SkyCubemapTexture);
 
 		BindPreDraw(
 			[](PrimitiveComponent* InComponent, Shader* InShader)
@@ -49,4 +51,17 @@ namespace Durna
 	{
 		OverallColor = InOverallColor;
 	}
+
+	Texture* SkySphereComponent::GetCubemap() const
+	{
+		return Cubemap;
+	}
+
+	void SkySphereComponent::SetCubemap(Texture* InTexture)
+	{
+		GetMaterial()->ResetTextureElements();
+		GetMaterial()->AddTextureElement(TextureElement("SkyCubemap", InTexture));
+		Cubemap = InTexture;
+	}
+
 }
