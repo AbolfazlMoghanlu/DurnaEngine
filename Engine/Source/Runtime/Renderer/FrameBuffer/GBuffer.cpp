@@ -32,12 +32,16 @@ namespace Durna
 		AddAttachment("Buffer_ShadingModel", FrameBufferAttachmentType::Color_4,
 			FrameBufferAttachmentFormat::Red_Int, FrameBufferAttachmentFormat::R8UI,
 			FrameBufferAttachmentDataType::uByte);
+			
+		AddAttachment("Buffer_Lighting", FrameBufferAttachmentType::Color_5,
+			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
+			FrameBufferAttachmentDataType::uByte);
 		
-		AddAttachment("Buffer_FinalColor", FrameBufferAttachmentType::Color_5,
+		AddAttachment("Buffer_FinalColor", FrameBufferAttachmentType::Color_6,
 			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
 			FrameBufferAttachmentDataType::uByte);
 
-		AddAttachment("Buffer_Postproccess", FrameBufferAttachmentType::Color_6,
+		AddAttachment("Buffer_Postproccess", FrameBufferAttachmentType::Color_7,
 			FrameBufferAttachmentFormat::RGBA, FrameBufferAttachmentFormat::RGBA,
 			FrameBufferAttachmentDataType::uByte);
 

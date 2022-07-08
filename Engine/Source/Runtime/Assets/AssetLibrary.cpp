@@ -15,6 +15,7 @@
 namespace Durna
 {
 	StaticMesh* AssetLibrary::FlipedSphere;
+	StaticMesh* AssetLibrary::Sphere;
 
 	StaticMesh* AssetLibrary::GizmoMesh;
 	StaticMesh* AssetLibrary::RockMesh;
@@ -23,6 +24,7 @@ namespace Durna
 	StaticMesh* AssetLibrary::ArrowMesh;
 
 	PrimitiveComponent* AssetLibrary::ScreenQuad;
+	PrimitiveComponent* AssetLibrary::PointLightSphere;
 
 	Image* AssetLibrary::TileImage;
 	Image* AssetLibrary::WallImage;
@@ -73,6 +75,8 @@ namespace Durna
 	Shader* AssetLibrary::RockShader;
 	Shader* AssetLibrary::ResolvedShader;
 	Shader* AssetLibrary::ShadowmapShader;
+	Shader* AssetLibrary::PointLightShader;
+
 	Shader* AssetLibrary::ArrowShader;
 	Shader* AssetLibrary::BillboardShader;
 	Shader* AssetLibrary::BasepassShader;
@@ -81,6 +85,9 @@ namespace Durna
 	{
 		FlipedSphere = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), FlipedSphere, 0, 0, 1);
+		
+		Sphere = new StaticMesh;
+		ModelLoader::Load(Path::ModelRelativePath("Sphere.obj"), Sphere, 0, 0, 1);
 
 		GizmoMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh, 0, 0, 1);
@@ -96,6 +103,9 @@ namespace Durna
 
 		ScreenQuad = new PrimitiveComponent("ScreenQuad");
 		ScreenQuad->SetStaticMesh(&BaseShapes::Plane, 1);
+
+		PointLightSphere = new PrimitiveComponent("PointLightSphere");
+		PointLightSphere->SetStaticMesh(Sphere, 0);
 
 		TileImage = new Image(Path::TextureRelativePath("T_TiledTexureCoordiante.png").c_str());
 		WallImage = new Image(Path::TextureRelativePath("T_Wall.jpg").c_str());
@@ -147,6 +157,7 @@ namespace Durna
 		RockShader = new Shader(Path::ShaderRelativePath("RockShader.glsl"));
 		ResolvedShader = new Shader(Path::ShaderRelativePath("ResolvedShader.glsl"));
 		ShadowmapShader = new Shader(Path::ShaderRelativePath("ShadowMapShader.glsl"));
+		PointLightShader = new Shader(Path::ShaderRelativePath("PointLightShader.glsl"));
 		ArrowShader = new Shader(Path::ShaderRelativePath("ArrowShader.glsl"));
 		BillboardShader = new Shader(Path::ShaderRelativePath("BillboardShader.glsl"));
 		BasepassShader = new Shader(Path::ShaderRelativePath("BasePassShader.glsl"));

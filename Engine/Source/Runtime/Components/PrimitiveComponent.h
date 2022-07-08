@@ -52,5 +52,6 @@ namespace Durna
 		void (*PreDrawFunc)(PrimitiveComponent* InComponent, Shader* InShader) = nullptr;
 
 		friend class RenderCommands;
+		friend class Renderer;
 	};
 }

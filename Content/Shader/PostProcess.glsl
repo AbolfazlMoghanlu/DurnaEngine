@@ -16,7 +16,7 @@ void main()
 #type fragment
 #version 460 core
 
-layout(location = 6) out vec4 Buffer_Postproccess;
+layout(location = 7) out vec4 Buffer_Postproccess;
   
 in vec2 TexCoords;
 
@@ -25,6 +25,7 @@ uniform sampler2D Buffer_Color;
 uniform sampler2D Buffer_Normal;
 uniform sampler2D Buffer_Specular_Roughness_Metalic_AO;
 uniform usampler2D Buffer_ShadingModel;
+uniform sampler2D Buffer_Lighting;
 uniform usampler2D Buffer_Stencil;
 uniform sampler2D Buffer_Depth;
 uniform sampler2D Buffer_FinalColor;
@@ -55,6 +56,7 @@ void main()
     float Metallic    = S_R_M_AO.z;
     float AO         = S_R_M_AO.w;
     uint FragShadingModel = texture(Buffer_ShadingModel, TexCoords).r;
+    vec3 Lighting = texture(Buffer_Lighting, TexCoords).xyz;
 
     float SceneDepth = texture(Buffer_Depth, TexCoords).x;
     uint StencilMask = texture(Buffer_Stencil, TexCoords).x;
@@ -167,6 +169,10 @@ void main()
            {
                Buffer_Postproccess = vec4(0.0f, 0.0f, 1.0f, 1.0f);
            }
+        break;
+
+        case 11:
+            Buffer_Postproccess = vec4(Lighting, 1);
         break;
 
         default:

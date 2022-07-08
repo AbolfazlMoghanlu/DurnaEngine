@@ -16,12 +16,14 @@ namespace Durna
 		static void Init();
 
 		static StaticMesh* FlipedSphere;
+		static StaticMesh* Sphere;
 		static StaticMesh* GizmoMesh;
 		static StaticMesh* RockMesh;
 		static StaticMesh* PlaneMesh;
 		static StaticMesh* ArrowMesh;
 
 		static PrimitiveComponent* ScreenQuad;
+		static PrimitiveComponent* PointLightSphere;
 
 		static Image* TileImage;
 		static Image* WallImage;
@@ -72,6 +74,7 @@ namespace Durna
 		static Shader* RockShader;
 		static Shader* ResolvedShader;
 		static Shader* ShadowmapShader;
+		static Shader* PointLightShader;
 		static Shader* ArrowShader;
 		static Shader* BillboardShader;
 		static Shader* BasepassShader;

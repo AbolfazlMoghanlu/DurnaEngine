@@ -18,6 +18,7 @@ namespace Durna
 		case 8:		return "Metallic";
 		case 9:		return "AO";
 		case 10:	return "Shading Model";
+		case 11:	return "Lighting";
 
 		default:	return "InvalidBuffer";
 		}

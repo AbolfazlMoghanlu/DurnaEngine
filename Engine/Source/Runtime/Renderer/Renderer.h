@@ -55,6 +55,8 @@ namespace Durna
 
 		static void RenderShadowBuffers();
 
+		static void RenderSceneLights();
+
 		static void ResolveFinalColor();
 
 		static void ResolvePostproccess();

@@ -35,6 +35,10 @@
 #include "Runtime/Components/SkySphereComponent.h"
 #include "Runtime/Engine/World.h"
 
+#include "Runtime/Renderer/Buffer.h"
+#include "Runtime/Math/ScaleRotationTranslationMatrix.h"
+#include "Runtime/Math/PrespectiveMatrix.h"
+#include "Runtime/Renderer/CommonRenderUniforms.h"
 
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
@@ -156,6 +160,8 @@ namespace Durna
 		RenderGBuffer();
 		FinishRenderGBuffer();
 
+		RenderSceneLights();
+
 		ResolveFinalColor();
 
 		ResolvePostproccess();
@@ -227,6 +233,56 @@ namespace Durna
 
 	}
 
+	void Renderer::RenderSceneLights()
+	{
+		RenderCommands::DisableDepthTest();
+		RenderCommands::DisableStencilTest();
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+
+		Gbuffer->BindDrawBuffers();
+
+		uint32 LightTextureID = Gbuffer->Attachments[5]->TextureID;
+		static const float Black[] = { 0, 0, 0, 0 };
+		glClearTexImage(LightTextureID, 0, GL_RGBA, GL_UNSIGNED_BYTE, Black);
+
+		Shader* PointLightShader = AssetLibrary::PointLightShader;
+		PrimitiveComponent* Pr = AssetLibrary::PointLightSphere;
+
+		Pr->VA->Bind();
+		PointLightShader->Use();
+
+		Gbuffer->BindTextures(PointLightShader->ID);
+		CommonRenderUniforms::UploadCameraLocation(PointLightShader);
+
+		Vector3f LightLocation = Vector3f(0.5f, 0.0f, -0.2f);
+		Vector3f LightScale = Vector3f(0.5f);
+
+		PointLightShader->SetUniformVec3f("LightLocation", LightLocation);
+		PointLightShader->SetUniform1f("LightScale", 0.5f);
+
+		ScaleRotationTranslationMatrix<float> Transform(LightScale, Rotatorf(0.0f), LightLocation);
+		PointLightShader->SetUniformMatrix4f("Transform", Transform.M[0]);
+
+		PointLightShader->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
+		PointLightShader->SetUniformMatrix4f("Projection", CameraManager::Get()->GetProjectionMatrix());
+		
+		glDrawElements(GL_TRIANGLES, Pr->EB->GetCount(), GL_UNSIGNED_INT, 0);
+
+		LightLocation = Vector3f(0.5f, 0.4f, -0.4f);
+		LightScale = Vector3f(0.3f);
+		PointLightShader->SetUniformVec3f("LightLocation", LightLocation);
+		PointLightShader->SetUniform1f("LightScale", 0.3f);
+
+		Transform = ScaleRotationTranslationMatrix<float>(LightScale, Rotatorf(0.0f), LightLocation);
+		PointLightShader->SetUniformMatrix4f("Transform", Transform.M[0]);
+
+		glDrawElements(GL_TRIANGLES, Pr->EB->GetCount(), GL_UNSIGNED_INT, 0);
+
+		glDisable(GL_BLEND);
+	}
+
 	void Renderer::ResolveFinalColor()
 	{
 		RenderCommands::DisableDepthTest();
@@ -261,12 +317,12 @@ namespace Durna
 			if (DirectionalLightFBO.get())
 			{
 				BasepassShader->Use();
-				Texture::ActivateTexture(9);
+				Texture::ActivateTexture(10);
 
 				glBindTexture(GL_TEXTURE_2D, DirectionalLightFBO->GetTextureID());
 
 				int UniformLocation = glGetUniformLocation(BasepassShader->ID, "ShadowMap");
-				glUniform1i(UniformLocation, 9);
+				glUniform1i(UniformLocation, 10);
 
 				Matrix<float> V = DirectionalLightSource->GetViewMatrix();
 				Matrix<float> P = DirectionalLightSource->GetProjectionMatrix();
@@ -286,11 +342,11 @@ namespace Durna
 
 		if (EnvironmentCubemap)
 		{
-			Texture::ActivateTexture(10);
+			Texture::ActivateTexture(11);
 			EnvironmentCubemap->Bind();
 
 			int UniformLocation = glGetUniformLocation(BasepassShader->ID, "EnvironmentCubemap");
-			glUniform1i(UniformLocation, 10);
+			glUniform1i(UniformLocation, 11);
 		}
 
 		RenderCommands::DrawFrameBufferToScreen(Gbuffer.get(), BasepassShader);

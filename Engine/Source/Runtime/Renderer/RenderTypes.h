@@ -60,6 +60,7 @@ namespace Durna
 		Metallic			,
 		AO					,
 		ShadingModel		,
+		Lighting			,
 		Max
 	};
 
