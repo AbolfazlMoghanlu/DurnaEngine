@@ -26,6 +26,7 @@ void main()
 in vec2 ScreenAlignedUVs;
 
 layout(location = 5) out vec4 Lighting;
+layout(location = 1) out vec4 a;
 
 uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
@@ -52,15 +53,24 @@ void main()
     vec3 PixelPositionToLight = LightLocation - WorldPosition;
     float Distance = length(PixelPositionToLight);
 
-    Distance /= Attenuation; 
-    Distance = clamp(Distance, 0, 1);
-    Distance = 1 - Distance;
+    //Distance /= Attenuation; 
+    //Distance = clamp(Distance, 0, 1);
+    //Distance = 1 - Distance;
 
-    float Attenuation =  (Distance * Distance);
-    vec3 Radiance = LightColor * Attenuation;
+    //float Attenuation =  (Distance * Distance);
+
+    Distance /= 1;
+
+    float A = Distance / Attenuation;
+    A = clamp(A, 0, 1);
+    A = 1 - A;
+
+    vec3 Radiance = LightColor * A;
 
     vec3 LightDir = normalize(PixelPositionToLight);
     float DiffuseLight = max(dot(LightDir, Normal), 0.0f);
 
 	Lighting = vec4(Radiance, 1) * DiffuseLight;
+	//Lighting = vec4(A);
+    //a = vec4(LightColor, 1);
 }

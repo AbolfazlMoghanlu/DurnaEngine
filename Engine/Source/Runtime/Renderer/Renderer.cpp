@@ -158,14 +158,20 @@ namespace Durna
 
 	void Renderer::Render()
 	{
+		glFrontFace(GL_CCW);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+
 		RenderShadowBuffers();
 
 		BeginRenderGBuffer();
 		RenderGBuffer();
 		FinishRenderGBuffer();
 
+		glCullFace(GL_BACK);
 		RenderSceneLights();
 
+		glCullFace(GL_FRONT);
 		ResolveFinalColor();
 
 		ResolvePostproccess();
@@ -184,6 +190,7 @@ namespace Durna
 
 		RenderCommands::EnableStencilTest();
 		RenderCommands::ClearStencilBuffer();
+
 
 		RenderCommands::SetViewportSize(MainWindow->Resolution);
 	}
@@ -244,6 +251,7 @@ namespace Durna
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
+
 
 		Gbuffer->BindDrawBuffers();
 

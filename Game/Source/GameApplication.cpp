@@ -118,9 +118,9 @@ void GameApplication::Init()
 	Actor1->AttachSceneComponent(pr1);
 	Actor1->AttachSceneComponent(pr2, pr1);
 	Actor1->AttachSceneComponent(pr3, pr1);
-	Actor1->AttachSceneComponent(LightSource_1);
-	Actor1->AttachSceneComponent(LightSource_2);
-	Actor1->AttachSceneComponent(LightSource_3);
+	Actor1->AttachSceneComponent(LightSource_1, pr1);
+	Actor1->AttachSceneComponent(LightSource_2, pr2);
+	Actor1->AttachSceneComponent(LightSource_3, pr3);
 
 	Actor1->SetActorScale(Vector3f(0.1f));
 
@@ -213,12 +213,6 @@ void GameApplication::Tick(float DeltaTime)
 
 	pr1->SetRelativeLocation(Vector3f(1.0, 0, 0));
 
-	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
+	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), -0.3f));
 	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
-
-	LightSource_1->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
-
-	LightSource_2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), 0, 0.0f));
-
-	LightSource_3->SetRelativeLocation(Vector3f(Math::Cos(Renderer::GetTime()), 0, 0.0f));
 }

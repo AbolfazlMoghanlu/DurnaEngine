@@ -87,7 +87,7 @@ namespace Durna
 		ModelLoader::Load(Path::ModelRelativePath("FlipedSphere.obj"), FlipedSphere, 0, 0, 1);
 		
 		Sphere = new StaticMesh;
-		ModelLoader::Load(Path::ModelRelativePath("Sphere.obj"), Sphere, 0, 0, 1);
+		ModelLoader::Load(Path::ModelRelativePath("SM_Sphere.fbx"), Sphere, 0, 0, 1);
 
 		GizmoMesh = new StaticMesh;
 		ModelLoader::Load(Path::ModelRelativePath("Gizmo.obj"), GizmoMesh, 0, 0, 1);
