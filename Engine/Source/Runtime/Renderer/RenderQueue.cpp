@@ -23,4 +23,30 @@ namespace Durna
 	{
 		Queue.reserve(Size);
 	}
+
+
+
+	
+
+	void PointLightRenderQueue::Clear(uint32 SlackSize /*= 0*/)
+	{
+		Queue.clear();
+		Queue.reserve(SlackSize);
+	}
+
+	void PointLightRenderQueue::AddPrimitive(PointLightComponent* InPointLightComponent)
+	{
+		Queue.push_back(InPointLightComponent);
+	}
+
+	void PointLightRenderQueue::Resize(uint32 Size)
+	{
+		Queue.resize(Size);
+	}
+
+	void PointLightRenderQueue::Reserve(uint32 Size)
+	{
+		Queue.reserve(Size);
+	}
+
 }

@@ -39,6 +39,16 @@ namespace Durna
 		LightColor = InColor;
 	}
 
+	float LightComponent::GetAttenuation() const
+	{
+		return Attenuation;
+	}
+
+	void LightComponent::SetAttenuation(float InAttenuation)
+	{
+		Attenuation = InAttenuation;
+	}
+
 	float LightComponent::GetMaxDrawDistance() const
 	{
 		return MaxDrawDistance;

@@ -13,6 +13,7 @@ namespace Durna
 	class Texture;
 	class Texture2D;
 	class TextureCube;
+	class PointLightComponent;
 }
 
 
@@ -30,6 +31,10 @@ private:
  	PrimitiveComponent* pr1 = nullptr;
  	PrimitiveComponent* pr2 = nullptr;
  	PrimitiveComponent* pr3 = nullptr;
+
+	PointLightComponent* LightSource_1;
+	PointLightComponent* LightSource_2;
+	PointLightComponent* LightSource_3;
 
 	Durna::StaticMesh* CubeMesh = nullptr;
 

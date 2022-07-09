@@ -11,6 +11,8 @@ namespace Durna
 		LinearColor(float InInt) : R(InInt), G(InInt), B(InInt), A(255) {};
 		LinearColor(float InR, float InG, float InB, float InA) : R(InR), G(InG), B(InB), A(InA) {};
 
+		LinearColor operator*(float F);
+
 		static LinearColor const Black;
 		static LinearColor const White;
 

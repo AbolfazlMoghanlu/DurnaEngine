@@ -23,6 +23,9 @@ namespace Durna
 		LinearColor GetLightColor() const;
 		void SetLightColor(const LinearColor& InColor);
 
+		float GetAttenuation() const;
+		void SetAttenuation(float InAttenuation);
+
 		float GetMaxDrawDistance() const;
 		void SetMaxDrawDistance(float InMaxDrawDistance);
 
@@ -48,6 +51,7 @@ namespace Durna
 	protected:
 		float Intensity = 1.0f;
 		LinearColor LightColor = LinearColor::White;
+		float Attenuation = 1.0f;
 
 		float MaxDrawDistance = 1.0f;
 		float MaxFadeRange = 1.0f;

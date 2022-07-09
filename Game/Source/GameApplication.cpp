@@ -26,6 +26,8 @@
 #include "Runtime/Renderer/Texture2D.h"
 #include "Runtime/Renderer/TextureCube.h"
 
+#include "Runtime/Components/Light/PointLightComponent.h"
+
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 
@@ -100,10 +102,25 @@ void GameApplication::Init()
 	pr3->SetRelativeLocation(Vector3f(-3.0f, 0.0f, 0.0f));
 
 
+	LightSource_1 = new PointLightComponent("Point light 1");
+	LightSource_1->SetAttenuation(1);
+	LightSource_1->SetLightColor(LinearColor(1.0f, 0.0f, 0.0f, 1.0f));
+
+	LightSource_2 = new PointLightComponent("Point light 2");
+	LightSource_2->SetAttenuation(1);
+	LightSource_2->SetLightColor(LinearColor(0.0f, 1.0f, 0.0f, 1.0f));
+
+	LightSource_3 = new PointLightComponent("Point light 3");
+	LightSource_3->SetAttenuation(1);
+	LightSource_3->SetLightColor(LinearColor(0.0f, 0.0f, 1.0f, 1.0f));
+
 	Actor1 = new Actor;
 	Actor1->AttachSceneComponent(pr1);
 	Actor1->AttachSceneComponent(pr2, pr1);
 	Actor1->AttachSceneComponent(pr3, pr1);
+	Actor1->AttachSceneComponent(LightSource_1);
+	Actor1->AttachSceneComponent(LightSource_2);
+	Actor1->AttachSceneComponent(LightSource_3);
 
 	Actor1->SetActorScale(Vector3f(0.1f));
 
@@ -198,4 +215,10 @@ void GameApplication::Tick(float DeltaTime)
 
 	pr2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
 	pr2->SetRelativeRotation(Rotatorf(0.0f, Math::Cos(Renderer::GetTime()) * 360.0f, 0.0f));
+
+	LightSource_1->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), Math::Cos(Renderer::GetTime()), 0.0f));
+
+	LightSource_2->SetRelativeLocation(Vector3f(Math::Sin(Renderer::GetTime()), 0, 0.0f));
+
+	LightSource_3->SetRelativeLocation(Vector3f(Math::Cos(Renderer::GetTime()), 0, 0.0f));
 }

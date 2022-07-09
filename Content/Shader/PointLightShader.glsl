@@ -33,7 +33,8 @@ uniform sampler2D Buffer_Normal;
 uniform sampler2D Buffer_Specular_Roughness_Metalic_AO;
 
 uniform vec3 LightLocation;
-uniform float LightScale;
+uniform vec3 LightColor;
+uniform float Attenuation;
 
 void main()
 {
@@ -48,12 +49,10 @@ void main()
     float AO         = S_R_M_AO.w;
 
 
-	vec3 LightColor = vec3(1, 0, 0);
-
     vec3 PixelPositionToLight = LightLocation - WorldPosition;
     float Distance = length(PixelPositionToLight);
 
-    Distance /= LightScale; 
+    Distance /= Attenuation; 
     Distance = clamp(Distance, 0, 1);
     Distance = 1 - Distance;
 

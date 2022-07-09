@@ -14,6 +14,8 @@ namespace Durna
 	class PrimitiveComponent;
 	class FrameBuffer;
 	class RenderQueue;
+	class PointLightRenderQueue;
+	class PointLightComponent;
 	class GBuffer;
 	class ResolveDefferedBuffer;
 	class ShadowFrameBuffer;
@@ -37,6 +39,7 @@ namespace Durna
 		static void ResizeBuffers(const IntPoint& InResolution);
 
 		static void RegisterToRenderQueue(PrimitiveComponent* Pr);
+		static void RegisterPointLight(PointLightComponent* InPointLightComponent);
 
 		static Material PostProccessMaterial;
 		static Material ResolvedMaterial;
@@ -66,6 +69,7 @@ namespace Durna
 		static float Time;
 
 		static RenderQueue RenderQue;
+		static PointLightRenderQueue PointLightRenderQue;
 
 		static void UpdatePostProcessUniforms();
 

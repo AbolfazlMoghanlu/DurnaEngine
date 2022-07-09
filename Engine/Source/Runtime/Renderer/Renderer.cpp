@@ -40,6 +40,8 @@
 #include "Runtime/Math/PrespectiveMatrix.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
 
+#include "Runtime/Components/Light/PointLightComponent.h"
+
 #if WITH_EDITOR
 	#include "Editor/Settings/Settings.h"
 #endif
@@ -55,6 +57,7 @@ namespace Durna
 	std::shared_ptr<GBuffer> Renderer::Gbuffer = nullptr;
 
 	RenderQueue Renderer::RenderQue;
+	PointLightRenderQueue Renderer::PointLightRenderQue;
 
 	Material Renderer::PostProccessMaterial;
 	Material Renderer::ResolvedMaterial;
@@ -149,6 +152,7 @@ namespace Durna
 		glfwSwapBuffers(MainWindow->GetGLFWWindow());
 
 		RenderQue.Clear();
+		PointLightRenderQue.Clear();
 	}
 
 
@@ -256,29 +260,24 @@ namespace Durna
 		Gbuffer->BindTextures(PointLightShader->ID);
 		CommonRenderUniforms::UploadCameraLocation(PointLightShader);
 
-		Vector3f LightLocation = Vector3f(0.5f, 0.0f, -0.2f);
-		Vector3f LightScale = Vector3f(0.5f);
-
-		PointLightShader->SetUniformVec3f("LightLocation", LightLocation);
-		PointLightShader->SetUniform1f("LightScale", 0.5f);
-
-		ScaleRotationTranslationMatrix<float> Transform(LightScale, Rotatorf(0.0f), LightLocation);
-		PointLightShader->SetUniformMatrix4f("Transform", Transform.M[0]);
-
 		PointLightShader->SetUniformMatrix4f("View", CameraManager::Get()->GetCameraViewMatrix());
 		PointLightShader->SetUniformMatrix4f("Projection", CameraManager::Get()->GetProjectionMatrix());
-		
-		glDrawElements(GL_TRIANGLES, Pr->EB->GetCount(), GL_UNSIGNED_INT, 0);
 
-		LightLocation = Vector3f(0.5f, 0.4f, -0.4f);
-		LightScale = Vector3f(0.3f);
-		PointLightShader->SetUniformVec3f("LightLocation", LightLocation);
-		PointLightShader->SetUniform1f("LightScale", 0.3f);
+		for (PointLightComponent* Light : PointLightRenderQue.Queue)
+		{
+			Vector3f LightLocation = Light->GetWorldLocation();
+			float LightAttenuation = Light->GetAttenuation();
+			LinearColor LightColor = Light->GetLightColor() * Light->GetIntensity();
 
-		Transform = ScaleRotationTranslationMatrix<float>(LightScale, Rotatorf(0.0f), LightLocation);
-		PointLightShader->SetUniformMatrix4f("Transform", Transform.M[0]);
+			PointLightShader->SetUniformVec3f("LightLocation", LightLocation);
+			PointLightShader->SetUniform1f("Attenuation", LightAttenuation);
+			PointLightShader->SetUniformVec3f("LightColor", LightColor);
 
-		glDrawElements(GL_TRIANGLES, Pr->EB->GetCount(), GL_UNSIGNED_INT, 0);
+			ScaleRotationTranslationMatrix<float> Transform(Vector3f(LightAttenuation), Rotatorf(0.0f), LightLocation);
+			PointLightShader->SetUniformMatrix4f("Transform", Transform.M[0]);
+
+			glDrawElements(GL_TRIANGLES, Pr->EB->GetCount(), GL_UNSIGNED_INT, 0);
+		}
 
 		glDisable(GL_BLEND);
 	}
@@ -403,4 +402,10 @@ namespace Durna
 	{
 		RenderQue.AddPrimitive(Pr);
 	}
+
+	void Renderer::RegisterPointLight(PointLightComponent* InPointLightComponent)
+	{
+		PointLightRenderQue.AddPrimitive(InPointLightComponent);
+	}
+
 }
