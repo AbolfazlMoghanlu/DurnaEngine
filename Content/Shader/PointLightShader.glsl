@@ -8,25 +8,22 @@ uniform mat4 View;
 uniform mat4 Projection;
 
 layout (location = 0) in vec3 aPos;
-
-out vec2 ScreenAlignedUVs;
+out vec3 ScreenSpaceTransform;
 
 void main()
 {
 	vec3 WorldPosition = (Transform * vec4(aPos, 1)).xyz;
 	gl_Position =  Projection * View * vec4(WorldPosition, 1);
-    ScreenAlignedUVs = gl_Position.xy / gl_Position.w;
-    ScreenAlignedUVs = ScreenAlignedUVs * 0.5f + 0.5f;
+    ScreenSpaceTransform = gl_Position.xyw;
 }
 
 
 #type fragment
 #version 460 core
 
-in vec2 ScreenAlignedUVs;
+in vec3 ScreenSpaceTransform;
 
 layout(location = 5) out vec4 Lighting;
-layout(location = 1) out vec4 a;
 
 uniform sampler2D Buffer_Position;
 uniform sampler2D Buffer_Color;
@@ -39,6 +36,8 @@ uniform float Attenuation;
 
 void main()
 {
+    vec2 ScreenAlignedUVs = (ScreenSpaceTransform.xy / ScreenSpaceTransform.z) * 0.5f + 0.5f;
+
 	vec4 SceneColor = texture(Buffer_Color, ScreenAlignedUVs);
     vec3 Normal = texture(Buffer_Normal, ScreenAlignedUVs).xyz;
     vec3 WorldPosition = texture(Buffer_Position, ScreenAlignedUVs).xyz;
@@ -71,6 +70,4 @@ void main()
     float DiffuseLight = max(dot(LightDir, Normal), 0.0f);
 
 	Lighting = vec4(Radiance, 1) * DiffuseLight;
-	//Lighting = vec4(A);
-    //a = vec4(LightColor, 1);
 }
