@@ -15,6 +15,8 @@ namespace Durna
 #if WITH_EDITOR
 		Panel = new PointLightComponentPanel(this);
 #endif
+
+		Intensity = 25.0f;
 	}
 
 	PointLightComponent::~PointLightComponent()

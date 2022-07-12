@@ -278,7 +278,7 @@ namespace Durna
 			LinearColor LightColor = Light->GetLightColor() * Light->GetIntensity();
 
 			PointLightShader->SetUniformVec3f("LightLocation", LightLocation);
-			PointLightShader->SetUniform1f("Attenuation", LightAttenuation);
+			PointLightShader->SetUniform1f("InvRadius", 1 / LightAttenuation);
 			PointLightShader->SetUniformVec3f("LightColor", LightColor);
 
 			ScaleRotationTranslationMatrix<float> Transform(Vector3f(LightAttenuation), Rotatorf(0.0f), LightLocation);
