@@ -94,7 +94,7 @@ void main()
         Shadow = 0;
     }
 
-    vec4 FinalColor = SceneColor;
+    vec3 FinalColor = SceneColor.xyz;
 
     // Lit
     if(FragShadingModel == 0)
@@ -110,14 +110,18 @@ void main()
    
        DiffuseLight *= (1 + SpecularLightFactor);
 
-       FinalColor = FinalColor * vec4((AmbientLight + DiffuseLight * (1 - Shadow)), 1);
+       FinalColor = FinalColor * vec3((AmbientLight + DiffuseLight * (1 - Shadow)));
 
-       FinalColor += vec4(Lighting, 1.0f);
+       FinalColor += Lighting;
 
        // Reflection
-       FinalColor = mix(EnvironmentReflection, FinalColor, Roughness);
+       FinalColor = mix(EnvironmentReflection.xyz, FinalColor, Roughness);
     }
 
 
-    Buffer_FinalColor = FinalColor;
+
+    FinalColor = FinalColor/ (FinalColor + 1);
+    FinalColor = pow(FinalColor, vec3(2.2f));
+
+    Buffer_FinalColor = vec4(FinalColor, 1);
 }

@@ -61,7 +61,7 @@ void main()
 {
 	vec4 Color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 1);
 
-	FragColor = pow(Color, vec4(2.2f, 2.2f, 2.2f, 1.0f));
+	FragColor = Color;
 	FragPosition = WorldPosition;
 	Normal = WorldNormal;
 	S_R_M_AO = vec4(Specular, 0.0f, 0.0f, 0.0f);

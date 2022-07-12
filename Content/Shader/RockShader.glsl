@@ -69,8 +69,6 @@ void main()
 
 	NormalMap = normalize(NormalMap * 2 - 1);
 
-	Color = vec4(pow(Color.xyz, vec3(2.2f)), 1);
-
 	FragColor = Color;
 	FragPosition = WorldPosition;
 	Normal = normalize(TBN * NormalMap);

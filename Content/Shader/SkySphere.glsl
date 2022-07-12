@@ -53,7 +53,7 @@ uniform mat4 Transform;
 void main()
 {
 	vec4 SkySampled = texture(SkyCubemap, TexCoord);
-	FragColor = pow(SkySampled, vec4(2.2f)) * vec4(OverallColor, 1.0f);
+	FragColor = SkySampled * vec4(OverallColor, 1.0f);
 	FragPosition = WorldPosition;
 
 	Normal = WorldNormal;
