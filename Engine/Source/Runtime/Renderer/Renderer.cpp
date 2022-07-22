@@ -8,7 +8,7 @@
 #include "Runtime/Engine/Camera/CameraManager.h"
 #include "Runtime/Renderer/ImGui/ImGuiRenderer.h"
 
-#include "Runtime/Assets/AssetLibrary.h"
+#include "Runtime/Asset/AssetLibrary.h"
 #include "Runtime/Engine/BaseShapes.h"
 
 #include "Runtime/renderer/RenderCommands.h"

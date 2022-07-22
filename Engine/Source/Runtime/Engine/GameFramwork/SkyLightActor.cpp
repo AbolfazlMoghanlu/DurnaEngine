@@ -3,7 +3,7 @@
 
 #include "Runtime/Components/SkyLightComponent.h"
 #include "Runtime/Components/BillboardComponent.h"
-#include "Runtime/Assets/AssetLibrary.h"
+#include "Runtime/Asset/AssetLibrary.h"
 #include "Runtime/Renderer/Texture2D.h"
 
 namespace Durna

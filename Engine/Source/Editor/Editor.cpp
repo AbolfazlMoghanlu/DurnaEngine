@@ -7,6 +7,7 @@
 #include "Editor/DetailsPanel/DetailsPanel.h"
 #include "Editor/Settings/Settings.h"
 #include "Editor/OutputLog/OutputLog.h"
+#include "Editor/ContentBrowser/ContentBrowser.h"
 #include "Runtime/Engine/Actor.h"
 #include "Runtime/Components/Component.h"
 
@@ -27,6 +28,7 @@ namespace Durna
 		DetailsPanel::Get()->Init();
 		Settings::Get()->Init();
 		OutputLog::Get()->Init();
+		ContentBrowser::Get()->Init();
 	}
 
 	void Editor::Tick(float DeltaTime)
@@ -36,6 +38,7 @@ namespace Durna
 		DetailsPanel::Get()->Tick(DeltaTime);
 		Settings::Get()->Tick(DeltaTime);
 		OutputLog::Get()->Tick(DeltaTime);
+		ContentBrowser::Get()->Tick(DeltaTime);
 	}
 
 	Editor* Editor::Get()

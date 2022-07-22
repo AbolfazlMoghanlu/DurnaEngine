@@ -1,7 +1,7 @@
 #include "DurnaPCH.h"
 #include "BillboardComponent.h"
 #include "Runtime/Renderer/Texture.h"
-#include "Runtime/Assets/AssetLibrary.h"
+#include "Runtime/Asset/AssetLibrary.h"
 #include "Runtime/Renderer/Material.h"
 #include "Runtime/Renderer/Shader.h"
 #include "Runtime/Renderer/CommonRenderUniforms.h"
