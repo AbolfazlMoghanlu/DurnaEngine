@@ -129,8 +129,9 @@ project "Game"
 	
 	postbuildcommands 
 	{
-		"{COPY} ../ThirdParty/Library/assimp/assimp-vc142-mt.dll ../Bin/" .. outputdir .. "/%{prj.name}"
-		--,"{COPY} ../ThirdParty/Library/assimp/assimp-vc142-mt.pdb ../Bin/" .. outputdir .. "/%{prj.name}"
+		"{COPY} ../ThirdParty/Library/assimp/assimp-vc142-mt.dll ../Bin/" .. outputdir .. "/%{prj.name}",
+		"{RMDIR} ../Bin/" .. outputdir .. "/Content/",
+		"{COPY} ../Content/ ../Bin/" .. outputdir .. "/Content/" 
 	}
 	
 	filter "configurations:DebugEditor"
