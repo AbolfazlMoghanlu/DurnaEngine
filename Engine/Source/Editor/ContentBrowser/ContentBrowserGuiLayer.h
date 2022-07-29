@@ -14,6 +14,7 @@ namespace Durna
 
 	private:
 		bool bImportFileOpen = false;
+		std::wstring CurrentDirectory = L"";
 
 		void ShowToolbar();
 		void ShowImportFileMenu();
