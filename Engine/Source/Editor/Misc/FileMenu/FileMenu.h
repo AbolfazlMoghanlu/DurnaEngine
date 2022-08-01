@@ -32,6 +32,10 @@ namespace Durna
 		std::function<void()> OnClickedCancelFun;
 		std::function<void(const std::vector<SystemFile>& Files)> OnClickedOKFun;
 	
+		std::vector<SystemFile> SelectedFiles;
+
+		bool SelectedFilesContains(const SystemFile& InSystemFile) const;
+	
 	private:
 	};
 }

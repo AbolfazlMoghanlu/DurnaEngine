@@ -37,6 +37,8 @@ namespace Durna
 
 			if (ImGui::Button(".."))
 			{
+				SelectedFiles.clear();
+
 				int32 SecondLastSlash = CurrentDirectory.rfind(L"\\", CurrentDirectory.size() - 2);
 
 				if (SecondLastSlash >= 0)
@@ -64,21 +66,47 @@ namespace Durna
 		{
 			std::string FileName = std::string(SF.Name.begin(), SF.Name.end());
 
+			bool bFileSelected = false;
 
+			ImVec4 ButtonColor;
 			if (SF.bDirectory)
 			{
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.12f, 0.72f, 0.17f, 1));
+				ButtonColor = ImVec4(0.12f, 0.72f, 0.17f, 1);
 			}
 			else
 			{
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.12f, 0.17f, 0.72f, 1));
+				bFileSelected = SelectedFilesContains(SF);
+			
+				ButtonColor = bFileSelected ? ImVec4(1.0f, 0.0f, 1.0f, 1) : ImVec4(0.12f, 0.17f, 0.72f, 1);
 			}
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ButtonColor);
+
 
 			if (ImGui::Button(FileName.c_str()))
 			{
 				if (SF.bDirectory)
 				{
 					CurrentDirectory = CurrentDirectory + SF.Name + L"\\";
+				}
+
+				else
+				{
+					if (bFileSelected)
+					{
+						for (auto& It = SelectedFiles.begin(); It != SelectedFiles.end(); It++)
+						{
+							if (It->Name == SF.Name)
+							{
+								SelectedFiles.erase(It);
+								break;
+							}
+						}
+					}
+					else
+					{
+						SelectedFiles.push_back(SF);
+					}
 				}
 			}
 
@@ -122,25 +150,39 @@ namespace Durna
 
 	void FileMenu::OnClickedOK()
 	{
-		bOpen = false;
-
 		if (OnClickedOKFun)
 		{
-			std::vector<SystemFile> Files;
-			Files.push_back(SystemFile(L"D:"));
-			OnClickedOKFun(Files);
+			OnClickedOKFun(SelectedFiles);
 		}
+
+		bOpen = false;
+		SelectedFiles.clear();
 	}
 
 	void FileMenu::OnClickCancel()
 	{
-		bOpen = false;
-
 		if (OnClickedCancelFun)
 		{
 			OnClickedCancelFun();
 		}
+
+		bOpen = false;
+		SelectedFiles.clear();
 	}
+
+	bool FileMenu::SelectedFilesContains(const SystemFile& InSystemFile) const
+	{
+		for (const SystemFile& SelectedFile : SelectedFiles)
+		{
+			if (SelectedFile.Name == InSystemFile.Name)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }
 
 #endif
